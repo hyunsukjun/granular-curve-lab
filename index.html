@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Granular Curve Lab</title>
+    <link rel="stylesheet" href="src/styles.css?v=20260908-02">
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div class="brand">
+          <h1>Granular Curve Lab</h1>
+          <p class="tagline">Draw grain position, size, density, and pitch across time.</p>
+          <p class="statusLine"><span id="fileStatus">No audio loaded</span><span class="privacyNote">Local browser processing. No upload.</span></p>
+        </div>
+        <div id="timeStatus">00:00.00 / 00:00.00</div>
+        <div class="transport">
+          <label class="fileButton">
+            Open Audio
+            <input id="fileInput" type="file" accept="audio/*">
+          </label>
+          <button id="playButton" type="button" disabled>Play</button>
+          <button id="stopButton" type="button" disabled>Stop</button>
+          <label class="durationSelect">
+            <span>Output Duration</span>
+            <input id="durationInput" type="number" min="1" max="180" step="0.5" value="20">
+            <span>sec</span>
+          </label>
+          <label class="outputSelect">
+            <select id="formatSelect" aria-label="Final output format">
+              <option value="mono">Mono 1ch</option>
+              <option value="stereo">Stereo 2ch</option>
+              <option value="quad">Quad 4ch</option>
+              <option value="octo">Octo 8ch</option>
+            </select>
+          </label>
+          <button id="downloadButton" type="button" disabled>Download WAV</button>
+        </div>
+      </header>
+
+      <section class="editor">
+        <div class="controlBand">
+          <div class="sourceWindowControl">
+            <span>Source Window</span>
+            <strong id="sourceWindowReadout">0% - 0.5%</strong>
+          </div>
+        </div>
+
+        <div class="legend">
+          <div class="modeButtons">
+            <button id="positionMode" class="active curveMode" type="button">Read Position</button>
+            <button id="spreadMode" class="curveMode" type="button">Spread</button>
+            <button id="sizeMode" class="curveMode" type="button">Size</button>
+            <button id="densityMode" class="curveMode" type="button">Density</button>
+            <button id="pitchLowMode" class="curveMode" type="button">Pitch Low</button>
+            <button id="pitchHighMode" class="curveMode" type="button">Pitch High</button>
+          </div>
+          <div class="curveActions">
+            <button id="clearCurveButton" type="button">Clear Current</button>
+            <button id="resetButton" type="button">Reset All</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="readout"><span>Curve</span><strong id="modeReadout">Read Position</strong></div>
+          <div class="readout"><span>Points</span><strong id="pointsReadout">2</strong></div>
+          <div class="readout"><span>Engine</span><strong id="engineReadout">Preview 64</strong></div>
+          <div class="readout"><span>Playhead</span><strong id="playheadReadout">0.00 s</strong></div>
+          <div class="readout"><span>Read Position</span><strong id="positionReadout">50% in window</strong></div>
+          <div class="readout"><span>Spread</span><strong id="spreadReadout">8%</strong></div>
+          <div class="readout"><span>Size</span><strong id="sizeReadout">80 ms</strong></div>
+          <div class="readout"><span>Density</span><strong id="densityReadout">18/s</strong></div>
+          <div class="readout"><span>Pitch</span><strong id="pitchReadout">0..0 st</strong></div>
+          <div class="readout"><span>WAV</span><strong id="downloadReadout">not ready</strong></div>
+        </div>
+
+        <div class="curveStack">
+          <div class="canvasFrame sourceFrame">
+            <canvas id="sourceCanvas" width="1800" height="150"></canvas>
+          </div>
+          <div class="canvasFrame curveFrame">
+            <canvas id="curveCanvas" width="1800" height="560"></canvas>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="src/app.js?v=20260908-02" type="module"></script>
+  </body>
+</html>

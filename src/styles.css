@@ -1,0 +1,397 @@
+:root {
+  color-scheme: dark;
+  --bg: #101519;
+  --surface: #172026;
+  --surface-strong: #1e2930;
+  --line: #324047;
+  --text: #edf3f2;
+  --muted: #9fb0b2;
+  --mint: #6de0c0;
+  --spread: #f2b705;
+  --density: #4fb06f;
+  --blue: #6fa8dc;
+  --green: #8fcf7a;
+  --red: #eb6f75;
+  --title-red: #d76f64;
+  --purple: #b887f4;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: auto;
+  background: var(--bg);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-content: start;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.brand h1 {
+  margin: 0;
+  color: var(--title-red);
+  font-size: 21px;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.brand p {
+  margin: 0;
+}
+
+.tagline {
+  margin-top: 4px;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.statusLine {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.privacyNote {
+  color: #79b8a8;
+}
+
+#timeStatus {
+  justify-self: center;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.transport,
+.modeButtons,
+.curveActions,
+.controlBand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.transport {
+  justify-self: end;
+}
+
+button,
+.fileButton,
+select,
+input {
+  height: 34px;
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  color: var(--text);
+  border-radius: 6px;
+}
+
+.outputSelect,
+.durationSelect {
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #46545c;
+  border-radius: 6px;
+  background: #151d22;
+}
+
+.durationSelect {
+  gap: 7px;
+  padding: 0 8px 0 12px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.durationSelect input {
+  width: 62px;
+  height: 28px;
+  border: 0;
+  background: #223039;
+  padding: 0 7px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.outputSelect select {
+  width: 158px;
+  border: 0;
+  border-radius: 5px;
+  background: #223039;
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+button,
+.fileButton {
+  min-width: 72px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+button:hover,
+.fileButton:hover {
+  background: #26353c;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.fileButton input {
+  display: none;
+}
+
+#downloadButton {
+  border-color: #58786d;
+  background: #1e3935;
+}
+
+#stopButton {
+  border-color: #5d3d3f;
+  color: #f1c1bf;
+}
+
+.editor {
+  min-width: 0;
+  min-height: 0;
+  padding: 12px;
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  align-content: start;
+  gap: 8px;
+}
+
+.controlBand {
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #151d22;
+}
+
+.compactField {
+  display: grid;
+  grid-template-columns: auto 86px auto;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.sourceWindowControl {
+  min-width: 188px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  border: 1px solid #46545c;
+  border-radius: 6px;
+  background: #151d22;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.sourceWindowControl strong {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.compactField input,
+.compactField select {
+  width: 86px;
+  padding: 0 8px;
+}
+
+.unitLabel {
+  min-width: 22px;
+  color: #c4cdcf;
+  font-size: 11px;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.curveActions {
+  justify-content: flex-end;
+}
+
+.legend button {
+  min-width: 88px;
+}
+
+.curveMode {
+  border-color: #39464d;
+}
+
+#positionMode.active {
+  border-color: var(--mint);
+  background: #17342f;
+  color: #c9fff0;
+}
+
+#spreadMode.active {
+  border-color: var(--spread);
+  background: #3b2d08;
+  color: #fff1b8;
+}
+
+#sizeMode.active {
+  border-color: var(--blue);
+  background: #1d2f42;
+  color: #cfe8ff;
+}
+
+#densityMode.active {
+  border-color: var(--density);
+  background: #193321;
+  color: #d0f2dc;
+}
+
+#pitchLowMode.active {
+  border-color: var(--red);
+  background: #3a2024;
+  color: #ffd0d1;
+}
+
+#pitchHighMode.active {
+  border-color: var(--purple);
+  background: #2f2540;
+  color: #eadbff;
+}
+
+#clearCurveButton,
+#resetButton {
+  min-width: 86px;
+  height: 30px;
+  color: #c8d1d3;
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(104px, 1fr));
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #151d22;
+}
+
+.readout {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.readout strong {
+  color: var(--text);
+  font-weight: 650;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.curveStack {
+  display: grid;
+  gap: 8px;
+}
+
+.canvasFrame {
+  min-width: 0;
+  overflow: hidden;
+}
+
+#sourceCanvas,
+#curveCanvas {
+  display: block;
+  background: #bfc9bd;
+  border: 1px solid #52625d;
+  border-radius: 6px;
+}
+
+#sourceCanvas {
+  height: 150px;
+  cursor: text;
+}
+
+#curveCanvas {
+  height: 560px;
+  cursor: crosshair;
+}
+
+@media (max-width: 980px) {
+  .panel {
+    grid-template-columns: repeat(2, minmax(118px, 1fr));
+  }
+
+  .topbar,
+  .legend {
+    align-items: flex-start;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  #timeStatus,
+  .transport {
+    justify-self: start;
+  }
+
+  .curveActions {
+    justify-content: flex-start;
+  }
+}
