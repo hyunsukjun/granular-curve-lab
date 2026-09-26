@@ -21,6 +21,11 @@ const sourceCanvas = document.getElementById("sourceCanvas");
 const sourceCtx = sourceCanvas.getContext("2d");
 const canvas = document.getElementById("curveCanvas");
 const ctx = canvas.getContext("2d");
+const penTool = document.getElementById("penTool");
+const eraserTool = document.getElementById("eraserTool");
+const eraseModifier = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgentData?.platform || "")
+  ? "metaKey"
+  : "ctrlKey";
 
 const modeButtons = {
   position: document.getElementById("positionMode"),
@@ -69,6 +74,7 @@ let workletBufferLoaded = false;
 let buffer;
 let waveform = [];
 let activeCurve = "position";
+let selectedTool = "pen";
 let selectedPoint = null;
 let hoverPoint = null;
 let dragging = false;
@@ -243,7 +249,7 @@ async function ensureAudio() {
 
 async function setupAudio() {
   if (!audioContext.audioWorklet) throw new Error("AudioWorklet is not available. Use a current browser over localhost or HTTPS.");
-  await audioContext.audioWorklet.addModule("src/granular-worklet.js?v=20260908-02");
+  await audioContext.audioWorklet.addModule("src/granular-worklet.js?v=20260926-01");
   node = new AudioWorkletNode(audioContext, "granular-curve-processor", {
     numberOfInputs: 0,
     numberOfOutputs: 1,
@@ -631,7 +637,7 @@ function resetAll() {
 
 async function getRenderer() {
   if (!renderGranular) {
-    const module = await import("./offline-render.js?v=20260908-02");
+    const module = await import("./offline-render.js?v=20260926-01");
     renderGranular = module.renderGranular;
   }
   return renderGranular;
@@ -658,6 +664,28 @@ clearCurveButton.addEventListener("click", () => {
 for (const [name, button] of Object.entries(modeButtons)) {
   button.addEventListener("click", () => setActiveCurve(name));
 }
+
+function isErasing(event) {
+  return selectedTool === "eraser" || Boolean(event?.[eraseModifier]);
+}
+
+function updateEraseCursor(event) {
+  canvas.classList.toggle("eraseMode", isErasing(event));
+}
+
+function setTool(tool) {
+  selectedTool = tool;
+  penTool.classList.toggle("active", tool === "pen");
+  eraserTool.classList.toggle("active", tool === "eraser");
+  penTool.setAttribute("aria-pressed", String(tool === "pen"));
+  eraserTool.setAttribute("aria-pressed", String(tool === "eraser"));
+  selectedPoint = null;
+  updateEraseCursor();
+  draw();
+}
+
+penTool.addEventListener("click", () => setTool("pen"));
+eraserTool.addEventListener("click", () => setTool("eraser"));
 
 for (const control of [durationInput, formatSelect]) {
   control.addEventListener("input", sendSettings);
@@ -704,9 +732,23 @@ downloadButton.addEventListener("click", async () => {
 });
 
 canvas.addEventListener("pointerdown", (event) => {
+  if (event.button !== 0) return;
   const p = pointerToPoint(event);
   const curve = curves[activeCurve];
-  selectedPoint = findPointNearPointer(p);
+  const found = findPointNearPointer(p);
+  if (isErasing(event)) {
+    event.preventDefault();
+    if (found > 0 && found < curve.length - 1) {
+      curve.splice(found, 1);
+      editedCurves[activeCurve] = true;
+      sendCurves();
+    }
+    selectedPoint = null;
+    hoverPoint = null;
+    draw();
+    return;
+  }
+  selectedPoint = found;
   if (selectedPoint < 0) {
     curve.push(p);
     sortCurve(curve);
@@ -721,11 +763,11 @@ canvas.addEventListener("pointerdown", (event) => {
 });
 
 canvas.addEventListener("pointermove", (event) => {
+  updateEraseCursor(event);
   const p = pointerToPoint(event);
   if (!dragging || selectedPoint == null) {
     const pointIndex = findPointNearPointer(p);
     hoverPoint = pointIndex >= 0 ? { curveName: activeCurve, pointIndex } : null;
-    canvas.style.cursor = hoverPoint ? "pointer" : "crosshair";
     draw();
     return;
   }
@@ -750,9 +792,14 @@ canvas.addEventListener("pointerup", (event) => {
 canvas.addEventListener("pointerleave", () => {
   if (dragging) return;
   hoverPoint = null;
-  canvas.style.cursor = "crosshair";
   draw();
 });
+
+canvas.addEventListener("pointerenter", updateEraseCursor);
+
+window.addEventListener("keydown", updateEraseCursor);
+window.addEventListener("keyup", updateEraseCursor);
+window.addEventListener("blur", () => updateEraseCursor());
 
 canvas.addEventListener("dblclick", (event) => {
   const p = pointerToPoint(event);
