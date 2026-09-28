@@ -249,7 +249,7 @@ async function ensureAudio() {
 
 async function setupAudio() {
   if (!audioContext.audioWorklet) throw new Error("AudioWorklet is not available. Use a current browser over localhost or HTTPS.");
-  await audioContext.audioWorklet.addModule("src/granular-worklet.js?v=20260926-01");
+  await audioContext.audioWorklet.addModule("src/granular-worklet.js?v=20260928-01");
   node = new AudioWorkletNode(audioContext, "granular-curve-processor", {
     numberOfInputs: 0,
     numberOfOutputs: 1,
@@ -379,7 +379,7 @@ function drawCurve(curve, color, width, fillPoints, alpha = 1) {
       ctx.arc(point.x * w, (1 - point.y) * h, 6, 0, Math.PI * 2);
       ctx.fillStyle = color;
       ctx.fill();
-      ctx.strokeStyle = "#111316";
+      ctx.strokeStyle = "#06111c";
       ctx.lineWidth = 2;
       ctx.stroke();
     }
@@ -413,30 +413,53 @@ function drawPitchRangeFill(w, h) {
   ctx.restore();
 }
 
+function drawCanvasGrid(context, w, h) {
+  context.save();
+  context.lineWidth = 1;
+  context.strokeStyle = "rgba(63, 101, 132, 0.12)";
+  for (let i = 1; i < 40; i += 1) {
+    if (i % 4 === 0) continue;
+    const x = (i / 40) * w;
+    context.beginPath();
+    context.moveTo(x, 0);
+    context.lineTo(x, h);
+    context.stroke();
+  }
+  for (let i = 1; i < 8; i += 1) {
+    if (i % 2 === 0) continue;
+    const y = (i / 8) * h;
+    context.beginPath();
+    context.moveTo(0, y);
+    context.lineTo(w, y);
+    context.stroke();
+  }
+  context.strokeStyle = "rgba(79, 121, 155, 0.28)";
+  for (let i = 0; i <= 10; i += 1) {
+    const x = (i / 10) * w;
+    context.beginPath();
+    context.moveTo(x, 0);
+    context.lineTo(x, h);
+    context.stroke();
+  }
+  for (let i = 1; i < 4; i += 1) {
+    const y = (i / 4) * h;
+    context.beginPath();
+    context.moveTo(0, y);
+    context.lineTo(w, y);
+    context.stroke();
+  }
+  context.restore();
+}
+
 function draw() {
   const scale = window.devicePixelRatio || 1;
   const w = canvasCssWidth;
   const h = canvasCssHeight;
   ctx.setTransform(scale, 0, 0, scale, 0, 0);
   ctx.clearRect(0, 0, w, h);
-  ctx.fillStyle = "#bdc8aa";
+  ctx.fillStyle = "#0c1f31";
   ctx.fillRect(0, 0, w, h);
-  ctx.strokeStyle = "rgba(55, 65, 55, 0.36)";
-  ctx.lineWidth = 1;
-  for (let i = 0; i <= 10; i += 1) {
-    const x = (i / 10) * w;
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, h);
-    ctx.stroke();
-  }
-  for (let i = 1; i < 4; i += 1) {
-    const y = (i / 4) * h;
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(w, y);
-    ctx.stroke();
-  }
+  drawCanvasGrid(ctx, w, h);
   drawCurveAxisHints(w, h);
   drawPitchRangeFill(w, h);
   for (const name of Object.keys(curves)) {
@@ -445,7 +468,7 @@ function draw() {
   drawCurve(curves[activeCurve], curveColors[activeCurve], 4.8, true, 1);
   if (buffer) {
     const x = (playheadSeconds / settings().durationSeconds) * w;
-    ctx.strokeStyle = "#1f2426";
+    ctx.strokeStyle = "rgba(226, 236, 244, 0.86)";
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(x, 0);
@@ -463,18 +486,10 @@ function drawSourceWindow() {
   const h = sourceCanvasCssHeight;
   sourceCtx.setTransform(scale, 0, 0, scale, 0, 0);
   sourceCtx.clearRect(0, 0, w, h);
-  sourceCtx.fillStyle = "#b7c2b6";
+  sourceCtx.fillStyle = "#0c1f31";
   sourceCtx.fillRect(0, 0, w, h);
-  sourceCtx.strokeStyle = "rgba(55, 65, 55, 0.36)";
-  sourceCtx.lineWidth = 1;
-  for (let i = 0; i <= 10; i += 1) {
-    const x = (i / 10) * w;
-    sourceCtx.beginPath();
-    sourceCtx.moveTo(x, 0);
-    sourceCtx.lineTo(x, h);
-    sourceCtx.stroke();
-  }
-  sourceCtx.fillStyle = "rgba(108, 101, 72, 0.52)";
+  drawCanvasGrid(sourceCtx, w, h);
+  sourceCtx.fillStyle = "rgba(128, 158, 186, 0.48)";
   const mid = h * 0.52;
   const amp = h * 0.34;
   const step = Math.max(1, Math.floor(waveform.length / w));
@@ -483,17 +498,17 @@ function drawSourceWindow() {
     sourceCtx.fillRect(x, mid - (sample * amp), 1, Math.max(1, sample * amp * 2));
   }
   const { startX, endX } = sourceWindowDisplayBounds(w);
-  sourceCtx.fillStyle = "rgba(16, 21, 25, 0.42)";
+  sourceCtx.fillStyle = "rgba(3, 10, 17, 0.55)";
   sourceCtx.fillRect(0, 0, startX, h);
   sourceCtx.fillRect(endX, 0, Math.max(0, w - endX), h);
-  sourceCtx.fillStyle = "rgba(109, 224, 192, 0.16)";
+  sourceCtx.fillStyle = "rgba(109, 224, 192, 0.12)";
   sourceCtx.fillRect(startX, 0, Math.max(1, endX - startX), h);
   sourceCtx.strokeStyle = "#6de0c0";
   sourceCtx.lineWidth = 2;
   sourceCtx.strokeRect(startX, 1, Math.max(1, endX - startX), h - 2);
   drawReadPositionMarker(w, h);
-  sourceCtx.fillStyle = "#101519";
-  sourceCtx.font = "650 12px Inter, ui-sans-serif, system-ui, sans-serif";
+  sourceCtx.fillStyle = "rgba(232, 240, 246, 0.9)";
+  sourceCtx.font = "650 12px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   sourceCtx.textBaseline = "top";
   sourceCtx.fillText("Source Window", Math.min(w - 118, startX + 8), 8);
 }
@@ -520,7 +535,7 @@ function drawReadPositionMarker(w, h) {
   const readNorm = sourceWindow.start + ((sourceWindow.end - sourceWindow.start) * readPosition);
   const x = readNorm * w;
   sourceCtx.save();
-  sourceCtx.strokeStyle = "rgba(215, 111, 100, 0.9)";
+  sourceCtx.strokeStyle = "rgba(109, 224, 192, 0.92)";
   sourceCtx.lineWidth = 1.6;
   sourceCtx.beginPath();
   sourceCtx.moveTo(x, 0);
@@ -532,8 +547,8 @@ function drawReadPositionMarker(w, h) {
 function drawCurveAxisHints(w, h) {
   if (activeCurve !== "position") return;
   ctx.save();
-  ctx.font = "650 12px Inter, ui-sans-serif, system-ui, sans-serif";
-  ctx.fillStyle = "rgba(16, 21, 25, 0.72)";
+  ctx.font = "650 12px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  ctx.fillStyle = "rgba(170, 188, 204, 0.82)";
   ctx.textAlign = "left";
   ctx.textBaseline = "top";
   ctx.fillText("Window End", 10, 10);
@@ -552,11 +567,11 @@ function drawTooltip(pointRef) {
   const px = point.x * canvasCssWidth;
   const py = (1 - point.y) * canvasCssHeight;
   ctx.save();
-  ctx.font = "650 13px Inter, ui-sans-serif, system-ui, sans-serif";
+  ctx.font = "650 13px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   const boxWidth = Math.ceil(ctx.measureText(text).width + 18);
   const boxX = Math.max(8, Math.min(canvasCssWidth - boxWidth - 8, px - (boxWidth / 2)));
   const boxY = py < 40 ? py + 14 : py - 36;
-  ctx.fillStyle = "rgba(31, 36, 38, 0.93)";
+  ctx.fillStyle = "rgba(7, 17, 28, 0.96)";
   ctx.fillRect(boxX, boxY, boxWidth, 26);
   ctx.strokeStyle = curveColors[pointRef.curveName];
   ctx.strokeRect(boxX, boxY, boxWidth, 26);
@@ -637,7 +652,7 @@ function resetAll() {
 
 async function getRenderer() {
   if (!renderGranular) {
-    const module = await import("./offline-render.js?v=20260926-01");
+    const module = await import("./offline-render.js?v=20260928-01");
     renderGranular = module.renderGranular;
   }
   return renderGranular;

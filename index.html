@@ -4,15 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Granular Curve Lab</title>
-    <link rel="stylesheet" href="src/styles.css?v=20260926-01">
+    <link rel="stylesheet" href="src/styles.css?v=20260928-01">
   </head>
   <body>
     <main class="app">
       <header class="topbar">
         <div class="brand">
-          <h1>Granular Curve Lab</h1>
-          <p class="tagline">Draw grain position, size, density, and pitch across time.</p>
-          <p class="statusLine"><span id="fileStatus">No audio loaded</span><span class="privacyNote">Local browser processing. No upload.</span></p>
+          <svg class="brandMark" viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M5 24h5m28 0h5M10 19v10m5-17v24m6-30v36m6-29v22m6-17v12m5-7v2"/>
+          </svg>
+          <div class="brandCopy">
+            <h1><span>Granular </span><span class="brandAccent">Curve Lab</span></h1>
+            <p class="tagline">Draw grain position, size, density, and pitch across time.</p>
+            <p class="statusLine"><span id="fileStatus">No audio loaded</span><span class="privacyNote">Local browser processing. No upload.</span></p>
+            <p class="formatNote">Recommended: WAV, MP3. Some formats may vary by browser.</p>
+          </div>
         </div>
         <div id="timeStatus">00:00.00 / 00:00.00</div>
         <div class="transport">
@@ -40,13 +46,6 @@
       </header>
 
       <section class="editor">
-        <div class="controlBand">
-          <div class="sourceWindowControl">
-            <span>Source Window</span>
-            <strong id="sourceWindowReadout">0% - 0.5%</strong>
-          </div>
-        </div>
-
         <div class="legend">
           <div class="modeButtons">
             <button id="positionMode" class="active curveMode" type="button">Read Position</button>
@@ -62,6 +61,12 @@
               <button id="eraserTool" type="button" aria-label="Eraser" aria-pressed="false" title="Eraser: click a point to delete. Mac: Command-click; PC: Ctrl-click">
                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4-4a2 2 0 0 1 0-3L13 4a2 2 0 0 1 3 0l6 6a2 2 0 0 1 0 3l-8 8"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg>
               </button>
+            </div>
+          </div>
+          <div class="controlBand">
+            <div class="sourceWindowControl">
+              <span>Source Window</span>
+              <strong id="sourceWindowReadout">0% - 0.5%</strong>
             </div>
           </div>
           <div class="curveActions">
@@ -94,6 +99,6 @@
       </section>
     </main>
 
-    <script src="src/app.js?v=20260926-01" type="module"></script>
+    <script src="src/app.js?v=20260928-01" type="module"></script>
   </body>
 </html>
