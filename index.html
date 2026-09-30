@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Granular Curve Lab</title>
-    <link rel="stylesheet" href="src/styles.css?v=20260928-01">
+    <link rel="stylesheet" href="src/styles.css?v=20260930-01">
   </head>
   <body>
     <main class="app">
@@ -20,14 +20,11 @@
             <p class="formatNote">Recommended: WAV, MP3. Some formats may vary by browser.</p>
           </div>
         </div>
-        <div id="timeStatus">00:00.00 / 00:00.00</div>
         <div class="transport">
           <label class="fileButton">
             Open Audio
             <input id="fileInput" type="file" accept="audio/*">
           </label>
-          <button id="playButton" type="button" disabled>Play</button>
-          <button id="stopButton" type="button" disabled>Stop</button>
           <label class="durationSelect">
             <span>Output Duration</span>
             <input id="durationInput" type="number" min="1" max="180" step="0.5" value="20">
@@ -41,6 +38,7 @@
               <option value="octo">Octo 8ch</option>
             </select>
           </label>
+          <span class="renderSpec" aria-label="WAV output specification">24-bit / 48 kHz</span>
           <button id="downloadButton" type="button" disabled>Download WAV</button>
         </div>
       </header>
@@ -79,7 +77,6 @@
           <div class="readout"><span>Curve</span><strong id="modeReadout">Read Position</strong></div>
           <div class="readout"><span>Points</span><strong id="pointsReadout">2</strong></div>
           <div class="readout"><span>Engine</span><strong id="engineReadout">Preview 64</strong></div>
-          <div class="readout"><span>Playhead</span><strong id="playheadReadout">0.00 s</strong></div>
           <div class="readout"><span>Read Position</span><strong id="positionReadout">50% in window</strong></div>
           <div class="readout"><span>Spread</span><strong id="spreadReadout">8%</strong></div>
           <div class="readout"><span>Size</span><strong id="sizeReadout">80 ms</strong></div>
@@ -97,8 +94,39 @@
           </div>
         </div>
       </section>
+      <footer class="playbackBar" aria-label="Playback and output monitoring">
+        <div class="bottomTransport" aria-label="Transport controls">
+          <button id="playButton" type="button" disabled>Play</button>
+          <button id="stopButton" type="button" disabled>Stop</button>
+        </div>
+        <output id="timeStatus" aria-label="Current playback time and duration">00:00.00 / 00:00.00</output>
+        <label class="scrubberGroup" for="playbackScrubber">
+          <span>Position</span>
+          <input id="playbackScrubber" type="range" min="0" max="1" step="0.0001" value="0" disabled>
+        </label>
+        <section class="outputMeter" aria-label="Stereo output level meter">
+          <div class="meterTitle">OUT</div>
+          <div class="meterChannels">
+            <div class="meterRow" data-meter-channel="0">
+              <span class="meterChannelLabel">L</span>
+              <div class="meterTrack" aria-hidden="true">
+                <div class="meterRms"></div><div class="meterPeak"></div><div class="meterHold"></div>
+              </div>
+              <span class="meterValue">-∞</span>
+            </div>
+            <div class="meterRow" data-meter-channel="1">
+              <span class="meterChannelLabel">R</span>
+              <div class="meterTrack" aria-hidden="true">
+                <div class="meterRms"></div><div class="meterPeak"></div><div class="meterHold"></div>
+              </div>
+              <span class="meterValue">-∞</span>
+            </div>
+          </div>
+          <button id="meterClipButton" class="meterClip" type="button" aria-pressed="false" title="Clip indicator. Click to reset.">CLIP</button>
+        </section>
+      </footer>
     </main>
 
-    <script src="src/app.js?v=20260928-01" type="module"></script>
+    <script src="src/app.js?v=20260930-01" type="module"></script>
   </body>
 </html>

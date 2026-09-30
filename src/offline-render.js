@@ -12,8 +12,12 @@ import {
   valueAt
 } from "./granular-core.js";
 
+export const RENDER_SAMPLE_RATE = 48000;
+export const RENDER_BIT_DEPTH = 24;
+
 export async function renderGranular({ audioBuffer, curves, settings, signal, onProgress }) {
-  const sampleRate = audioBuffer.sampleRate;
+  const sampleRate = RENDER_SAMPLE_RATE;
+  const sourceSampleRate = audioBuffer.sampleRate;
   const source = audioBuffer.getChannelData(0);
   const duration = clamp(settings.durationSeconds || 20, 1, 180);
   const frameCount = Math.ceil(duration * sampleRate);
@@ -22,7 +26,7 @@ export async function renderGranular({ audioBuffer, curves, settings, signal, on
   const random = makeSeededRandom(7321);
   const rangeStart = clamp(Math.min(settings.rangeStart, settings.rangeEnd));
   const rangeEnd = clamp(Math.max(settings.rangeStart, settings.rangeEnd));
-  const rangeSeconds = Math.max(1 / sampleRate, (rangeEnd - rangeStart) * audioBuffer.duration);
+  const rangeSeconds = Math.max(1 / sourceSampleRate, (rangeEnd - rangeStart) * audioBuffer.duration);
   let nextGrain = 0;
   let grainIndex = 0;
   let lastProgress = 0;
@@ -41,7 +45,7 @@ export async function renderGranular({ audioBuffer, curves, settings, signal, on
       const sourceCenter = clamp(position + ((random() - 0.5) * spread), rangeStart, rangeEnd) * source.length;
       const [low, high] = pitchBounds(curves, t);
       const semitone = low + ((high - low) * random());
-      const rate = Math.pow(2, semitone / 12);
+      const rate = Math.pow(2, semitone / 12) * (sourceSampleRate / sampleRate);
       const readSpan = (lengthSamples - 1) * rate;
       const minRead = rangeStart * source.length;
       const maxRead = Math.max(minRead, (rangeEnd * source.length) - readSpan - 3);
@@ -65,10 +69,12 @@ export async function renderGranular({ audioBuffer, curves, settings, signal, on
   applyPeakRiskCompensation(output, settings.outputGain ?? 0.92);
   onProgress?.(1);
   return {
-    blob: encodeWav(output, sampleRate),
+    blob: encodeWav(output, sampleRate, { bitDepth: RENDER_BIT_DEPTH, dither: true, ditherSeed: 48024 }),
     duration,
     channelCount,
-    grains: grainIndex
+    grains: grainIndex,
+    sampleRate,
+    bitDepth: RENDER_BIT_DEPTH
   };
 }
 

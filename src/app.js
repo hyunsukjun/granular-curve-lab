@@ -5,10 +5,12 @@ import {
   semitoneFromNorm,
   valueAt
 } from "./granular-core.js";
+import { OutputMeterAnalyzer } from "./output-meter.js?v=20260930-01";
 
 const fileInput = document.getElementById("fileInput");
 const fileStatus = document.getElementById("fileStatus");
 const timeStatus = document.getElementById("timeStatus");
+const playbackScrubber = document.getElementById("playbackScrubber");
 const playButton = document.getElementById("playButton");
 const stopButton = document.getElementById("stopButton");
 const downloadButton = document.getElementById("downloadButton");
@@ -23,6 +25,8 @@ const canvas = document.getElementById("curveCanvas");
 const ctx = canvas.getContext("2d");
 const penTool = document.getElementById("penTool");
 const eraserTool = document.getElementById("eraserTool");
+const meterRows = Array.from(document.querySelectorAll("[data-meter-channel]"));
+const meterClipButton = document.getElementById("meterClipButton");
 const eraseModifier = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgentData?.platform || "")
   ? "metaKey"
   : "ctrlKey";
@@ -40,7 +44,6 @@ const readouts = {
   mode: document.getElementById("modeReadout"),
   points: document.getElementById("pointsReadout"),
   engine: document.getElementById("engineReadout"),
-  playhead: document.getElementById("playheadReadout"),
   position: document.getElementById("positionReadout"),
   spread: document.getElementById("spreadReadout"),
   size: document.getElementById("sizeReadout"),
@@ -70,6 +73,7 @@ const curveLabels = {
 let audioContext;
 let audioSetupPromise = null;
 let node;
+let outputMeter;
 let workletBufferLoaded = false;
 let buffer;
 let waveform = [];
@@ -83,7 +87,12 @@ let sourceDragAnchor = 0;
 let sourceDragMoved = false;
 let playheadSeconds = 0;
 let isPlaying = false;
+let isScrubbing = false;
 let playbackToken = 0;
+let meterAnimationFrame = 0;
+let meterLastFrameTime = performance.now();
+let meterClipLatched = false;
+const meterDisplay = meterRows.map(() => ({ peak: 0, rms: 0, hold: 0, holdUntil: 0 }));
 let downloadUrl = null;
 let renderAbortController = null;
 let renderGranular = null;
@@ -164,6 +173,56 @@ function formatClock(seconds) {
   return `${String(minutes).padStart(2, "0")}:${remaining.toFixed(2).padStart(5, "0")}`;
 }
 
+function linearToDb(value) {
+  return value > 0.000001 ? 20 * Math.log10(value) : -Infinity;
+}
+
+function meterPosition(value) {
+  const db = linearToDb(value);
+  return Math.max(0, Math.min(1, (db + 60) / 60));
+}
+
+function smoothMeterValue(currentValue, target, elapsedMs, attackMs, releaseMs) {
+  const time = target > currentValue ? attackMs : releaseMs;
+  const amount = 1 - Math.exp(-elapsedMs / Math.max(1, time));
+  return currentValue + ((target - currentValue) * amount);
+}
+
+function updateMeterDisplay(now) {
+  const elapsedMs = Math.min(100, Math.max(0, now - meterLastFrameTime));
+  meterLastFrameTime = now;
+  const measuredChannels = outputMeter?.read() || [];
+
+  meterRows.forEach((row, index) => {
+    const measured = measuredChannels[index] || { peak: 0, rms: 0, clipped: false };
+    const display = meterDisplay[index];
+    display.peak = smoothMeterValue(display.peak, measured.peak, elapsedMs, 18, 320);
+    display.rms = smoothMeterValue(display.rms, measured.rms, elapsedMs, 45, 420);
+    if (measured.peak >= display.hold) {
+      display.hold = measured.peak;
+      display.holdUntil = now + 1000;
+    } else if (now > display.holdUntil) {
+      display.hold = smoothMeterValue(display.hold, measured.peak, elapsedMs, 0, 700);
+    }
+    if (measured.clipped) meterClipLatched = true;
+    row.querySelector(".meterRms").style.transform = `scaleX(${meterPosition(display.rms)})`;
+    row.querySelector(".meterPeak").style.transform = `scaleX(${meterPosition(display.peak)})`;
+    row.querySelector(".meterHold").style.left = `${meterPosition(display.hold) * 100}%`;
+    const peakDb = linearToDb(display.peak);
+    row.querySelector(".meterValue").textContent = Number.isFinite(peakDb) ? peakDb.toFixed(1) : "-∞";
+  });
+
+  meterClipButton.classList.toggle("clipped", meterClipLatched);
+  meterClipButton.setAttribute("aria-pressed", String(meterClipLatched));
+  meterAnimationFrame = requestAnimationFrame(updateMeterDisplay);
+}
+
+function startMeterAnimation() {
+  if (meterAnimationFrame) return;
+  meterLastFrameTime = performance.now();
+  meterAnimationFrame = requestAnimationFrame(updateMeterDisplay);
+}
+
 function minimumSourceWindowWidth() {
   if (!buffer?.duration) return 0.005;
   return Math.max(0.0001, Math.min(1, grainMinimumSeconds / buffer.duration));
@@ -222,6 +281,7 @@ function setBusy(isBusy) {
   stopButton.disabled = isBusy || !buffer;
   downloadButton.disabled = isBusy || !buffer;
   fileInput.disabled = isBusy;
+  playbackScrubber.disabled = isBusy || !buffer;
 }
 
 function nextPlaybackToken() {
@@ -249,13 +309,16 @@ async function ensureAudio() {
 
 async function setupAudio() {
   if (!audioContext.audioWorklet) throw new Error("AudioWorklet is not available. Use a current browser over localhost or HTTPS.");
-  await audioContext.audioWorklet.addModule("src/granular-worklet.js?v=20260928-01");
+  await audioContext.audioWorklet.addModule("src/granular-worklet.js?v=20260930-01");
   node = new AudioWorkletNode(audioContext, "granular-curve-processor", {
     numberOfInputs: 0,
     numberOfOutputs: 1,
     outputChannelCount: [2]
   });
-  node.connect(audioContext.destination);
+  outputMeter = new OutputMeterAnalyzer(audioContext, { channelCount: 2 });
+  node.connect(outputMeter.input);
+  outputMeter.connect(audioContext.destination);
+  startMeterAnimation();
   node.port.onmessage = (event) => {
     if (event.data.token != null && event.data.token !== playbackToken) return;
     if (event.data.type === "position") {
@@ -264,8 +327,9 @@ async function setupAudio() {
       draw();
     } else if (event.data.type === "ended" || event.data.type === "stopped") {
       isPlaying = false;
-      if (event.data.type === "ended") playheadSeconds = settings().durationSeconds;
+      playheadSeconds = 0;
       playButton.textContent = "Play";
+      if (event.data.type === "ended") node?.port.postMessage({ type: "seek", seconds: 0, token: playbackToken });
       draw();
     }
   };
@@ -588,7 +652,6 @@ function updateReadouts() {
   readouts.mode.textContent = curveLabels[activeCurve];
   readouts.points.textContent = String(curves[activeCurve].length);
   readouts.engine.textContent = engineLimit === 32 ? "Preview 32 / Render 64" : "Preview 64 / Render 64";
-  readouts.playhead.textContent = `${playheadSeconds.toFixed(2)} s`;
   readouts.position.textContent = `${Math.round(current.position * 100)}% in window`;
   readouts.spread.textContent = `${Math.round(current.spread * 100)}%`;
   readouts.size.textContent = `${Math.round(current.sizeMs)} ms`;
@@ -596,6 +659,7 @@ function updateReadouts() {
   readouts.pitch.textContent = `${current.pitchLow.toFixed(1)}..${current.pitchHigh.toFixed(1)} st`;
   sourceWindowReadout.textContent = `${formatSourcePercent(sourceWindow.start)}% - ${formatSourcePercent(sourceWindow.end)}%`;
   timeStatus.textContent = `${formatClock(playheadSeconds)} / ${formatClock(s.durationSeconds)}`;
+  if (!isScrubbing) playbackScrubber.value = String(Math.max(0, Math.min(1, playheadSeconds / s.durationSeconds)));
 }
 
 function pointerToPoint(event) {
@@ -652,7 +716,7 @@ function resetAll() {
 
 async function getRenderer() {
   if (!renderGranular) {
-    const module = await import("./offline-render.js?v=20260928-01");
+    const module = await import("./offline-render.js?v=20260930-01");
     renderGranular = module.renderGranular;
   }
   return renderGranular;
@@ -668,6 +732,30 @@ playButton.addEventListener("click", () => {
   else playAudio();
 });
 stopButton.addEventListener("click", stopAudio);
+
+function seekFromScrubber() {
+  if (!buffer) return;
+  const progress = Math.max(0, Math.min(1, Number(playbackScrubber.value) || 0));
+  playheadSeconds = progress * settings().durationSeconds;
+  node?.port.postMessage({ type: "seek", seconds: playheadSeconds, token: playbackToken });
+  draw();
+}
+
+playbackScrubber.addEventListener("pointerdown", () => { isScrubbing = true; });
+playbackScrubber.addEventListener("input", seekFromScrubber);
+playbackScrubber.addEventListener("change", () => {
+  seekFromScrubber();
+  isScrubbing = false;
+});
+playbackScrubber.addEventListener("pointerup", () => { isScrubbing = false; });
+playbackScrubber.addEventListener("pointercancel", () => { isScrubbing = false; });
+
+meterClipButton.addEventListener("click", () => {
+  meterClipLatched = false;
+  meterClipButton.classList.remove("clipped");
+  meterClipButton.setAttribute("aria-pressed", "false");
+});
+
 resetButton.addEventListener("click", resetAll);
 clearCurveButton.addEventListener("click", () => {
   curves[activeCurve] = defaultCurve(curveDefaults[activeCurve]);

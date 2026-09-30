@@ -2,6 +2,8 @@
 
 Granular Curve Lab is a small browser-based Curve Lab prototype for drawing granular synthesis relationships over time. It follows the existing Audio/Timbre/Space Curve Lab frame: static HTML/CSS/JS, local browser decoding, one large curve canvas, realtime AudioWorklet preview, and a separate offline WAV renderer.
 
+The web app is the current executable reference implementation. Product behavior, parameter mappings, DSP rules, interaction contracts, fine-tuning knowledge, and future Standalone considerations are maintained as long-term product assets in the documentation set below.
+
 ## v0.1 scope
 
 - Mono source analysis and playback source.
@@ -10,10 +12,11 @@ Granular Curve Lab is a small browser-based Curve Lab prototype for drawing gran
 - Grain Size uses logarithmic mapping from 5 ms to 1000 ms.
 - Pitch Range is represented by two curves, Low and High.
 - Standard Hann envelope fixed for v0.1.
-- Realtime preview uses up to 64 grains and automatically shows `Preview 32 / Render 64` when density and grain size imply high load.
-- Offline render always uses the full 64-grain design target.
+- Realtime preview uses a 64-grain cap and automatically falls back to 32 grains when density and grain size imply high load.
+- Playback uses the shared Curve Lab bottom bar with output-time scrubbing and post-DSP stereo level metering.
+- Offline render is not limited by the 32/64-grain Preview cap; it calculates every scheduled grain. The current `Render 64` status text denotes the original quality target, not a literal offline voice limit.
 - Gain handling is peak-risk compensation with a -1 dBFS limiter ceiling, not full loudness normalization.
-- WAV export supports mono, stereo, quad, and 8-channel files.
+- WAV export is fixed at 24-bit / 48 kHz and supports mono, stereo, quad, and 8-channel files.
 - Multichannel output uses balanced grain distribution only. It deliberately avoids Space Curve Lab-style spatial composition controls.
 
 ## Reused Curve Lab patterns
@@ -27,4 +30,24 @@ Granular Curve Lab is a small browser-based Curve Lab prototype for drawing gran
 
 ## Current prototype limits
 
-This is the first minimum prototype. It has passed syntax checks, but realtime browser audio and downloaded WAVs still need an actual short-file listening pass in Chrome or Edge before treating the tool as class-ready.
+This remains a focused v0.1 prototype. Real-file browser lifecycle, curve editing, responsive layout, and 1/2/4/8-channel render calculations have been verified. Formal listening approval across representative source material, a broader browser/codec matrix, persistent presets, and Standalone conformance fixtures are still to be documented.
+
+## Product knowledge documentation
+
+- [`AGENTS.md`](AGENTS.md): repository rules for future coding agents.
+- [`DEVELOPMENT_GUIDELINES.md`](DEVELOPMENT_GUIDELINES.md): architecture and development policy.
+- [`CURVE_LAB_DESIGN_SYSTEM.md`](CURVE_LAB_DESIGN_SYSTEM.md): Granular application of the shared design system.
+- [`docs/FEATURE_REGISTRY.md`](docs/FEATURE_REGISTRY.md): implemented, verified, absent, and future features.
+- [`docs/PARAMETER_SPEC.md`](docs/PARAMETER_SPEC.md): stable IDs, ranges, defaults, mappings, and tuning gaps.
+- [`docs/INTERACTION_SPEC.md`](docs/INTERACTION_SPEC.md): platform-independent user interaction contracts.
+- [`docs/DSP_BEHAVIOR.md`](docs/DSP_BEHAVIOR.md): signal flow, algorithms, gain, randomization, and Preview/Render parity.
+- [`docs/DECISIONS.md`](docs/DECISIONS.md): durable product decisions and rationale.
+- [`docs/STANDALONE_MIGRATION.md`](docs/STANDALONE_MIGRATION.md): portability inventory and native migration risks.
+- [`docs/LISTENING_REFERENCE.md`](docs/LISTENING_REFERENCE.md): listening protocol, reference-source requirements, sonic intent, and approval log.
+- [`docs/TUNING_HISTORY.md`](docs/TUNING_HISTORY.md): current tuning constants, reasons, evidence level, and future change history.
+- [`docs/DEVELOPMENT_HISTORY.md`](docs/DEVELOPMENT_HISTORY.md): important UI/DSP iterations, rejected directions, and lessons to preserve.
+- [`docs/CONFORMANCE_SPEC.md`](docs/CONFORMANCE_SPEC.md): deterministic mappings, random sequences, channel order, and future golden-render contract.
+- [`docs/PERFORMANCE_BASELINE.md`](docs/PERFORMANCE_BASELINE.md): realtime/offline performance behavior, memory model, and measurement matrix.
+- [`docs/STATE_SCHEMA.md`](docs/STATE_SCHEMA.md): draft versioned product-state contract and unresolved source-file policy.
+
+Documentation baseline: 2026-09-30. Items not established by code or a recorded listening test are marked `UNKNOWN` or `TO BE DOCUMENTED` rather than inferred.
