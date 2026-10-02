@@ -2,6 +2,8 @@ import {
   curveDefaults,
   densityFromNorm,
   grainMsFromNorm,
+  normFromDensity,
+  normFromGrainMs,
   semitoneFromNorm,
   valueAt
 } from "./granular-core.js";
@@ -104,6 +106,8 @@ let canvasBaseWidth = 0;
 const canvasMinimumWidth = 1800;
 const canvasBaseHeight = 560;
 const sourceCanvasBaseHeight = 150;
+const parameterScaleWidth = 54;
+const plotRightPadding = 8;
 const grainMinimumSeconds = 0.005;
 const sourceWindowMinimumPixels = 10;
 const sourceWindow = { start: 0, end: 0.005 };
@@ -418,9 +422,84 @@ function stopAudio() {
   draw();
 }
 
+function getPlotBounds() {
+  return {
+    left: parameterScaleWidth,
+    width: Math.max(1, canvasCssWidth - parameterScaleWidth - plotRightPadding),
+    height: canvasCssHeight
+  };
+}
+
+function getSourcePlotBounds() {
+  return {
+    left: parameterScaleWidth,
+    width: Math.max(1, sourceCanvasCssWidth - parameterScaleWidth - plotRightPadding),
+    height: sourceCanvasCssHeight
+  };
+}
+
+function getParameterTicks() {
+  if (activeCurve === "size") {
+    return [1000, 200, 50, 10, 5].map((value) => ({
+      y: normFromGrainMs(value),
+      label: `${value} ms`
+    }));
+  }
+  if (activeCurve === "density") {
+    return [80, 30, 10, 3, 1].map((value) => ({
+      y: normFromDensity(value),
+      label: `${value}/s`
+    }));
+  }
+  if (activeCurve === "pitchLow" || activeCurve === "pitchHigh") {
+    return [
+      { y: 1, label: "+24 st" },
+      { y: 0.75, label: "+12 st" },
+      { y: 0.5, label: "0 st", emphasis: true },
+      { y: 0.25, label: "-12 st" },
+      { y: 0, label: "-24 st" }
+    ];
+  }
+  return [
+    { y: 1, label: "100%" },
+    { y: 0.75, label: "75%" },
+    { y: 0.5, label: "50%" },
+    { y: 0.25, label: "25%" },
+    { y: 0, label: "0%" }
+  ];
+}
+
+function drawParameterScale() {
+  const { left, width, height } = getPlotBounds();
+  ctx.save();
+  ctx.textAlign = "right";
+  ctx.textBaseline = "alphabetic";
+  for (const tick of getParameterTicks()) {
+    const y = (1 - tick.y) * height;
+    const textY = Math.max(11, Math.min(height - 5, y + 4));
+    ctx.font = tick.emphasis
+      ? "750 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+      : "600 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+    ctx.fillStyle = tick.emphasis ? "rgba(232, 240, 246, 0.96)" : "rgba(170, 188, 204, 0.82)";
+    ctx.strokeStyle = tick.emphasis ? "rgba(95, 141, 177, 0.6)" : "rgba(72, 111, 143, 0.28)";
+    ctx.lineWidth = tick.emphasis ? 1.6 : 1;
+    ctx.fillText(tick.label, left - 9, textY);
+    ctx.beginPath();
+    ctx.moveTo(left - 5, y);
+    ctx.lineTo(left + width, y);
+    ctx.stroke();
+  }
+  ctx.strokeStyle = "rgba(104, 145, 178, 0.62)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(left, 0);
+  ctx.lineTo(left, height);
+  ctx.stroke();
+  ctx.restore();
+}
+
 function drawCurve(curve, color, width, fillPoints, alpha = 1) {
-  const w = canvasCssWidth;
-  const h = canvasCssHeight;
+  const { left, width: w, height: h } = getPlotBounds();
   ctx.save();
   ctx.globalAlpha = alpha;
   ctx.strokeStyle = color;
@@ -431,7 +510,7 @@ function drawCurve(curve, color, width, fillPoints, alpha = 1) {
   for (let i = 0; i <= w; i += 3) {
     const x = i / w;
     const y = valueAt(curve, x);
-    const px = x * w;
+    const px = left + (x * w);
     const py = (1 - y) * h;
     if (i === 0) ctx.moveTo(px, py);
     else ctx.lineTo(px, py);
@@ -440,7 +519,7 @@ function drawCurve(curve, color, width, fillPoints, alpha = 1) {
   if (fillPoints) {
     for (const point of curve) {
       ctx.beginPath();
-      ctx.arc(point.x * w, (1 - point.y) * h, 6, 0, Math.PI * 2);
+      ctx.arc(left + (point.x * w), (1 - point.y) * h, 6, 0, Math.PI * 2);
       ctx.fillStyle = color;
       ctx.fill();
       ctx.strokeStyle = "#06111c";
@@ -451,7 +530,8 @@ function drawCurve(curve, color, width, fillPoints, alpha = 1) {
   ctx.restore();
 }
 
-function drawPitchRangeFill(w, h) {
+function drawPitchRangeFill() {
+  const { left, width: w, height: h } = getPlotBounds();
   const isPitchActive = activeCurve === "pitchLow" || activeCurve === "pitchHigh";
   ctx.save();
   ctx.fillStyle = isPitchActive ? "rgba(199, 105, 174, 0.22)" : "rgba(199, 105, 174, 0.12)";
@@ -461,7 +541,7 @@ function drawPitchRangeFill(w, h) {
     const lowY = valueAt(curves.pitchLow, x);
     const highY = valueAt(curves.pitchHigh, x);
     const topY = (1 - Math.max(lowY, highY)) * h;
-    const px = x * w;
+    const px = left + (x * w);
     if (i === 0) ctx.moveTo(px, topY);
     else ctx.lineTo(px, topY);
   }
@@ -470,20 +550,20 @@ function drawPitchRangeFill(w, h) {
     const lowY = valueAt(curves.pitchLow, x);
     const highY = valueAt(curves.pitchHigh, x);
     const bottomY = (1 - Math.min(lowY, highY)) * h;
-    ctx.lineTo(x * w, bottomY);
+    ctx.lineTo(left + (x * w), bottomY);
   }
   ctx.closePath();
   ctx.fill();
   ctx.restore();
 }
 
-function drawCanvasGrid(context, w, h) {
+function drawCanvasGrid(context, left, w, h) {
   context.save();
   context.lineWidth = 1;
   context.strokeStyle = "rgba(63, 101, 132, 0.12)";
   for (let i = 1; i < 40; i += 1) {
     if (i % 4 === 0) continue;
-    const x = (i / 40) * w;
+    const x = left + ((i / 40) * w);
     context.beginPath();
     context.moveTo(x, 0);
     context.lineTo(x, h);
@@ -493,13 +573,13 @@ function drawCanvasGrid(context, w, h) {
     if (i % 2 === 0) continue;
     const y = (i / 8) * h;
     context.beginPath();
-    context.moveTo(0, y);
-    context.lineTo(w, y);
+    context.moveTo(left, y);
+    context.lineTo(left + w, y);
     context.stroke();
   }
   context.strokeStyle = "rgba(79, 121, 155, 0.28)";
   for (let i = 0; i <= 10; i += 1) {
-    const x = (i / 10) * w;
+    const x = left + ((i / 10) * w);
     context.beginPath();
     context.moveTo(x, 0);
     context.lineTo(x, h);
@@ -508,8 +588,8 @@ function drawCanvasGrid(context, w, h) {
   for (let i = 1; i < 4; i += 1) {
     const y = (i / 4) * h;
     context.beginPath();
-    context.moveTo(0, y);
-    context.lineTo(w, y);
+    context.moveTo(left, y);
+    context.lineTo(left + w, y);
     context.stroke();
   }
   context.restore();
@@ -523,15 +603,17 @@ function draw() {
   ctx.clearRect(0, 0, w, h);
   ctx.fillStyle = "#0c1f31";
   ctx.fillRect(0, 0, w, h);
-  drawCanvasGrid(ctx, w, h);
-  drawCurveAxisHints(w, h);
-  drawPitchRangeFill(w, h);
+  const plot = getPlotBounds();
+  drawCanvasGrid(ctx, plot.left, plot.width, h);
+  drawPitchRangeFill();
+  drawParameterScale();
+  drawCurveAxisHints(w);
   for (const name of Object.keys(curves)) {
     if (name !== activeCurve && editedCurves[name]) drawCurve(curves[name], curveColors[name], 2.1, false, 1);
   }
   drawCurve(curves[activeCurve], curveColors[activeCurve], 4.8, true, 1);
   if (buffer) {
-    const x = (playheadSeconds / settings().durationSeconds) * w;
+    const x = plot.left + ((playheadSeconds / settings().durationSeconds) * plot.width);
     ctx.strokeStyle = "rgba(226, 236, 244, 0.86)";
     ctx.lineWidth = 1.5;
     ctx.beginPath();
@@ -548,56 +630,62 @@ function drawSourceWindow() {
   const scale = window.devicePixelRatio || 1;
   const w = sourceCanvasCssWidth;
   const h = sourceCanvasCssHeight;
+  const plot = getSourcePlotBounds();
   sourceCtx.setTransform(scale, 0, 0, scale, 0, 0);
   sourceCtx.clearRect(0, 0, w, h);
   sourceCtx.fillStyle = "#0c1f31";
   sourceCtx.fillRect(0, 0, w, h);
-  drawCanvasGrid(sourceCtx, w, h);
+  drawCanvasGrid(sourceCtx, plot.left, plot.width, h);
   sourceCtx.fillStyle = "rgba(128, 158, 186, 0.48)";
   const mid = h * 0.52;
   const amp = h * 0.34;
-  const step = Math.max(1, Math.floor(waveform.length / w));
-  for (let x = 0; x < w; x += 1) {
+  const step = Math.max(1, Math.floor(waveform.length / plot.width));
+  for (let x = 0; x < plot.width; x += 1) {
     const sample = waveform[Math.min(waveform.length - 1, x * step)] || 0;
-    sourceCtx.fillRect(x, mid - (sample * amp), 1, Math.max(1, sample * amp * 2));
+    sourceCtx.fillRect(plot.left + x, mid - (sample * amp), 1, Math.max(1, sample * amp * 2));
   }
-  const { startX, endX } = sourceWindowDisplayBounds(w);
+  const { startX, endX } = sourceWindowDisplayBounds(plot.left, plot.width);
   sourceCtx.fillStyle = "rgba(3, 10, 17, 0.55)";
-  sourceCtx.fillRect(0, 0, startX, h);
-  sourceCtx.fillRect(endX, 0, Math.max(0, w - endX), h);
+  sourceCtx.fillRect(plot.left, 0, Math.max(0, startX - plot.left), h);
+  sourceCtx.fillRect(endX, 0, Math.max(0, (plot.left + plot.width) - endX), h);
   sourceCtx.fillStyle = "rgba(109, 224, 192, 0.12)";
   sourceCtx.fillRect(startX, 0, Math.max(1, endX - startX), h);
   sourceCtx.strokeStyle = "#6de0c0";
   sourceCtx.lineWidth = 2;
   sourceCtx.strokeRect(startX, 1, Math.max(1, endX - startX), h - 2);
-  drawReadPositionMarker(w, h);
+  drawReadPositionMarker(plot.left, plot.width, h);
   sourceCtx.fillStyle = "rgba(232, 240, 246, 0.9)";
   sourceCtx.font = "650 12px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   sourceCtx.textBaseline = "top";
-  sourceCtx.fillText("Source Window", Math.min(w - 118, startX + 8), 8);
+  sourceCtx.fillText("Source Window", Math.min(plot.left + plot.width - 118, startX + 8), 8);
+  sourceCtx.font = "600 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  sourceCtx.fillStyle = "rgba(170, 188, 204, 0.82)";
+  sourceCtx.textAlign = "right";
+  sourceCtx.fillText("SOURCE", plot.left - 9, 10);
 }
 
-function sourceWindowDisplayBounds(w) {
-  const actualStartX = sourceWindow.start * w;
-  const actualEndX = sourceWindow.end * w;
+function sourceWindowDisplayBounds(left, width) {
+  const actualStartX = left + (sourceWindow.start * width);
+  const actualEndX = left + (sourceWindow.end * width);
   const actualWidth = Math.max(1, actualEndX - actualStartX);
   const displayWidth = Math.max(sourceWindowMinimumPixels, actualWidth);
   let startX = actualStartX;
   let endX = startX + displayWidth;
-  if (endX > w) {
-    endX = w;
-    startX = Math.max(0, endX - displayWidth);
+  const plotEnd = left + width;
+  if (endX > plotEnd) {
+    endX = plotEnd;
+    startX = Math.max(left, endX - displayWidth);
   }
   return { startX, endX };
 }
 
-function drawReadPositionMarker(w, h) {
+function drawReadPositionMarker(left, width, h) {
   if (!buffer || !isPlaying) return;
   const duration = settings().durationSeconds;
   const t = Math.max(0, Math.min(1, playheadSeconds / Math.max(0.001, duration)));
   const readPosition = valueAt(curves.position, t);
   const readNorm = sourceWindow.start + ((sourceWindow.end - sourceWindow.start) * readPosition);
-  const x = readNorm * w;
+  const x = left + (readNorm * width);
   sourceCtx.save();
   sourceCtx.strokeStyle = "rgba(109, 224, 192, 0.92)";
   sourceCtx.lineWidth = 1.6;
@@ -608,16 +696,10 @@ function drawReadPositionMarker(w, h) {
   sourceCtx.restore();
 }
 
-function drawCurveAxisHints(w, h) {
-  if (activeCurve !== "position") return;
+function drawCurveAxisHints(w) {
   ctx.save();
-  ctx.font = "650 12px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  ctx.font = "600 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   ctx.fillStyle = "rgba(170, 188, 204, 0.82)";
-  ctx.textAlign = "left";
-  ctx.textBaseline = "top";
-  ctx.fillText("Window End", 10, 10);
-  ctx.textBaseline = "bottom";
-  ctx.fillText("Window Start", 10, h - 10);
   ctx.textAlign = "right";
   ctx.textBaseline = "top";
   ctx.fillText("Output Time", w - 10, 10);
@@ -628,12 +710,13 @@ function drawTooltip(pointRef) {
   const point = curves[pointRef.curveName][pointRef.pointIndex];
   if (!point) return;
   const text = formatPointValue(pointRef.curveName, point);
-  const px = point.x * canvasCssWidth;
+  const { left, width } = getPlotBounds();
+  const px = left + (point.x * width);
   const py = (1 - point.y) * canvasCssHeight;
   ctx.save();
   ctx.font = "650 13px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   const boxWidth = Math.ceil(ctx.measureText(text).width + 18);
-  const boxX = Math.max(8, Math.min(canvasCssWidth - boxWidth - 8, px - (boxWidth / 2)));
+  const boxX = Math.max(left + 8, Math.min(left + width - boxWidth - 8, px - (boxWidth / 2)));
   const boxY = py < 40 ? py + 14 : py - 36;
   ctx.fillStyle = "rgba(7, 17, 28, 0.96)";
   ctx.fillRect(boxX, boxY, boxWidth, 26);
@@ -664,14 +747,16 @@ function updateReadouts() {
 
 function pointerToPoint(event) {
   const rect = canvas.getBoundingClientRect();
-  const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+  const { left, width } = getPlotBounds();
+  const canvasX = event.clientX - rect.left;
+  const x = Math.max(0, Math.min(1, (canvasX - left) / width));
   const y = Math.max(0, Math.min(1, 1 - ((event.clientY - rect.top) / rect.height)));
   return { x, y };
 }
 
 function findPointNearPointer(point) {
   const curve = curves[activeCurve];
-  const xRadius = 10 / canvasCssWidth;
+  const xRadius = 10 / getPlotBounds().width;
   const yRadius = 10 / canvasCssHeight;
   let bestIndex = -1;
   let bestDistance = Infinity;
@@ -913,7 +998,9 @@ canvas.addEventListener("dblclick", (event) => {
 
 function pointerToSourceNorm(event) {
   const rect = sourceCanvas.getBoundingClientRect();
-  return Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+  const { left, width } = getSourcePlotBounds();
+  const canvasX = event.clientX - rect.left;
+  return Math.max(0, Math.min(1, (canvasX - left) / width));
 }
 
 function setSourceWindow(start, end) {
