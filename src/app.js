@@ -656,8 +656,9 @@ function drawSourceWindow() {
   drawReadPositionMarker(plot.left, plot.width, h);
   sourceCtx.fillStyle = "rgba(232, 240, 246, 0.9)";
   sourceCtx.font = "650 12px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  sourceCtx.textAlign = "left";
   sourceCtx.textBaseline = "top";
-  sourceCtx.fillText("Source Window", Math.min(plot.left + plot.width - 118, startX + 8), 8);
+  sourceCtx.fillText("Source Window", plot.left + 8, 8);
   sourceCtx.font = "600 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   sourceCtx.fillStyle = "rgba(170, 188, 204, 0.82)";
   sourceCtx.textAlign = "right";
