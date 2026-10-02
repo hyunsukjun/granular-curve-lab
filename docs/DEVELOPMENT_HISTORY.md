@@ -23,7 +23,7 @@ This is a retrospective record of product-shaping changes visible in the current
 ## 3. Read Position Was Separated From Source Time
 
 **Observed problem:** A vertical source-time representation and a permanently centered red marker made Read Position difficult to understand.  
-**Current direction:** Read Position is a curve over output time. The source waveform shows the corresponding read marker only when it communicates the curve's initial/current value or active playback movement. Decorative center indicators were removed.  
+**Current direction:** Read Position is a curve over output time. The source waveform shows the corresponding read marker only during playback, following the current Read Position curve value. The marker is hidden while stopped, and decorative center indicators were removed.
 **Preserve:** Output playhead, curve time, and source read position are distinct concepts and require distinct visual roles.
 
 ## 4. Curve Visibility Was Standardized
@@ -76,4 +76,3 @@ The history above explains product direction but does not replace empirical evid
 - commit-linked numeric tuning changes
 
 Future rejected experiments must remain recorded in `TUNING_HISTORY.md` rather than being erased after a final value is selected.
-

@@ -592,7 +592,7 @@ function sourceWindowDisplayBounds(w) {
 }
 
 function drawReadPositionMarker(w, h) {
-  if (!buffer) return;
+  if (!buffer || !isPlaying) return;
   const duration = settings().durationSeconds;
   const t = Math.max(0, Math.min(1, playheadSeconds / Math.max(0.001, duration)));
   const readPosition = valueAt(curves.position, t);

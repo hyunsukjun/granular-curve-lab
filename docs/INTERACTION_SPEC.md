@@ -25,7 +25,7 @@ Current web binding: file input with `audio/*` acceptance.
 
 Play, Stop, the only visible time display, Position scrubber, and L/R output meter are grouped in the bottom playback bar. Natural completion also returns the playhead and scrubber to zero.
 
-The playhead represents output time, not source read position. Source read position is drawn separately in the Source Window lane.
+The playhead represents output time, not source read position. During playback, Source read position is drawn separately in the Source Window lane. The marker is hidden while stopped.
 
 ## 3. Output Duration
 
