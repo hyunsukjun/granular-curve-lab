@@ -3,7 +3,7 @@
 Version: 1.0  
 Baseline: 2026-09-29  
 Reference family: Audio Curve Lab  
-Product brand: Granular Curve Lab, Coral `#F0785A`
+Product brand: Granular Curve Lab, Pink `#EF4FA4`
 
 ## 1. Design Intent
 
@@ -22,7 +22,7 @@ The common visual order is:
 
 Brand color and parameter colors have different jobs.
 
-- Brand Coral `#F0785A`: waveform-style brand mark, `Curve Lab` title text, restrained action/focus accents.
+- Brand Pink `#EF4FA4`: directional grain-cluster brand mark, `Curve Lab` title text, restrained action/focus accents.
 - Read Position `#6DE0C0`: source-reading trajectory and Source Window.
 - Spread `#F2B705`: random source-position distribution width.
 - Grain Size `#6FA8DC`: grain duration.
@@ -30,7 +30,7 @@ Brand color and parameter colors have different jobs.
 - Pitch Low `#EB6F75`: lower transposition bound.
 - Pitch High `#B887F4`: upper transposition bound.
 
-Do not recolor all parameters Coral. Parameter color is semantic information.
+Do not recolor all parameters Pink. Parameter color is semantic information.
 
 ## 3. Current Web Tokens
 
@@ -49,9 +49,9 @@ Do not recolor all parameters Coral. Parameter color is semantic information.
 | Primary text | `--cl-text` | `#E8F0F6` |
 | Secondary text | `--cl-text-secondary` | `#AABCCC` |
 | Muted text | `--cl-text-muted` | `#71889B` |
-| Brand | `--cl-accent` | `#F0785A` |
-| Brand hover | `--cl-accent-hover` | `#F48D72` |
-| Focus | `--cl-focus` | `#FFAD98` |
+| Brand | `--cl-accent` | `#EF4FA4` |
+| Brand hover | `--cl-accent-hover` | `#F37BB9` |
+| Focus | `--cl-focus` | `#F8A7D1` |
 
 ### Geometry and spacing
 
@@ -86,7 +86,7 @@ Do not add a remote font dependency. Typography remains compact, legible, and ne
 - Header output controls contain Open Audio, Output Duration, channel format, and Download WAV.
 - Play, Stop, the single time display, Position scrubber, and L/R meter live in the bottom playback bar.
 - Output Duration and channel format are global-output controls, not grain-curve parameters.
-- Download WAV is the primary output action and may use restrained Coral emphasis.
+- Download WAV is the primary output action and may use restrained Pink emphasis.
 
 ## 6. Toolbar and Tools
 
@@ -120,7 +120,7 @@ Curve visibility takes precedence over ambient effects.
 - Hover increases surface and border contrast.
 - `focus-visible` uses the focus token and must remain clearly visible.
 - Disabled controls retain shape but lower opacity.
-- Active parameter buttons use their own parameter color, not Coral.
+- Active parameter buttons use their own parameter color, not Pink.
 - Active Pen/Eraser state uses the common blue workbench selection treatment.
 
 ## 10. Ambient Background and Motion
@@ -142,3 +142,12 @@ When changing design:
 - Do not alter curve coordinates, parameter mappings, or DSP.
 - Update this document when tokens, hierarchy, or states change.
 - Validate narrow and wide layouts, keyboard focus, disabled controls, high-DPI Canvas, and reduced-motion behavior.
+
+## Hub v0.10 Identity Pilot — 2026-10-04
+
+PROJECT-SPECIFIC local pilot. Previous Coral #F0785A becomes canonical Pink #EF4FA4.
+Header and favicon use exact Hub v0.10 symbol/micro assets (13 / 8 particles).
+App tile retains 19 particles for future standalone use.
+`--cl-accent` aliases `--curve-lab-granular`; focus/hover are web derivatives.
+Parameter colors, canvas, normalized curves and DSP remain unchanged.
+See `docs/IDENTITY_PILOT.md` for source, hashes and verification scope.

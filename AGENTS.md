@@ -71,3 +71,8 @@ Do not erase meaningful old tuning values without recording the previous value, 
 Scale verification to the change. For behavior-affecting work, check initialization, real-file loading, Play/Stop, Spacebar, every parameter mode, Pen/Eraser, point add/move/delete, empty eraser behavior, endpoint protection, Clear Current, Reset cancel/confirm, waveform/playhead, Preview, Render, WAV output, canvas resize, pointer mapping, narrow/wide layouts, console errors, and JavaScript syntax.
 
 This project has no built-in default sample and no automated test suite at the documentation baseline. Do not invent either merely to satisfy a checklist; record the limitation and test with a short real audio file when audio behavior changes.
+
+## Identity Pilot
+
+Product identity uses Hub v0.10 Granular #EF4FA4 and original grain-cluster assets.
+See `docs/IDENTITY_PILOT.md`. Preserve independent parameter colors.

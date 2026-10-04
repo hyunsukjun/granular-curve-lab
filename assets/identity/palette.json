@@ -1,0 +1,18 @@
+{
+  "source": "CURVE LAB HUB for macOS / DesignIdentity / 2026-10-04-v0.10",
+  "status": "Granular-only identity pilot; publication authorized 2026-10-04",
+  "colorSpace": "sRGB",
+  "colors": {
+    "audio": "#459BFF",
+    "timbre": "#F4CB38",
+    "space": "#A982FF",
+    "granular": "#EF4FA4",
+    "spectral": "#FF7047",
+    "oscillator": "#28CDB0"
+  },
+  "assets": {
+    "granular-symbol.svg": "4ce9b2fe45fda591155f5d379727ea4e1a1edaed89119ec935bc1207905837ae",
+    "granular-micro.svg": "bddb77d0859818652c71052461f71cadb82f7a1efa4410109ee3f11a62b9ec0a",
+    "granular-app.svg": "d17589acfdd094585b31c6b15ec6c59c52e833238d7827346499a5f5cf46f7c8"
+  }
+}

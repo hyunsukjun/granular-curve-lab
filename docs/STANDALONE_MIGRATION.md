@@ -196,3 +196,8 @@ These records distinguish code-derived facts from measured or listening-approved
 ## 8. Migration Principle
 
 Do not begin with framework selection. Begin with parameter conformance tests, curve interpolation fixtures, DSP reference renders, interaction acceptance tests, and listening references derived from this product documentation.
+
+## Identity Asset Pilot
+
+STANDALONE ASSET: `assets/identity/granular-app.svg`, symbol/micro variants
+and canonical palette. Native packaging/Dock validation remains separate.

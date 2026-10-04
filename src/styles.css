@@ -11,9 +11,9 @@
   --cl-text: #e8f0f6;
   --cl-text-secondary: #aabccc;
   --cl-text-muted: #71889b;
-  --cl-accent: #f0785a;
-  --cl-accent-hover: #f48d72;
-  --cl-focus: #ffad98;
+  --cl-accent: var(--curve-lab-granular);
+  --cl-accent-hover: #f37bb9;
+  --cl-focus: #f8a7d1;
   --cl-danger: #e35d80;
   --cl-meter-green: #20d45b;
   --cl-meter-yellow: #f2d31b;
@@ -144,11 +144,8 @@ button:disabled {
   flex: 0 0 48px;
   width: 48px;
   height: 48px;
-  fill: none;
-  stroke: var(--cl-accent);
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  display: block;
+  object-fit: contain;
 }
 
 .brandCopy {
@@ -275,14 +272,14 @@ button:disabled {
 }
 
 #downloadButton {
-  border-color: #b75f49;
-  background: #7d3f31;
+  border-color: var(--cl-accent);
+  background: color-mix(in srgb, var(--cl-accent) 48%, var(--cl-bg));
   color: #fff3ef;
 }
 
 #downloadButton:hover:not(:disabled) {
   border-color: var(--cl-accent-hover);
-  background: #96503e;
+  background: color-mix(in srgb, var(--cl-accent) 60%, var(--cl-bg));
 }
 
 #stopButton {

@@ -146,3 +146,9 @@ This log records durable product decisions, not every conversation. Dates below 
 **REASON:** Remove duplicate transport information, align the Curve Lab family, and expose truthful final-output level feedback without changing Granular DSP.  
 **RESULT:** Stop and natural completion return to zero; scrubbing updates UI and audio together; meter/CLIP state is observational only.  
 **AFFECTS:** Layout, transport interaction, realtime audio graph, accessibility, Standalone monitoring contract.
+
+## GCL-D015: Hub v0.10 Identity Pilot
+
+2026-10-04 · PROJECT-SPECIFIC. Replace Coral #F0785A and generic waveform
+with canonical Pink #EF4FA4 and directional grain cluster. Preserve parameter
+colors and audio processing. Stop before commit. See `IDENTITY_PILOT.md`.

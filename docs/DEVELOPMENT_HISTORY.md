@@ -76,3 +76,10 @@ The history above explains product direction but does not replace empirical evid
 - commit-linked numeric tuning changes
 
 Future rejected experiments must remain recorded in `TUNING_HISTORY.md` rather than being erased after a final value is selected.
+
+## 2026-10-04 - Hub identity pilot
+
+PROJECT-SPECIFIC: Coral to canonical Pink #EF4FA4 and original Hub v0.10 grain
+icons. Desktop/narrow visual checks, JS syntax/hash checks and source SVG counts
+passed. Audio processing unchanged. No file playback/export validation performed
+for this visual-only change. See `IDENTITY_PILOT.md`. Stop before commit.

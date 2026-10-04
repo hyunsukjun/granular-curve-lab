@@ -51,3 +51,9 @@ This remains a focused v0.1 prototype. Real-file browser lifecycle, curve editin
 - [`docs/STATE_SCHEMA.md`](docs/STATE_SCHEMA.md): draft versioned product-state contract and unresolved source-file policy.
 
 Documentation baseline: 2026-09-30. Items not established by code or a recorded listening test are marked `UNKNOWN` or `TO BE DOCUMENTED` rather than inferred.
+
+## Local identity pilot
+
+Hub v0.10 brand color and icons are applied locally. See
+[identity pilot](docs/IDENTITY_PILOT.md) for scope and verification.
+GitHub/Pages publication authorized on 2026-10-04.

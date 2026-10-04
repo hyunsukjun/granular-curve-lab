@@ -182,3 +182,8 @@ Statuses describe the current repository, not proposed future work.
 - Persistent presets/state
 
 These absences are not defects unless a later product decision adds them.
+
+## GCL-IDENTITY-001: Hub Identity
+
+IMPLEMENTED locally: canonical brand color, header symbol and favicon.
+See `IDENTITY_PILOT.md`. Publication authorized on 2026-10-04.
