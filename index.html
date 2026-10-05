@@ -6,7 +6,7 @@
     <title>Granular Curve Lab</title>
     <link rel="icon" type="image/svg+xml" href="assets/identity/granular-micro.svg?v=hub-v0.10">
     <link rel="stylesheet" href="assets/identity/tokens.css?v=hub-v0.10">
-    <link rel="stylesheet" href="src/styles.css?v=20261005-duration-02">
+    <link rel="stylesheet" href="src/styles.css?v=20261005-duration-always-02">
   </head>
   <body>
     <main class="app">
@@ -47,7 +47,6 @@
             <button id="densityMode" class="curveMode" type="button">Density</button>
             <button id="pitchLowMode" class="curveMode" type="button">Pitch Low</button>
             <button id="pitchHighMode" class="curveMode" type="button">Pitch High</button>
-            <button id="durationToggle" type="button" aria-expanded="false" aria-controls="durationPanel">Duration <span id="durationSummary">20 sec</span></button>
             <div class="toolToggle" role="group" aria-label="Curve editing tool">
               <button id="penTool" class="active" type="button" aria-label="Pen" aria-pressed="true" title="Pen: add or move points">
                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L9 17l-4 1 1-4Z"/></svg>
@@ -69,7 +68,7 @@
           </div>
         </div>
 
-        <section id="durationPanel" class="durationPanel" aria-label="Output Duration" hidden>
+        <section id="durationPanel" class="durationPanel" aria-label="Output Duration">
           <label for="durationInput">Output Duration</label>
           <select id="durationRange" aria-label="Duration range">
             <option value="short">1–60 sec</option>
@@ -136,6 +135,6 @@
       </footer>
     </main>
 
-    <script src="src/app.js?v=20261005-duration-02" type="module"></script>
+    <script src="src/app.js?v=20261005-duration-always-02" type="module"></script>
   </body>
 </html>

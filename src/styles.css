@@ -325,22 +325,6 @@ button:disabled {
   color: var(--cl-text-secondary);
 }
 
-#durationToggle {
-  height: 34px;
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-}
-
-#durationToggle[aria-expanded="true"] {
-  border-color: var(--cl-accent);
-  background: var(--cl-surface-raised);
-}
-
-#durationSummary {
-  margin-left: 5px;
-  color: var(--cl-text-muted);
-}
-
 .durationPanel {
   display: grid;
   grid-template-columns: auto auto auto minmax(100px, 1fr) auto 110px auto;
@@ -353,7 +337,6 @@ button:disabled {
   color: var(--cl-text-secondary);
 }
 
-.durationPanel[hidden] { display: none; }
 .durationPanel select { height: 32px; padding: 0 8px; }
 .durationPanel input { width: 100%; min-width: 0; accent-color: var(--cl-accent); }
 .durationPanel output { text-align: right; font-variant-numeric: tabular-nums; color: var(--cl-text); }
@@ -569,8 +552,8 @@ button:disabled {
 
 #curveCanvas {
   height: 560px;
-  height: clamp(220px, calc(100vh - 448px - var(--editor-extra-height, 0px)), 560px) !important;
-  height: clamp(220px, calc(100dvh - 448px - var(--editor-extra-height, 0px)), 560px) !important;
+  height: clamp(220px, calc(100vh - 460px - var(--editor-extra-height, 0px)), 560px) !important;
+  height: clamp(220px, calc(100dvh - 460px - var(--editor-extra-height, 0px)), 560px) !important;
   cursor: crosshair;
 }
 

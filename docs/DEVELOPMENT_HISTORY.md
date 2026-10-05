@@ -1,5 +1,11 @@
 # Development History and Lessons
 
+## 2026-10-05: Duration Always Visible
+
+Final spacing pass reserves an additional 12 px above transport. Final 1280x800 Canvas measurement is about 268 px; the 280/248 px figures below describe the initial pass. Low-window scroll-end clearance and wide-window clearance were checked after this adjustment.
+
+User requested alignment with Oscillator's persistent Duration row for immediate access. Removed the disclosure button and hidden-panel state; retained measured control height, source waveform and normalized curve coordinates. At 1280x800 removing the wrapped toggle restores toolbar space: Canvas is 280 px, slider about 709 px. At approximately 1366x768 Canvas is 248 px and slider about 795 px. These are browser measurements, not fixed dimensions. Actual short WAV download verified; long multichannel stability remains outside this UI change.
+
 ## 2026-10-05: Duration Toolbar Disclosure
 
 The user preferred gestural duration control near curve modes to a header number field or Canvas dropdown. Added Short/Long slider ranges and extended offline duration to 600 seconds. A fixed Canvas subtraction did not account for toolbar wrapping; actual toolbar/panel growth now determines available editing height. Preserve normalized curves and the source/output-time distinction in standalone. Long-render device stability remains unverified.

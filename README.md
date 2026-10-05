@@ -54,6 +54,8 @@ Documentation baseline: 2026-09-30. Items not established by code or a recorded 
 
 ## Local identity pilot
 
+Latest local UI update: Output Duration is now always visible below the parameter toolbar, with no toggle. The disclosure description below is historical. Actual short mono 24-bit/48 kHz WAV download was verified for this revision; long multichannel stability remains unverified. No commit or publication is included in this update.
+
 Local Duration update (2026-10-05): the Duration toolbar button opens a horizontal slider, with 1–60 seconds and 1–10 minutes ranges. Changes stop/reset Preview and preserve normalized curve points. Canvas yields space to the panel and wrapped toolbar, retaining a 220 px minimum. Verified in-app at 1280x800 and approximately 1366x768, including real-file load, duration-change stop/reset, point preservation and short WAV render completion. Ten-minute multichannel stability, actual saved WAV for this revision, and cross-browser listening remain unverified. No publication is included in this update.
 
 Hub v0.10 brand color and icons are applied locally. See

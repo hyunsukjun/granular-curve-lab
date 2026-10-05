@@ -19,7 +19,6 @@ const downloadButton = document.getElementById("downloadButton");
 const clearCurveButton = document.getElementById("clearCurveButton");
 const resetButton = document.getElementById("resetButton");
 const durationInput = document.getElementById("durationInput");
-const durationToggle = document.getElementById("durationToggle");
 const durationPanel = document.getElementById("durationPanel");
 const durationRange = document.getElementById("durationRange");
 const formatSelect = document.getElementById("formatSelect");
@@ -874,7 +873,6 @@ eraserTool.addEventListener("click", () => setTool("eraser"));
 function updateDurationDisplay() {
   const seconds = settings().durationSeconds;
   const label = seconds < 60 ? `${seconds} sec` : `${Math.floor(seconds / 60)} min${seconds % 60 ? ` ${seconds % 60} sec` : ""}`;
-  document.getElementById("durationSummary").textContent = label;
   document.getElementById("durationValue").textContent = label;
   durationInput.setAttribute("aria-valuetext", label);
   const channels = { mono: 1, stereo: 2, quad: 4, octo: 8 }[formatSelect.value];
@@ -888,12 +886,6 @@ function applyDuration() {
   sendSettings();
 }
 
-durationToggle.addEventListener("click", () => {
-  const open = durationPanel.hidden;
-  durationPanel.hidden = !open;
-  durationToggle.setAttribute("aria-expanded", String(open));
-  document.querySelector(".editor").classList.toggle("durationOpen", open);
-});
 durationRange.addEventListener("change", () => {
   const previous = Number(durationInput.value);
   const long = durationRange.value === "long";
@@ -1082,7 +1074,7 @@ window.addEventListener("resize", resizeCanvas);
 function fitEditorControls() {
   const editor = document.querySelector(".editor");
   const toolbarGrowth = Math.max(0, document.querySelector(".legend").getBoundingClientRect().height - 54);
-  const panelHeight = durationPanel.hidden ? 0 : durationPanel.getBoundingClientRect().height + 8;
+  const panelHeight = durationPanel.getBoundingClientRect().height + 8;
   editor.style.setProperty("--editor-extra-height", `${Math.ceil(toolbarGrowth + panelHeight)}px`);
 }
 window.addEventListener("resize", fitEditorControls);

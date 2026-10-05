@@ -31,7 +31,7 @@ The playhead represents output time, not source read position. During playback, 
 
 The user sets the total output timeline in seconds. Every curve spans this duration from left to right. Changing duration does not stretch source audio; it changes the time over which granular parameter trajectories are evaluated.
 
-The Duration toolbar button toggles a horizontal panel below the toolbar while retaining the active curve. Its label retains the current duration when closed. Short range is 1–60 seconds; Long is 60–600 seconds, both in one-second steps. Changing duration stops Preview and resets output time to zero; normalized curve points are untouched. Range switching clamps to its bounds. Estimated WAV size is shown in decimal MB; intermediate render memory is additional. Duration and format controls are disabled during import/render. The editor measures toolbar/panel height and yields vertical space, retaining a 220 px minimum with scrolling on smaller windows.
+Output Duration is always visible immediately below the parameter toolbar; there is no Duration toggle or collapsed state. The row contains its label, range selector, slider, current time and estimated WAV size. Short range is 1–60 seconds; Long is 60–600 seconds, both in one-second steps. Changing duration stops Preview and resets output time to zero; normalized curve points are untouched. Range switching clamps to its bounds. Estimated WAV size is shown in decimal MB; intermediate render memory is additional. Duration and format controls are disabled during import/render. The editor measures toolbar/panel height and yields vertical space, retaining a 220 px minimum with scrolling on smaller windows.
 
 ## 4. Parameter Mode Selection
 

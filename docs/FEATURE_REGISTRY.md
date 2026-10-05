@@ -1,5 +1,9 @@
 # Feature Registry
 
+## Always-Visible Duration (2026-10-05)
+
+Supersedes the disclosure UI described below: Output Duration is permanently visible below the parameter toolbar, following the Oscillator layout reference. Toggle and summary button are removed. Duration ranges, value clamping, playback reset, render locking, DSP and WAV encoding are unchanged. Verified real-file Play/Stop, duration changes, resize/point deletion and actual 1 s mono 24-bit/48 kHz WAV download. At 1280x800 and approximately 1366x768 the row stays on one line; narrow layouts wrap and scroll above transport.
+
 ## Duration Panel Update (2026-10-05)
 
 Duration disclosure in the curve toolbar replaces the header numeric input. A linear slider provides 1–60 s and 60–600 s ranges, current value and estimated WAV size. Closing the panel preserves the selected curve and duration. Timeline changes stop/reset Preview without changing curve points. Render uses the same 600 s maximum. Extra toolbar/panel height is measured for responsive Canvas sizing. Long multichannel rendering requires further device testing.
