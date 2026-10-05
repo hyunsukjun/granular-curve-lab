@@ -149,6 +149,12 @@ This log records durable product decisions, not every conversation. Dates below 
 
 ## GCL-D015: Hub v0.10 Identity Pilot
 
+See GCL-D016 below for the subsequent Duration UI change.
+
 2026-10-04 · PROJECT-SPECIFIC. Replace Coral #F0785A and generic waveform
 with canonical Pink #EF4FA4 and directional grain cluster. Preserve parameter
 colors and audio processing. Stop before commit. See `IDENTITY_PILOT.md`.
+
+## GCL-D016: Duration Disclosure and Laptop Editing Space
+
+2026-10-05. User-approved local implementation: replace the header numeric duration field with a Duration button and horizontal slider panel. Use 1–60 seconds normally and an explicit 1–10 minute range. Preserve normalized curves and stop/reset playback on duration changes. Measure extra control height so the Canvas gives space back when the panel closes; minimum 220 px protects editing on low windows. Offline duration clamp expands from 180 to 600 seconds to match Preview/UI. Grain DSP and WAV encoding are unchanged. Ten-minute eight-channel output is not a device-stability guarantee.

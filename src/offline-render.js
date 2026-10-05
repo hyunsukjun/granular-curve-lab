@@ -19,7 +19,7 @@ export async function renderGranular({ audioBuffer, curves, settings, signal, on
   const sampleRate = RENDER_SAMPLE_RATE;
   const sourceSampleRate = audioBuffer.sampleRate;
   const source = audioBuffer.getChannelData(0);
-  const duration = clamp(settings.durationSeconds || 20, 1, 180);
+  const duration = clamp(settings.durationSeconds || 20, 1, 600);
   const frameCount = Math.ceil(duration * sampleRate);
   const channelCount = outputChannelCount(settings.format);
   const output = Array.from({ length: channelCount }, () => new Float32Array(frameCount));

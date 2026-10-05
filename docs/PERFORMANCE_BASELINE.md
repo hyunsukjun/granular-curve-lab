@@ -1,5 +1,7 @@
 # Performance and Stability Baseline
 
+Duration extension (2026-10-05): UI and offline render now allow 600 s. At 48 kHz/24-bit, ten minutes of eight-channel WAV needs approximately 691.2 MB of PCM; Float32 output arrays alone require 921.6 MB, before encoding and browser copies. The UI estimate describes file payload, not peak RAM. No ten-minute eight-channel browser stability benchmark has been completed. Short-render completion is not proof of this upper bound.
+
 Version: 1.0  
 Baseline: 2026-09-30  
 Measured hardware baseline: NOT YET ESTABLISHED
@@ -80,4 +82,3 @@ Required cases:
 - Measured end-to-end latency and playhead error.
 
 Until these values are measured and approved, performance status remains provisional rather than Standalone-ready.
-

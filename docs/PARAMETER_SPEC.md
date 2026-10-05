@@ -15,7 +15,7 @@ This document records stable identity and current code-derived behavior. Percept
 | `density` | Density | grains/s | 1–80 | 18 | Logarithmic | Yes |
 | `pitchLow` | Pitch Low | semitone | -24–+24 | 0 | Linear | Yes |
 | `pitchHigh` | Pitch High | semitone | -24–+24 | 0 | Linear | Yes |
-| `durationSeconds` | Output Duration | s | 1–180 | 20 | Linear numeric | No |
+| `durationSeconds` | Output Duration | s | 1–600 | 20 | Linear slider, two ranges | No |
 | `rangeStart` | Source Window Start | normalized source | 0–1 | 0 | Linear | No |
 | `rangeEnd` | Source Window End | normalized source | 0–1 | source-dependent | Linear | No |
 | `format` | Output Format | channels | 1/2/4/8 | 1 | Discrete | No |
@@ -170,14 +170,15 @@ This document records stable identity and current code-derived behavior. Percept
 
 **Display Name:** Output Duration
 
-- Type: numeric float input
+- Type: integer seconds, horizontal slider
 - Unit: seconds
-- Minimum / Maximum / Default / Step: `1 / 180 / 20 / 0.5`
+- Minimum / Maximum / Default / Step: `1 / 600 / 20 / 1`
+- UI ranges: Short `1–60 s`; Long `60–600 s`. Switching ranges clamps the existing value to the new range.
 - Purpose: define complete output timeline independently of source duration
 - Curve Support: no; all curve `x` values map across this duration
 - Preview/Render: shared duration setting
 - Edge Cases: invalid input falls back to 20 s and is clamped to range
-- Fine-Tuning Notes: range rationale and preferred classroom values are TO BE DOCUMENTED
+- Fine-Tuning Notes: 2026-10-05 replaces the 1–180 s numeric field with a toolbar disclosure and slider. Short-range resolution supports direct gestural editing; Long explicitly exposes up to ten minutes. This is a UI/product decision, not a listening-based DSP tuning.
 
 ## `rangeStart` and `rangeEnd`
 

@@ -1,5 +1,9 @@
 # Development History and Lessons
 
+## 2026-10-05: Duration Toolbar Disclosure
+
+The user preferred gestural duration control near curve modes to a header number field or Canvas dropdown. Added Short/Long slider ranges and extended offline duration to 600 seconds. A fixed Canvas subtraction did not account for toolbar wrapping; actual toolbar/panel growth now determines available editing height. Preserve normalized curves and the source/output-time distinction in standalone. Long-render device stability remains unverified.
+
 Version: 1.0  
 Baseline: 2026-09-30
 

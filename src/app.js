@@ -19,6 +19,9 @@ const downloadButton = document.getElementById("downloadButton");
 const clearCurveButton = document.getElementById("clearCurveButton");
 const resetButton = document.getElementById("resetButton");
 const durationInput = document.getElementById("durationInput");
+const durationToggle = document.getElementById("durationToggle");
+const durationPanel = document.getElementById("durationPanel");
+const durationRange = document.getElementById("durationRange");
 const formatSelect = document.getElementById("formatSelect");
 const sourceWindowReadout = document.getElementById("sourceWindowReadout");
 const sourceCanvas = document.getElementById("sourceCanvas");
@@ -102,10 +105,6 @@ let canvasCssWidth = 1;
 let canvasCssHeight = 1;
 let sourceCanvasCssWidth = 1;
 let sourceCanvasCssHeight = 1;
-let canvasBaseWidth = 0;
-const canvasMinimumWidth = 1800;
-const canvasBaseHeight = 560;
-const sourceCanvasBaseHeight = 150;
 const parameterScaleWidth = 54;
 const plotRightPadding = 8;
 const grainMinimumSeconds = 0.005;
@@ -130,7 +129,7 @@ function defaultCurve(y) {
 }
 
 function settings() {
-  const durationSeconds = Math.max(1, Math.min(180, Number(durationInput.value) || 20));
+  const durationSeconds = Math.max(1, Math.min(600, Number(durationInput.value) || 20));
   return {
     durationSeconds,
     rangeStart: sourceWindow.start,
@@ -149,13 +148,6 @@ function previewGrainLimit() {
 }
 
 function resizeCanvas() {
-  const frameRect = canvas.parentElement.getBoundingClientRect();
-  const targetWidth = Math.max(frameRect.width, canvasBaseWidth, canvasMinimumWidth);
-  canvasBaseWidth = targetWidth;
-  sourceCanvas.style.width = `${Math.round(canvasBaseWidth)}px`;
-  sourceCanvas.style.height = `${sourceCanvasBaseHeight}px`;
-  canvas.style.width = `${Math.round(canvasBaseWidth)}px`;
-  canvas.style.height = `${canvasBaseHeight}px`;
   const sourceRect = sourceCanvas.getBoundingClientRect();
   const rect = canvas.getBoundingClientRect();
   const scale = window.devicePixelRatio || 1;
@@ -286,6 +278,9 @@ function setBusy(isBusy) {
   downloadButton.disabled = isBusy || !buffer;
   fileInput.disabled = isBusy;
   playbackScrubber.disabled = isBusy || !buffer;
+  durationInput.disabled = isBusy;
+  durationRange.disabled = isBusy;
+  formatSelect.disabled = isBusy;
 }
 
 function nextPlaybackToken() {
@@ -802,7 +797,7 @@ function resetAll() {
 
 async function getRenderer() {
   if (!renderGranular) {
-    const module = await import("./offline-render.js?v=20260930-01");
+    const module = await import("./offline-render.js?v=20261005-duration-01");
     renderGranular = module.renderGranular;
   }
   return renderGranular;
@@ -876,10 +871,45 @@ function setTool(tool) {
 penTool.addEventListener("click", () => setTool("pen"));
 eraserTool.addEventListener("click", () => setTool("eraser"));
 
-for (const control of [durationInput, formatSelect]) {
-  control.addEventListener("input", sendSettings);
-  control.addEventListener("change", sendSettings);
+function updateDurationDisplay() {
+  const seconds = settings().durationSeconds;
+  const label = seconds < 60 ? `${seconds} sec` : `${Math.floor(seconds / 60)} min${seconds % 60 ? ` ${seconds % 60} sec` : ""}`;
+  document.getElementById("durationSummary").textContent = label;
+  document.getElementById("durationValue").textContent = label;
+  durationInput.setAttribute("aria-valuetext", label);
+  const channels = { mono: 1, stereo: 2, quad: 4, octo: 8 }[formatSelect.value];
+  const megabytes = (44 + seconds * 48000 * channels * 3) / 1000000;
+  document.getElementById("durationEstimate").textContent = `WAV ~${megabytes.toFixed(1)} MB`;
 }
+
+function applyDuration() {
+  stopAudio();
+  updateDurationDisplay();
+  sendSettings();
+}
+
+durationToggle.addEventListener("click", () => {
+  const open = durationPanel.hidden;
+  durationPanel.hidden = !open;
+  durationToggle.setAttribute("aria-expanded", String(open));
+  document.querySelector(".editor").classList.toggle("durationOpen", open);
+});
+durationRange.addEventListener("change", () => {
+  const previous = Number(durationInput.value);
+  const long = durationRange.value === "long";
+  durationInput.min = long ? "60" : "1";
+  durationInput.max = long ? "600" : "60";
+  durationInput.value = String(Math.max(long ? 60 : 1, Math.min(long ? 600 : 60, previous)));
+  document.getElementById("durationMin").textContent = long ? "1 min" : "1 sec";
+  document.getElementById("durationMax").textContent = long ? "10 min" : "60 sec";
+  applyDuration();
+});
+durationInput.addEventListener("input", applyDuration);
+formatSelect.addEventListener("change", () => {
+  updateDurationDisplay();
+  sendSettings();
+});
+updateDurationDisplay();
 
 downloadButton.addEventListener("click", async () => {
   if (!buffer) return;
@@ -1049,6 +1079,22 @@ sourceCanvas.addEventListener("pointerleave", () => {
 });
 
 window.addEventListener("resize", resizeCanvas);
+function fitEditorControls() {
+  const editor = document.querySelector(".editor");
+  const toolbarGrowth = Math.max(0, document.querySelector(".legend").getBoundingClientRect().height - 54);
+  const panelHeight = durationPanel.hidden ? 0 : durationPanel.getBoundingClientRect().height + 8;
+  editor.style.setProperty("--editor-extra-height", `${Math.ceil(toolbarGrowth + panelHeight)}px`);
+}
+window.addEventListener("resize", fitEditorControls);
+if ("ResizeObserver" in window) {
+  const canvasResizeObserver = new ResizeObserver(resizeCanvas);
+  canvasResizeObserver.observe(sourceCanvas);
+  canvasResizeObserver.observe(canvas);
+  const controlsResizeObserver = new ResizeObserver(fitEditorControls);
+  controlsResizeObserver.observe(document.querySelector(".legend"));
+  controlsResizeObserver.observe(durationPanel);
+}
+fitEditorControls();
 window.addEventListener("keydown", (event) => {
   const target = event.target;
   const isTyping = target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target?.isContentEditable;

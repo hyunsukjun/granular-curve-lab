@@ -1,5 +1,9 @@
 # Feature Registry
 
+## Duration Panel Update (2026-10-05)
+
+Duration disclosure in the curve toolbar replaces the header numeric input. A linear slider provides 1–60 s and 60–600 s ranges, current value and estimated WAV size. Closing the panel preserves the selected curve and duration. Timeline changes stop/reset Preview without changing curve points. Render uses the same 600 s maximum. Extra toolbar/panel height is measured for responsive Canvas sizing. Long multichannel rendering requires further device testing.
+
 Version: 1.0  
 Baseline: 2026-09-29
 
