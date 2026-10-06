@@ -93,3 +93,15 @@ PROJECT-SPECIFIC: Coral to canonical Pink #EF4FA4 and original Hub v0.10 grain
 icons. Desktop/narrow visual checks, JS syntax/hash checks and source SVG counts
 passed. Audio processing unchanged. No file playback/export validation performed
 for this visual-only change. See `IDENTITY_PILOT.md`. Stop before commit.
+
+## 2026-10-06 — Sample-rate / export boundary audit (no DSP change)
+
+Four source rates × four output formats passed 60-second 48k/24-bit WAV duration/header checks. Actual app saved an 8ch/20-second WAV from a 6-second source and reopened it as the existing first-channel mono source. High-frequency tests exposed aliasing: 30 kHz at 96k, Pitch 0, folds to 18 kHz at 48k output. At Pitch -12 it legitimately becomes 15 kHz. A blanket 48k source conversion would remove that pitch-down material. At native 48k, 18 kHz pitched +12 aliases to 12 kHz. Rate-dependent grain filtering must be evaluated for Preview and Render together, retaining cubic as A/B baseline and measuring CPU cost. No implementation or listening approval claimed. Local audit evidence is in work/CurveLabWebV1/GRANULAR_RATE_REVIEW.md in the shared workspace.
+
+## 2026-10-06 — User decision: defer alias correction to family listening phase
+
+Retain the current cubic Preview/Render as the A/B baseline. The measured alias issue remains OPEN/DEFERRED, not resolved or accepted as a sonic preference. Revisit during the six-Lab reference-sound fine-tuning phase, comparing pitch-down preservation, pitch-up alias rejection, level-matched Preview/Render, and CPU cost. Continue independent duration/export/stability checks. No DSP change is authorized by this deferral; resolve or explicitly accept a documented limitation before Web v1 freeze. Shared workboard decision: WEB-D010.
+
+## 2026-10-06 — Natural-end Preview channel sequence
+
+Reset the grain channel index at natural completion, matching Stop/reset. Fixed-setting browser AudioWorklet passes before/after natural end and Stop have identical channel PCM. Product UI file loading/replay/Stop passed. Cache versions updated. Gain, random seed, voice cap and offline DSP remain unchanged. Dense 60-second Octo and three cancel/recover cycles passed; maximum main-thread gap about504ms remains a separate performance finding. Listening and low-end-device approval remain open.

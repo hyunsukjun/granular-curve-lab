@@ -205,6 +205,7 @@ class GranularProcessor extends AudioWorkletProcessor {
         if (this.outputTime >= duration) {
           this.playing = false;
           this.outputTime = duration;
+          this.grainIndex = 0;
           this.port.postMessage({ type: "ended", token: this.token });
         }
         if (this.positionFramesUntilUpdate <= 0) {

@@ -129,3 +129,9 @@ Commit or preserve externally with stable checksums:
 
 Until these exist, “Standalone parity” may describe formulas but cannot prove output parity.
 
+
+### Natural-end stereo restart regression (2026-10-06)
+
+With 48 kHz output, 3 seconds, 2 grains/s, 100 ms Hann grains, spread zero and fixed zero-semitone pitch, natural completion followed by seek(0)/play must restart channel assignment from the left channel, as Stop/reset does. A Node host-shim probe of the actual worklet confirms equal PCM across these two fixed-setting passes after the natural-end index reset. Randomized repeats remain intentionally different. Browser transport and listening verification remain pending.
+
+Browser follow-up: real AudioWorklet first pass, natural-end replay, and Stop/reset replay produced equal fixed-setting PCM. Product UI reopened a saved WAV, completed a 3-second pass, restarted, and returned to zero on Stop, without console errors. This is transport verification, not listening approval.

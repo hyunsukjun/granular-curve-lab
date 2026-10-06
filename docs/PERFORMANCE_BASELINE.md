@@ -82,3 +82,7 @@ Required cases:
 - Measured end-to-end latency and playhead error.
 
 Until these values are measured and approved, performance status remains provisional rather than Standalone-ready.
+
+## 2026-10-06 dense export browser probe
+
+Local browser, 48k, 60-second Octo, 80 grains/s, 1000ms grains: 4800 scheduled grains, WAV 69,120,044 bytes, about 4.08 seconds elapsed. 20ms main-thread timer fired112 times; maximum gap503.8ms. Three abort/recover cycles succeeded. This does not certify low-end devices or 5/10-minute loads. Peak compensation and WAV encoding remain synchronous; isolate their costs before choosing a performance change. Evidence: shared work/CurveLabWebV1/evidence/granular-browser-contract.json.

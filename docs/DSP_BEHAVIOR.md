@@ -197,3 +197,7 @@ Measured end-to-end latency: UNKNOWN.
 - Cubic interpolation quality at ±24 st: TO BE DOCUMENTED.
 - Multichannel speaker-layout interpretation: intentionally undefined.
 - Preview random stream does not restart deterministically on every Play.
+
+## 2026-10-06 natural-end channel sequence correction
+
+Natural completion resets the Preview grain channel index to zero, matching Stop's channel-sequence reset. Previously, natural end followed by seek(0)/play could reverse the next pass's alternating stereo assignment. Random generator state is still retained; this does not make randomized Preview repeats identical or align Preview with Render.
