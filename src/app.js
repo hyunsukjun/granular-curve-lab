@@ -796,7 +796,7 @@ function resetAll() {
 
 async function getRenderer() {
   if (!renderGranular) {
-    const module = await import("./offline-render.js?v=20261005-duration-01");
+    const module = await import("./render-client.js?v=20261006-worker-01");
     renderGranular = module.renderGranular;
   }
   return renderGranular;
@@ -910,7 +910,11 @@ downloadButton.addEventListener("click", async () => {
     return;
   }
   if (isPlaying) stopAudio();
+  const renderBuffer = buffer;
+  const renderCurves = structuredClone(curves);
+  const renderSettings = { ...settings(), maxPreviewGrains: 64 };
   renderAbortController = new AbortController();
+  clearDownload();
   setBusy(true);
   downloadButton.disabled = false;
   downloadButton.textContent = "Cancel";
@@ -918,16 +922,16 @@ downloadButton.addEventListener("click", async () => {
   try {
     const render = await getRenderer();
     const rendered = await render({
-      audioBuffer: buffer,
-      curves,
-      settings: { ...settings(), maxPreviewGrains: 64 },
+      audioBuffer: renderBuffer,
+      curves: renderCurves,
+      settings: renderSettings,
       signal: renderAbortController.signal,
       onProgress: (progress) => { readouts.download.textContent = `creating ${Math.round(progress * 100)}%`; }
     });
     downloadUrl = URL.createObjectURL(rendered.blob);
     const link = document.createElement("a");
     link.href = downloadUrl;
-    link.download = `GranularCurveLab-${formatSelect.value}.wav`;
+    link.download = `GranularCurveLab-${renderSettings.format}.wav`;
     document.body.appendChild(link);
     link.click();
     link.remove();

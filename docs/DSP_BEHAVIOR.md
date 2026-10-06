@@ -201,3 +201,7 @@ Measured end-to-end latency: UNKNOWN.
 ## 2026-10-06 natural-end channel sequence correction
 
 Natural completion resets the Preview grain channel index to zero, matching Stop's channel-sequence reset. Previously, natural end followed by seek(0)/play could reverse the next pass's alternating stereo assignment. Random generator state is still retained; this does not make randomized Preview repeats identical or align Preview with Render.
+
+## Worker export execution (local candidate)
+
+The app runs the unchanged offline renderer in a disposable module Worker, including peak compensation and 48k/24-bit dithered WAV encoding. Source channel0 is cloned, not transferred. Curves/settings are captured at render start. Abort terminates the Worker even during encoding. Completion/error also terminates it. Randomization, accumulation order, envelopes and gain are unchanged.

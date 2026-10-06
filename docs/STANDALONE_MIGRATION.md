@@ -201,3 +201,5 @@ Do not begin with framework selection. Begin with parameter conformance tests, c
 
 STANDALONE ASSET: `assets/identity/granular-app.svg`, symbol/micro variants
 and canonical palette. Native packaging/Dock validation remains separate.
+
+Export scheduling is now separated from DSP in the local Worker candidate. Preserve seeded WAV byte equivalence and start-time snapshots when replacing the browser Worker with a native background job. Cancellation must also cover final WAV encoding; source ownership stays with Preview.

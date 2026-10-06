@@ -86,3 +86,7 @@ Until these values are measured and approved, performance status remains provisi
 ## 2026-10-06 dense export browser probe
 
 Local browser, 48k, 60-second Octo, 80 grains/s, 1000ms grains: 4800 scheduled grains, WAV 69,120,044 bytes, about 4.08 seconds elapsed. 20ms main-thread timer fired112 times; maximum gap503.8ms. Three abort/recover cycles succeeded. This does not certify low-end devices or 5/10-minute loads. Peak compensation and WAV encoding remain synchronous; isolate their costs before choosing a performance change. Evidence: shared work/CurveLabWebV1/evidence/granular-browser-contract.json.
+
+Worker candidate follow-up: same 60-second dense Octo browser condition completed in3.65s with181 timer ticks and21.7ms maximum gap, compared with503.8ms before. This improves main-thread availability, not memory complexity or low-end-device certification.
+
+Worker memory follow-up (Node adapter, explicit GC):60s20 alternating completion/cancel cycles return main arrays to11.12MiB; RSS stabilizes near479MiB from cycle9 through20. 180s8ch completes in11.40s, worker arrays692.21MiB. WAV readback in the test contributes to process RSS near1027MiB; this is not a browser peak measurement. Worker separation does not reduce full-buffer memory complexity. Browser/low-end/5–10minute validation remains open.

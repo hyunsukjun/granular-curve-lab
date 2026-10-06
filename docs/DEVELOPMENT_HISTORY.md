@@ -105,3 +105,11 @@ Retain the current cubic Preview/Render as the A/B baseline. The measured alias 
 ## 2026-10-06 — Natural-end Preview channel sequence
 
 Reset the grain channel index at natural completion, matching Stop/reset. Fixed-setting browser AudioWorklet passes before/after natural end and Stop have identical channel PCM. Product UI file loading/replay/Stop passed. Cache versions updated. Gain, random seed, voice cap and offline DSP remain unchanged. Dense 60-second Octo and three cancel/recover cycles passed; maximum main-thread gap about504ms remains a separate performance finding. Listening and low-end-device approval remain open.
+
+## 2026-10-06 — Worker export local candidate
+
+Keep WAV48k/24bit per user decision. Move unchanged offline renderer into disposable Worker, snapshot render settings, preserve original source, terminate on abort/result/error. Four-format WAV parity and browser responsiveness/cancel recovery pass. Actual app completed60s8ch and restored controls on Cancel. Local only; saved WAV reopen remains pending before release.
+
+Worker follow-up: actual20s8chWAV saved/reopened/PlayStop verified;20 alternating60s completion/cancel cycles stabilize in Node after warmup. Release-ready locally; not yet committed/deployed. Memory and physical listening limitations remain documented.
+
+Release approval: user authorized shipping the verified Worker bundle. Full-buffer memory costs, low-end hardware and long-duration listening remain separate follow-up work.
