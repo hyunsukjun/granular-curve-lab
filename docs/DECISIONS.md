@@ -158,3 +158,7 @@ colors and audio processing. Stop before commit. See `IDENTITY_PILOT.md`.
 ## GCL-D016: Duration Disclosure and Laptop Editing Space
 
 2026-10-05. User-approved local implementation: replace the header numeric duration field with a Duration button and horizontal slider panel. Use 1–60 seconds normally and an explicit 1–10 minute range. Preserve normalized curves and stop/reset playback on duration changes. Measure extra control height so the Canvas gives space back when the panel closes; minimum 220 px protects editing on low windows. Offline duration clamp expands from 180 to 600 seconds to match Preview/UI. Grain DSP and WAV encoding are unchanged. Ten-minute eight-channel output is not a device-stability guarantee.
+
+## Give editing and dialogs priority over global transport (2026-10-07)
+
+COMMON CANDIDATE: transport shortcuts must respect the same availability as Play and must not consume form editing or modal button activation. Guard the current handlers without changing DSP or curve data. Disabled Play previously did not prevent the key handler from dispatching transport; the handler now blocks that bypass.

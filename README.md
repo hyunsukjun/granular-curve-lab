@@ -61,3 +61,5 @@ Local Duration update (2026-10-05): the Duration toolbar button opens a horizont
 Hub v0.10 brand color and icons are applied locally. See
 [identity pilot](docs/IDENTITY_PILOT.md) for scope and verification.
 GitHub/Pages publication authorized on 2026-10-04.
+
+Keyboard transport respects disabled Play while importing/rendering. Run `node tests/transport-keyboard.test.mjs` for focused routing regression checks.

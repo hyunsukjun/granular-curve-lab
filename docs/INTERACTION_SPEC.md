@@ -137,3 +137,7 @@ With a source loaded:
 - Undo/Redo contract: no current feature.
 - Native Standalone modifier mapping outside macOS/Windows: TO BE DOCUMENTED.
 - Endpoint anchoring versus current movable-endpoint behavior: product decision required before change.
+
+## Spacebar routing (2026-10-07)
+
+Spacebar dispatches at most one transport action per physical press. Held-key repeats are consumed, and disabled Play or an absent source blocks dispatch. Input, select, textarea and editable-text targets retain native keydown/keyup behavior. Existing Play/Stop or Play/Pause semantics and DSP are unchanged. Native confirmation dialogs keep their existing browser behavior.

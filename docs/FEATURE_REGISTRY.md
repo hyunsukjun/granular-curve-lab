@@ -195,3 +195,7 @@ These absences are not defects unless a later product decision adds them.
 
 IMPLEMENTED locally: canonical brand color, header symbol and favicon.
 See `IDENTITY_PILOT.md`. Publication authorized on 2026-10-04.
+
+## Keyboard transport availability (2026-10-07)
+
+Spacebar dispatches at most one transport action per physical press. Held-key repeats are consumed, and disabled Play or an absent source blocks dispatch. Input, select, textarea and editable-text targets retain native keydown/keyup behavior. Existing Play/Stop or Play/Pause semantics and DSP are unchanged. Native confirmation dialogs keep their existing browser behavior. See `tests/transport-keyboard.test.mjs` for event-routing regression checks; these isolate command dispatch from DSP.

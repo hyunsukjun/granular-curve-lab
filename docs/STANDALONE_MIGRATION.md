@@ -203,3 +203,7 @@ STANDALONE ASSET: `assets/identity/granular-app.svg`, symbol/micro variants
 and canonical palette. Native packaging/Dock validation remains separate.
 
 Export scheduling is now separated from DSP in the local Worker candidate. Preserve seeded WAV byte equivalence and start-time snapshots when replacing the browser Worker with a native background job. Cancellation must also cover final WAV encoding; source ownership stays with Preview.
+
+## Portable keyboard availability contract (2026-10-07)
+
+COMMON CANDIDATE: one physical shortcut press dispatches at most one available transport action. Editing controls and open modal dialogs own their keyboard events. Native focus and key-repeat APIs replace DOM checks; sound and transport semantics remain product-specific.
