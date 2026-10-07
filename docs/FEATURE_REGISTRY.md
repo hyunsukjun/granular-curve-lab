@@ -199,3 +199,8 @@ See `IDENTITY_PILOT.md`. Publication authorized on 2026-10-04.
 ## Keyboard transport availability (2026-10-07)
 
 Spacebar dispatches at most one transport action per physical press. Held-key repeats are consumed, and disabled Play or an absent source blocks dispatch. Input, select, textarea and editable-text targets retain native keydown/keyup behavior. Existing Play/Stop or Play/Pause semantics and DSP are unchanged. Native confirmation dialogs keep their existing browser behavior. See `tests/transport-keyboard.test.mjs` for event-routing regression checks; these isolate command dispatch from DSP.
+
+
+## 2026-10-07 — Import before playback in Safari
+
+File import creates the decoding context without awaiting `AudioContext.resume()`. Playback still requests activation through the default context path. This prevents a pending Safari playback permission request from blocking file decoding after the file chooser closes. Existing decoding, channel policy, curves, DSP and export format remain unchanged. Regression: `tests/import-suspended-context.mjs` exercises suspended context, decode failure/retry and playback activation (plus Spectral channel/rate policy). Standalone implementations should likewise keep file decoding independent of output-device activation.

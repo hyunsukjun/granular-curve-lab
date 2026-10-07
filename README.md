@@ -63,3 +63,5 @@ Hub v0.10 brand color and icons are applied locally. See
 GitHub/Pages publication authorized on 2026-10-04.
 
 Keyboard transport respects disabled Play while importing/rendering. Run `node tests/transport-keyboard.test.mjs` for focused routing regression checks.
+
+- Safari: opening an audio file before Play no longer waits for playback activation.

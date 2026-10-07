@@ -287,13 +287,13 @@ function nextPlaybackToken() {
   return playbackToken;
 }
 
-async function ensureAudioContext() {
+async function ensureAudioContext({ resume = true } = {}) {
   if (!audioContext) {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if (!AudioContextClass) throw new Error("Web Audio is not available in this browser.");
     audioContext = new AudioContextClass();
   }
-  if (audioContext.state !== "running") await audioContext.resume();
+  if (resume && audioContext.state !== "running") await audioContext.resume();
 }
 
 async function ensureAudio() {
@@ -369,7 +369,8 @@ async function loadAudioFile(file) {
   setBusy(true);
   fileStatus.textContent = `Loading ${file.name}...`;
   try {
-    await ensureAudioContext();
+    // Decoding must not wait for Safari playback permission after the file chooser.
+    await ensureAudioContext({ resume: false });
     buffer = await decodeAudioFile(await file.arrayBuffer());
     buildWaveform(buffer);
     resetSourceWindowToMinimum();

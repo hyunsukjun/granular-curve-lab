@@ -162,3 +162,8 @@ colors and audio processing. Stop before commit. See `IDENTITY_PILOT.md`.
 ## Give editing and dialogs priority over global transport (2026-10-07)
 
 COMMON CANDIDATE: transport shortcuts must respect the same availability as Play and must not consume form editing or modal button activation. Guard the current handlers without changing DSP or curve data. Disabled Play previously did not prevent the key handler from dispatching transport; the handler now blocks that bypass.
+
+
+## 2026-10-07 — Import before playback in Safari
+
+File import creates the decoding context without awaiting `AudioContext.resume()`. Playback still requests activation through the default context path. This prevents a pending Safari playback permission request from blocking file decoding after the file chooser closes. Existing decoding, channel policy, curves, DSP and export format remain unchanged. Regression: `tests/import-suspended-context.mjs` exercises suspended context, decode failure/retry and playback activation (plus Spectral channel/rate policy). Standalone implementations should likewise keep file decoding independent of output-device activation.
