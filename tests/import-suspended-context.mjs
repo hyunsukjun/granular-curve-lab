@@ -11,7 +11,7 @@ const c={window:{AudioContext},audioContext:null,buffer:null,renderAbortControll
  spectrogram:{invalidate(){}},outputTime:{setBuffer(){}},fileStatus:text(),downloadReadout:text(),readouts:{download:text()},playButton:text(),isPlaying:false,
  setTransportBusy(x){busy.push(x)},setBusy(x){busy.push(x)},nextPlaybackToken(){return 1},
  decodeAudioFile:async()=>{decoded++;if(rejectDecode)throw new Error('Invalid audio');return candidate},
- buildWaveform(){},sendBufferToWorklet(){},resetSourceWindowToMinimum(){},sendSettings(){},clearDownload(){},largeFileSeconds:300,resetCurrentReadouts(){},draw(){},console:{error(){}}};
+ stopAudio(){},buildWaveform(){},sendBufferToWorklet(){},resetSourceWindowToMinimum(){},sendSettings(){},clearDownload(){},largeFileSeconds:300,resetCurrentReadouts(){},draw(){},console:{error(){}}};
 vm.createContext(c);vm.runInContext(pick('ensureAudioContext')+'\n'+pick('loadAudioFile'),c);
 const file={name:'test.wav',arrayBuffer:async()=>new ArrayBuffer(8)};
 let timer;

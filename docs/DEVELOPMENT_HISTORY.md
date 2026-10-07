@@ -113,3 +113,8 @@ Keep WAV48k/24bit per user decision. Move unchanged offline renderer into dispos
 Worker follow-up: actual20s8chWAV saved/reopened/PlayStop verified;20 alternating60s completion/cancel cycles stabilize in Node after warmup. Release-ready locally; not yet committed/deployed. Memory and physical listening limitations remain documented.
 
 Release approval: user authorized shipping the verified Worker bundle. Full-buffer memory costs, low-end hardware and long-duration listening remain separate follow-up work.
+
+
+## 2026-10-08 — Source replacement lifecycle
+
+Selecting a replacement file stops previous playback, resets the playhead and revokes the previous rendered WAV URL before decoding. A failed decode continues to clear the source and disable transport/export; a subsequent valid file restores readiness without reload. Cancelling the file chooser (no file) preserves the existing source and playback. No DSP, curves, output duration or WAV format changes. Regression: tests/file-replacement-lifecycle.mjs. Standalone implementations should keep old playback and export resources from surviving a failed replacement.

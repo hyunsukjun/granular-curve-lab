@@ -366,6 +366,9 @@ function buildWaveform(audioBuffer) {
 
 async function loadAudioFile(file) {
   if (!file) return;
+  // A replacement invalidates the previous playback and exported result, even on decode failure.
+  stopAudio();
+  clearDownload();
   setBusy(true);
   fileStatus.textContent = `Loading ${file.name}...`;
   try {
