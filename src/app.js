@@ -401,7 +401,9 @@ function playAudio() {
   if (playheadSeconds >= duration - 0.02) {
     playheadSeconds = 0;
   }
+  const requestToken = playbackToken;
   ensureAudio().then(() => {
+    if (isPlaying || requestToken !== playbackToken || !buffer || playButton.disabled) return;
     node.port.postMessage({ type: "seek", seconds: playheadSeconds, token: playbackToken });
     node.port.postMessage({ type: "play", token: nextPlaybackToken() });
     isPlaying = true;
@@ -413,7 +415,8 @@ function playAudio() {
 }
 
 function stopAudio() {
-  node?.port.postMessage({ type: "stop", reset: true, token: nextPlaybackToken() });
+  const stopToken = nextPlaybackToken();
+  node?.port.postMessage({ type: "stop", reset: true, token: stopToken });
   isPlaying = false;
   playheadSeconds = 0;
   playButton.textContent = "Play";
