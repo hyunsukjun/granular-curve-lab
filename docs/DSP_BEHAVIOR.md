@@ -205,3 +205,11 @@ Natural completion resets the Preview grain channel index to zero, matching Stop
 ## Worker export execution (local candidate)
 
 The app runs the unchanged offline renderer in a disposable module Worker, including peak compensation and 48k/24-bit dithered WAV encoding. Source channel0 is cloned, not transferred. Curves/settings are captured at render start. Abort terminates the Worker even during encoding. Completion/error also terminates it. Randomization, accumulation order, envelopes and gain are unchanged.
+
+
+## AIFF input compatibility (2026-10-11)
+
+See [AIFF import contract](AIFF_IMPORT.md): local PCM AIFF 16/24-bit mono/stereo
+normalization into PCM WAV before the established decoder. Existing DSP,
+resampling and Lab-specific channel policies are preserved. Browser and memory
+verification limits are recorded there.

@@ -1,3 +1,4 @@
+import { readAudioFile } from "./audio-import.js?v=20261011-aiff1";
 import {
   curveDefaults,
   densityFromNorm,
@@ -374,7 +375,7 @@ async function loadAudioFile(file) {
   try {
     // Decoding must not wait for Safari playback permission after the file chooser.
     await ensureAudioContext({ resume: false });
-    buffer = await decodeAudioFile(await file.arrayBuffer());
+    buffer = await decodeAudioFile(await readAudioFile(file, audioContext.sampleRate));
     buildWaveform(buffer);
     resetSourceWindowToMinimum();
     workletBufferLoaded = false;
@@ -387,7 +388,7 @@ async function loadAudioFile(file) {
     draw();
   } catch (error) {
     console.error(error);
-    fileStatus.textContent = "Could not load audio. Try WAV, MP3, or M4A.";
+    fileStatus.textContent = error.message?.startsWith("AIFF:") ? error.message : "Could not load audio. Try WAV, MP3, or M4A.";
     readouts.download.textContent = "not ready";
     buffer = null;
   } finally {

@@ -67,3 +67,10 @@ Keyboard transport respects disabled Play while importing/rendering. Run `node t
 - Safari: opening an audio file before Play no longer waits for playback activation.
 
 - Replacing the source stops previous playback and releases the previous WAV result, including when the new file cannot be decoded.
+
+
+### Portable AIFF input
+
+AIFF (.aif/.aiff), mono/stereo 16/24-bit PCM, is converted locally on import.
+AIFF-C is not supported by this importer; use PCM WAV instead. Original files
+are unchanged. See [support scope and limits](docs/AIFF_IMPORT.md).
