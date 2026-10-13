@@ -1,3 +1,4 @@
+import {mountTransport} from "./common-transport.js?v=20261013-1";
 import { readAudioFile } from "./audio-import.js?v=20261011-aiff1";
 import {
   curveDefaults,
@@ -201,9 +202,10 @@ function updateMeterDisplay(now) {
       display.hold = smoothMeterValue(display.hold, measured.peak, elapsedMs, 0, 700);
     }
     if (measured.clipped) meterClipLatched = true;
-    row.querySelector(".meterRms").style.transform = `scaleX(${meterPosition(display.rms)})`;
-    row.querySelector(".meterPeak").style.transform = `scaleX(${meterPosition(display.peak)})`;
+    row.querySelector(".meterRms").style.clipPath = `inset(0 ${(1-meterPosition(display.rms))*100}% 0 0)`;
+    row.querySelector(".meterPeak").style.clipPath = `inset(0 ${(1-meterPosition(display.peak))*100}% 0 0)`;
     row.querySelector(".meterHold").style.left = `${meterPosition(display.hold) * 100}%`;
+    row.querySelector(".meterHold").style.opacity = display.hold > 0.001 ? "1" : "0";
     const peakDb = linearToDb(display.peak);
     row.querySelector(".meterValue").textContent = Number.isFinite(peakDb) ? peakDb.toFixed(1) : "-∞";
   });
@@ -326,7 +328,7 @@ async function setupAudio() {
       draw();
     } else if (event.data.type === "ended" || event.data.type === "stopped") {
       isPlaying = false;
-      playheadSeconds = 0;
+      playheadSeconds = event.data.type === "stopped" ? event.data.seconds || 0 : 0;
       playButton.textContent = "Play";
       if (event.data.type === "ended") node?.port.postMessage({ type: "seek", seconds: 0, token: playbackToken });
       draw();
@@ -815,28 +817,17 @@ fileInput.addEventListener("change", async () => {
   fileInput.value = "";
 });
 
-playButton.addEventListener("click", () => {
-  if (isPlaying) stopAudio();
-  else playAudio();
-});
-stopButton.addEventListener("click", stopAudio);
+playButton.addEventListener("click", playAudio);
+stopButton.addEventListener("click", pauseAudio);
 
 function seekFromScrubber() {
   if (!buffer) return;
   const progress = Math.max(0, Math.min(1, Number(playbackScrubber.value) || 0));
   playheadSeconds = progress * settings().durationSeconds;
-  node?.port.postMessage({ type: "seek", seconds: playheadSeconds, token: playbackToken });
+  node?.port.postMessage({ type: "seek", seconds: playheadSeconds, token: nextPlaybackToken() });
   draw();
 }
 
-playbackScrubber.addEventListener("pointerdown", () => { isScrubbing = true; });
-playbackScrubber.addEventListener("input", seekFromScrubber);
-playbackScrubber.addEventListener("change", () => {
-  seekFromScrubber();
-  isScrubbing = false;
-});
-playbackScrubber.addEventListener("pointerup", () => { isScrubbing = false; });
-playbackScrubber.addEventListener("pointercancel", () => { isScrubbing = false; });
 
 meterClipButton.addEventListener("click", () => {
   meterClipLatched = false;
@@ -1027,7 +1018,7 @@ window.addEventListener("blur", () => updateEraseCursor());
 canvas.addEventListener("dblclick", (event) => {
   const p = pointerToPoint(event);
   playheadSeconds = p.x * settings().durationSeconds;
-  node?.port.postMessage({ type: "seek", seconds: playheadSeconds, token: playbackToken });
+  node?.port.postMessage({ type: "seek", seconds: playheadSeconds, token: nextPlaybackToken() });
   draw();
 });
 
@@ -1109,7 +1100,7 @@ window.addEventListener("keydown", (event) => {
   if (document.activeElement instanceof HTMLButtonElement) {
     document.activeElement.blur();
   }
-  if (isPlaying) stopAudio();
+  if (isPlaying) pauseAudio();
   else playAudio();
 });
 
@@ -1122,3 +1113,12 @@ window.addEventListener("keyup", (event) => {
 });
 
 resizeCanvas();
+
+function pauseAudio() {
+  if (!buffer) return;
+  node?.port.postMessage({type:"stop",reset:false,token:nextPlaybackToken()});
+  if (!node) nextPlaybackToken();
+  isPlaying=false;playButton.textContent="Play";draw();
+}
+
+mountTransport({onScrub:value=>{isScrubbing=value;},state:()=>({duration:settings().durationSeconds,seconds:playheadSeconds,playing:isPlaying,disabled:playButton.disabled}),seek:p=>{playbackScrubber.value=String(p);seekFromScrubber();}});

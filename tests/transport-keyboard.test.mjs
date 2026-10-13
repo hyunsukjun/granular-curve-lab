@@ -16,7 +16,7 @@ function harness(){
  const ctx={HTMLInputElement,HTMLSelectElement,HTMLTextAreaElement,HTMLButtonElement,
   window:{addEventListener:(type,cb)=>handlers[type]=cb},document:{activeElement:new HTMLButtonElement()},
   resetDialog:{hidden:true},buffer:{},playButton:{disabled:false},isPlaying:false,
-  toggleAudio(){calls.push('toggle')},play(){calls.push('play')},playAudio(){calls.push('play')},stop(){calls.push('stop')},stopAudio(){calls.push('stop')}};
+  toggleAudio(){calls.push('toggle')},play(){calls.push('play')},playAudio(){calls.push('play')},stop(){calls.push('stop')},stopAudio(){calls.push('stop')},pauseAudio(){calls.push('pause')}};
  vm.runInNewContext(source.slice(start,end),ctx);
  const send=(type='keydown',overrides={})=>{const event={code:'Space',target:ctx.document.activeElement,repeat:false,prevented:false,preventDefault(){this.prevented=true},stopPropagation(){},...overrides};handlers[type](event);return event;};
  return {ctx,calls,send};
