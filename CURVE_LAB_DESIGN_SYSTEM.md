@@ -171,3 +171,7 @@ Oscillator retains its existing source-duration seek cap for convolution tails.
 Verification covers syntax, keyboard contracts and browser layout; file-based
 Labs also exercised silent-WAV pause/resume. Audible listening, Safari/Windows,
 long-file performance and Oscillator mode-specific listening remain separate QA.
+
+
+## 2026-10-14 — Common Clear Current / Reset All appearance
+Both actions follow Audio's neutral navy reference: background #122438, text #aabccc, 6px radius, 13px/620 type, 92px minimum width, 38px height (30px at >=900px viewport width). Clear border #3b5063; Reset border #203a52. Shared hover/pressed/focus/disabled styles live in src/curve-actions.css. Red action emphasis is removed; brand/parameter colors elsewhere stay independent. Existing IDs, handlers, reset scope, confirmation mechanism and keyboard behavior remain unchanged. This is a local visual update, separate from DSP verification.
