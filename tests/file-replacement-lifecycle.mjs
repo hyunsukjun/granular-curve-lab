@@ -1,3 +1,4 @@
+import {readAudioFile} from "../src/audio-import.js";
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
@@ -5,12 +6,12 @@ const source=readFileSync(new URL('../src/app.js',import.meta.url),'utf8');
 const pick=name=>{const start=source.search(new RegExp(`(?:async )?function ${name}\\(`));assert.ok(start>=0);return source.slice(start,source.indexOf('\n}',start)+2)};
 const revoked=[],messages=[],busy=[];
 let resolveDecode,rejectDecode;
-const c={buffer:{duration:1},downloadUrl:'blob:previous',isPlaying:true,playheadSeconds:1,playButton:{textContent:'Playing'},fileStatus:{textContent:''},readouts:{download:{textContent:''}},
+const c={readAudioFile,audioContext:{sampleRate:48000},buffer:{duration:1},downloadUrl:'blob:previous',isPlaying:true,playheadSeconds:1,playButton:{textContent:'Playing'},fileStatus:{textContent:''},readouts:{download:{textContent:''}},
  node:{port:{postMessage:m=>messages.push(m)}},URL:{revokeObjectURL:u=>revoked.push(u)},nextPlaybackToken:()=>7,draw(){},
  setBusy:x=>busy.push(x),ensureAudioContext:async()=>{},decodeAudioFile:()=>new Promise((resolve,reject)=>{resolveDecode=resolve;rejectDecode=reject}),
  buildWaveform(){},resetSourceWindowToMinimum(){},sendBufferToWorklet(){},sendSettings(){},console:{error(){}}};
 vm.createContext(c);vm.runInContext(['clearDownload','stopAudio','loadAudioFile'].map(pick).join('\n'),c);
-const file={name:'replacement.wav',arrayBuffer:async()=>new ArrayBuffer(8)};
+const file={name:'replacement.wav',slice:()=>new Blob([new ArrayBuffer(8)]),arrayBuffer:async()=>new ArrayBuffer(8)};
 await c.loadAudioFile(null);assert.equal(c.isPlaying,true);assert.equal(c.downloadUrl,'blob:previous');
 const pending=c.loadAudioFile(file);await new Promise(r=>setImmediate(r));
 assert.equal(c.isPlaying,false,'replacement must stop previous playback before decode');assert.equal(c.playheadSeconds,0);

@@ -93,3 +93,12 @@ Do not serialize implementation-private PRNG state accidentally. Any choice chan
 6. Confirm unknown future fields do not corrupt known state.
 
 This schema remains a design asset, not an implemented user feature.
+
+
+## 2026-10-14 — Source Window boundary / single Output Duration (local)
+
+Preview and Render now constrain pitched grain length to the selected half-open sample window. Integer bounds are ceil(start*N) through ceil(end*N)-1, limited to the file. The maximum grain length is floor((last-first)/readRate)+1; this overrides the previous minimum-16-sample request when necessary. Cubic interpolation taps repeat the nearest in-window endpoint instead of borrowing outside samples. Empty windows produce silence. This intentionally corrects prior leakage; high-pitch grains in a narrow window can become shorter. Seed, envelope formulas, gain/cap, channel-0 source policy and alias handling remain unchanged.
+
+Output Duration is one linear 0–600 second slider, 1-second step, default 20. Removed Short/Long selector; durationSeconds identity is retained. Zero is a non-renderable UI state: Play/Download disabled, direct render rejects zero. Positive UI durations are 1–600. Changing duration stops playback and returns its cursor to zero. Existing valid durations retain their meaning; no preset persistence is introduced.
+
+Verification: tests/source-window-boundary.mjs and tests/duration-range.mjs. See docs/VERIFICATION_2026-10-14.md for evidence and limits. No listening approval or deployment is implied.

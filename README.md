@@ -80,3 +80,7 @@ are unchanged. See [support scope and limits](docs/AIFF_IMPORT.md).
 Bottom controls are Return to start / Play / Pause. Space toggles Play/Pause.
 Pause keeps the current position; Return to start seeks to zero. The thin slider
 navigates output time. Source guides, sound engines and export policies are unchanged.
+
+
+### Local update 2026-10-14
+Source Window isolation now includes pitched reads and cubic interpolation taps. Output Duration uses one 0–10 min slider; 0 disables playback/export. See [verification](docs/VERIFICATION_2026-10-14.md). Reset confirm/cancel and post-reset playback/WAV saving verified in Safari; release details are tracked in the verification log.

@@ -118,3 +118,12 @@ Release approval: user authorized shipping the verified Worker bundle. Full-buff
 ## 2026-10-08 — Source replacement lifecycle
 
 Selecting a replacement file stops previous playback, resets the playhead and revokes the previous rendered WAV URL before decoding. A failed decode continues to clear the source and disable transport/export; a subsequent valid file restores readiness without reload. Cancelling the file chooser (no file) preserves the existing source and playback. No DSP, curves, output duration or WAV format changes. Regression: tests/file-replacement-lifecycle.mjs. Standalone implementations should keep old playback and export resources from surviving a failed replacement.
+
+
+## 2026-10-14 — Source Window boundary / single Output Duration (local)
+
+Preview and Render now constrain pitched grain length to the selected half-open sample window. Integer bounds are ceil(start*N) through ceil(end*N)-1, limited to the file. The maximum grain length is floor((last-first)/readRate)+1; this overrides the previous minimum-16-sample request when necessary. Cubic interpolation taps repeat the nearest in-window endpoint instead of borrowing outside samples. Empty windows produce silence. This intentionally corrects prior leakage; high-pitch grains in a narrow window can become shorter. Seed, envelope formulas, gain/cap, channel-0 source policy and alias handling remain unchanged.
+
+Output Duration is one linear 0–600 second slider, 1-second step, default 20. Removed Short/Long selector; durationSeconds identity is retained. Zero is a non-renderable UI state: Play/Download disabled, direct render rejects zero. Positive UI durations are 1–600. Changing duration stops playback and returns its cursor to zero. Existing valid durations retain their meaning; no preset persistence is introduced.
+
+Verification: tests/source-window-boundary.mjs and tests/duration-range.mjs. See docs/VERIFICATION_2026-10-14.md for evidence and limits. No listening approval or deployment is implied.

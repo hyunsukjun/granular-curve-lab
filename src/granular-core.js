@@ -64,14 +64,14 @@ export function envelopeValue(type, phase) {
   return 0.5 - (0.5 * Math.cos(Math.PI * 2 * p));
 }
 
-export function readCubic(channel, pos) {
-  if (!channel || pos < 0 || pos >= channel.length - 3) return 0;
+export function readCubic(channel, pos, first = 0, last = channel.length - 1) {
+  if (!channel || first > last || pos < first || pos > last) return 0;
   const i0 = Math.floor(pos);
   const frac = pos - i0;
-  const xm1 = channel[Math.max(0, i0 - 1)];
+  const xm1 = channel[Math.max(first, i0 - 1)];
   const x0 = channel[i0];
-  const x1 = channel[i0 + 1];
-  const x2 = channel[Math.min(channel.length - 1, i0 + 2)];
+  const x1 = channel[Math.min(last, i0 + 1)];
+  const x2 = channel[Math.min(last, i0 + 2)];
   const a = (-0.5 * xm1) + (1.5 * x0) - (1.5 * x1) + (0.5 * x2);
   const b = xm1 - (2.5 * x0) + (2 * x1) - (0.5 * x2);
   const c = (-0.5 * xm1) + (0.5 * x1);

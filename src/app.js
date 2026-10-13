@@ -22,7 +22,6 @@ const clearCurveButton = document.getElementById("clearCurveButton");
 const resetButton = document.getElementById("resetButton");
 const durationInput = document.getElementById("durationInput");
 const durationPanel = document.getElementById("durationPanel");
-const durationRange = document.getElementById("durationRange");
 const formatSelect = document.getElementById("formatSelect");
 const sourceWindowReadout = document.getElementById("sourceWindowReadout");
 const sourceCanvas = document.getElementById("sourceCanvas");
@@ -130,7 +129,7 @@ function defaultCurve(y) {
 }
 
 function settings() {
-  const durationSeconds = Math.max(1, Math.min(600, Number(durationInput.value) || 20));
+  const durationSeconds = Math.max(0, Math.min(600, Number(durationInput.value)));
   return {
     durationSeconds,
     rangeStart: sourceWindow.start,
@@ -275,13 +274,12 @@ function clearDownload() {
 }
 
 function setBusy(isBusy) {
-  playButton.disabled = isBusy || !buffer;
+  playButton.disabled = isBusy || !buffer || settings().durationSeconds <= 0;
   stopButton.disabled = isBusy || !buffer;
-  downloadButton.disabled = isBusy || !buffer;
+  downloadButton.disabled = isBusy || !buffer || settings().durationSeconds <= 0;
   fileInput.disabled = isBusy;
   playbackScrubber.disabled = isBusy || !buffer;
   durationInput.disabled = isBusy;
-  durationRange.disabled = isBusy;
   formatSelect.disabled = isBusy;
 }
 
@@ -310,7 +308,7 @@ async function ensureAudio() {
 
 async function setupAudio() {
   if (!audioContext.audioWorklet) throw new Error("AudioWorklet is not available. Use a current browser over localhost or HTTPS.");
-  await audioContext.audioWorklet.addModule("src/granular-worklet.js?v=20261006-restart-01");
+  await audioContext.audioWorklet.addModule("src/granular-worklet.js?v=20261014-window-01");
   node = new AudioWorkletNode(audioContext, "granular-curve-processor", {
     numberOfInputs: 0,
     numberOfOutputs: 1,
@@ -399,7 +397,7 @@ async function loadAudioFile(file) {
 }
 
 function playAudio() {
-  if (!buffer || isPlaying) return;
+  if (!buffer || isPlaying || settings().durationSeconds <= 0) return;
   const duration = settings().durationSeconds;
   if (playheadSeconds >= duration - 0.02) {
     playheadSeconds = 0;
@@ -617,7 +615,7 @@ function draw() {
   }
   drawCurve(curves[activeCurve], curveColors[activeCurve], 4.8, true, 1);
   if (buffer) {
-    const x = plot.left + ((playheadSeconds / settings().durationSeconds) * plot.width);
+    const x = plot.left + ((playheadSeconds / Math.max(1, settings().durationSeconds)) * plot.width);
     ctx.strokeStyle = "rgba(226, 236, 244, 0.86)";
     ctx.lineWidth = 1.5;
     ctx.beginPath();
@@ -747,7 +745,7 @@ function updateReadouts() {
   readouts.pitch.textContent = `${current.pitchLow.toFixed(1)}..${current.pitchHigh.toFixed(1)} st`;
   sourceWindowReadout.textContent = `${formatSourcePercent(sourceWindow.start)}% - ${formatSourcePercent(sourceWindow.end)}%`;
   timeStatus.textContent = `${formatClock(playheadSeconds)} / ${formatClock(s.durationSeconds)}`;
-  if (!isScrubbing) playbackScrubber.value = String(Math.max(0, Math.min(1, playheadSeconds / s.durationSeconds)));
+  if (!isScrubbing) playbackScrubber.value = String(Math.max(0, Math.min(1, playheadSeconds / Math.max(1, s.durationSeconds))));
 }
 
 function pointerToPoint(event) {
@@ -806,7 +804,7 @@ function resetAll() {
 
 async function getRenderer() {
   if (!renderGranular) {
-    const module = await import("./render-client.js?v=20261006-worker-01");
+    const module = await import("./render-client.js?v=20261014-window-01");
     renderGranular = module.renderGranular;
   }
   return renderGranular;
@@ -876,25 +874,17 @@ function updateDurationDisplay() {
   durationInput.setAttribute("aria-valuetext", label);
   const channels = { mono: 1, stereo: 2, quad: 4, octo: 8 }[formatSelect.value];
   const megabytes = (44 + seconds * 48000 * channels * 3) / 1000000;
-  document.getElementById("durationEstimate").textContent = `WAV ~${megabytes.toFixed(1)} MB`;
+  document.getElementById("durationEstimate").textContent = seconds === 0 ? "Choose duration > 0" : `WAV ~${megabytes.toFixed(1)} MB`;
 }
 
 function applyDuration() {
   stopAudio();
+  playheadSeconds = 0;
   updateDurationDisplay();
+  setBusy(false);
   sendSettings();
 }
 
-durationRange.addEventListener("change", () => {
-  const previous = Number(durationInput.value);
-  const long = durationRange.value === "long";
-  durationInput.min = long ? "60" : "1";
-  durationInput.max = long ? "600" : "60";
-  durationInput.value = String(Math.max(long ? 60 : 1, Math.min(long ? 600 : 60, previous)));
-  document.getElementById("durationMin").textContent = long ? "1 min" : "1 sec";
-  document.getElementById("durationMax").textContent = long ? "10 min" : "60 sec";
-  applyDuration();
-});
 durationInput.addEventListener("input", applyDuration);
 formatSelect.addEventListener("change", () => {
   updateDurationDisplay();
@@ -908,6 +898,7 @@ downloadButton.addEventListener("click", async () => {
     renderAbortController.abort();
     return;
   }
+  if (settings().durationSeconds <= 0) return;
   if (isPlaying) stopAudio();
   const renderBuffer = buffer;
   const renderCurves = structuredClone(curves);

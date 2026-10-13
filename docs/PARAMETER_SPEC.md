@@ -15,7 +15,7 @@ This document records stable identity and current code-derived behavior. Percept
 | `density` | Density | grains/s | 1–80 | 18 | Logarithmic | Yes |
 | `pitchLow` | Pitch Low | semitone | -24–+24 | 0 | Linear | Yes |
 | `pitchHigh` | Pitch High | semitone | -24–+24 | 0 | Linear | Yes |
-| `durationSeconds` | Output Duration | s | 1–600 | 20 | Linear slider, two ranges | No |
+| `durationSeconds` | Output Duration | s | 0–600 | 20 | Single linear slider | No |
 | `rangeStart` | Source Window Start | normalized source | 0–1 | 0 | Linear | No |
 | `rangeEnd` | Source Window End | normalized source | 0–1 | source-dependent | Linear | No |
 | `format` | Output Format | channels | 1/2/4/8 | 1 | Discrete | No |
@@ -172,8 +172,8 @@ This document records stable identity and current code-derived behavior. Percept
 
 - Type: integer seconds, horizontal slider
 - Unit: seconds
-- Minimum / Maximum / Default / Step: `1 / 600 / 20 / 1`
-- UI ranges: Short `1–60 s`; Long `60–600 s`. Switching ranges clamps the existing value to the new range.
+- Minimum / Maximum / Default / Step: `0 / 600 / 20 / 1`
+- UI range: `0–600 s`. Zero disables Play/Download; valid output is 1–600 s.
 - Purpose: define complete output timeline independently of source duration
 - Curve Support: no; all curve `x` values map across this duration
 - Preview/Render: shared duration setting
@@ -232,3 +232,12 @@ This document records stable identity and current code-derived behavior. Percept
 ## Parameter Versioning
 
 All entries are version `1.0`. Any future change to ID, domain, mapping, default, interpolation, or semantic meaning requires a decision record and state-migration note.
+
+
+## 2026-10-14 — Source Window boundary / single Output Duration (local)
+
+Preview and Render now constrain pitched grain length to the selected half-open sample window. Integer bounds are ceil(start*N) through ceil(end*N)-1, limited to the file. The maximum grain length is floor((last-first)/readRate)+1; this overrides the previous minimum-16-sample request when necessary. Cubic interpolation taps repeat the nearest in-window endpoint instead of borrowing outside samples. Empty windows produce silence. This intentionally corrects prior leakage; high-pitch grains in a narrow window can become shorter. Seed, envelope formulas, gain/cap, channel-0 source policy and alias handling remain unchanged.
+
+Output Duration is one linear 0–600 second slider, 1-second step, default 20. Removed Short/Long selector; durationSeconds identity is retained. Zero is a non-renderable UI state: Play/Download disabled, direct render rejects zero. Positive UI durations are 1–600. Changing duration stops playback and returns its cursor to zero. Existing valid durations retain their meaning; no preset persistence is introduced.
+
+Verification: tests/source-window-boundary.mjs and tests/duration-range.mjs. See docs/VERIFICATION_2026-10-14.md for evidence and limits. No listening approval or deployment is implied.

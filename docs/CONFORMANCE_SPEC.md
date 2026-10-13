@@ -137,3 +137,12 @@ With 48 kHz output, 3 seconds, 2 grains/s, 100 ms Hann grains, spread zero and f
 Browser follow-up: real AudioWorklet first pass, natural-end replay, and Stop/reset replay produced equal fixed-setting PCM. Product UI reopened a saved WAV, completed a 3-second pass, restarted, and returned to zero on Stop, without console errors. This is transport verification, not listening approval.
 
 Worker candidate: browser 1-second Mono/Stereo/Quad/Octo WAVs are byte-identical to direct offline renderer output. Source stays intact. Three abort/recover cycles, pre-aborted requests and cancellation at the encoding boundary pass. Evidence in shared work/CurveLabWebV1/evidence/granular-worker-contract.json. Follow-up: actual Brave Save produced a 20s/8ch/48k/24-bit WAV (960000 frames), reopened and played/stopped in the app. Physical multichannel listening remains unverified.
+
+
+## 2026-10-14 — Source Window boundary / single Output Duration (local)
+
+Preview and Render now constrain pitched grain length to the selected half-open sample window. Integer bounds are ceil(start*N) through ceil(end*N)-1, limited to the file. The maximum grain length is floor((last-first)/readRate)+1; this overrides the previous minimum-16-sample request when necessary. Cubic interpolation taps repeat the nearest in-window endpoint instead of borrowing outside samples. Empty windows produce silence. This intentionally corrects prior leakage; high-pitch grains in a narrow window can become shorter. Seed, envelope formulas, gain/cap, channel-0 source policy and alias handling remain unchanged.
+
+Output Duration is one linear 0–600 second slider, 1-second step, default 20. Removed Short/Long selector; durationSeconds identity is retained. Zero is a non-renderable UI state: Play/Download disabled, direct render rejects zero. Positive UI durations are 1–600. Changing duration stops playback and returns its cursor to zero. Existing valid durations retain their meaning; no preset persistence is introduced.
+
+Verification: tests/source-window-boundary.mjs and tests/duration-range.mjs. See docs/VERIFICATION_2026-10-14.md for evidence and limits. No listening approval or deployment is implied.

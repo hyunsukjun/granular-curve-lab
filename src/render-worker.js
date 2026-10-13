@@ -1,4 +1,4 @@
-import { renderGranular } from './offline-render.js?v=20261005-duration-01';
+import { renderGranular } from './offline-render.js?v=20261014-window-01';
 
 self.onmessage = async ({ data }) => {
   try {

@@ -39,14 +39,14 @@ function envelopeValue(type, phase) {
   return 0.5 - (0.5 * Math.cos(Math.PI * 2 * p));
 }
 
-function readCubic(channel, pos) {
-  if (!channel || pos < 0 || pos >= channel.length - 3) return 0;
+function readCubic(channel, pos, first = 0, last = channel.length - 1) {
+  if (!channel || first > last || pos < first || pos > last) return 0;
   const i0 = Math.floor(pos);
   const frac = pos - i0;
-  const xm1 = channel[Math.max(0, i0 - 1)];
+  const xm1 = channel[Math.max(first, i0 - 1)];
   const x0 = channel[i0];
-  const x1 = channel[i0 + 1];
-  const x2 = channel[Math.min(channel.length - 1, i0 + 2)];
+  const x1 = channel[Math.min(last, i0 + 1)];
+  const x2 = channel[Math.min(last, i0 + 2)];
   const a = (-0.5 * xm1) + (1.5 * x0) - (1.5 * x1) + (0.5 * x2);
   const b = xm1 - (2.5 * x0) + (2 * x1) - (0.5 * x2);
   const c = (-0.5 * xm1) + (0.5 * x1);
@@ -139,7 +139,7 @@ class GranularProcessor extends AudioWorkletProcessor {
     const rangeEnd = clamp(Math.max(this.settings.rangeStart, this.settings.rangeEnd));
     const available = Math.max(1 / this.sourceRate, (rangeEnd - rangeStart) * (this.source.length / this.sourceRate));
     const requestedMs = grainMsFromNorm(valueAt(this.curves.size, t));
-    const lengthSamples = Math.max(16, Math.round((Math.min(requestedMs / 1000, available) * sampleRate)));
+    let lengthSamples = Math.max(16, Math.round((Math.min(requestedMs / 1000, available) * sampleRate)));
     const position = rangeStart + ((rangeEnd - rangeStart) * clamp(valueAt(this.curves.position, t)));
     const spread = clamp(valueAt(this.curves.spread, t)) * (rangeEnd - rangeStart);
     const jitterNorm = (this.random() - 0.5) * spread;
@@ -147,13 +147,21 @@ class GranularProcessor extends AudioWorkletProcessor {
     const [low, high] = pitchBounds(this.curves, t);
     const semitone = low + ((high - low) * this.random());
     const rate = Math.pow(2, semitone / 12) * (this.sourceRate / sampleRate);
-    const readSpan = (lengthSamples - 1) * rate;
-    const minRead = rangeStart * this.source.length;
-    const maxRead = Math.max(minRead, (rangeEnd * this.source.length) - readSpan - 3);
+    const minRead = Math.ceil(rangeStart * this.source.length);
+    const lastRead = Math.min(this.source.length - 1, Math.ceil(rangeEnd * this.source.length) - 1);
+    lengthSamples = Math.min(lengthSamples, Math.max(0, Math.floor((lastRead - minRead) / rate) + 1));
+    const readSpan = Math.max(0, lengthSamples - 1) * rate;
+    const maxRead = Math.max(minRead, lastRead - readSpan);
     const start = clamp(sourceCenter - (readSpan * 0.5), minRead, maxRead);
 
+    if (lengthSamples === 0) {
+      this.grainIndex += 1;
+      return;
+    }
     this.grains.push({
       pos: start,
+      first: minRead,
+      last: lastRead,
       age: 0,
       length: lengthSamples,
       rate,
@@ -172,7 +180,7 @@ class GranularProcessor extends AudioWorkletProcessor {
     for (let i = 0; i < outL.length; i += 1) {
       let l = 0;
       let r = 0;
-      if (this.source && this.playing) {
+      if (this.source && this.playing && this.settings.durationSeconds > 0) {
         const duration = Math.max(0.1, this.settings.durationSeconds);
         const t = clamp(this.outputTime / duration);
         const density = densityFromNorm(valueAt(this.curves.density, t));
@@ -190,7 +198,7 @@ class GranularProcessor extends AudioWorkletProcessor {
             this.grains.splice(g, 1);
             continue;
           }
-          const sample = readCubic(this.source, grain.pos) * envelopeValue(this.settings.envelope, phase);
+          const sample = readCubic(this.source, grain.pos, grain.first, grain.last) * envelopeValue(this.settings.envelope, phase);
           if (grain.channel === 0) l += sample;
           else r += sample;
           grain.pos += grain.rate;
