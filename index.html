@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="src/common-transport.css?v=20261013-1">
     <link rel="stylesheet" href="src/curve-actions.css?v=20261014-family1">
     <link rel="stylesheet" href="src/file-help.css?v=20261014-family1">
+    <link rel="stylesheet" href="src/parameter-help.css?v=20261014-family1">
   </head>
   <body>
     <main class="app">
@@ -57,12 +58,12 @@
       <section class="editor">
         <div class="legend">
           <div class="modeButtons">
-            <button id="positionMode" class="active curveMode" type="button">Read Position</button>
-            <button id="spreadMode" class="curveMode" type="button">Spread</button>
-            <button id="sizeMode" class="curveMode" type="button">Size</button>
-            <button id="densityMode" class="curveMode" type="button">Density</button>
-            <button id="pitchLowMode" class="curveMode" type="button">Pitch Low</button>
-            <button id="pitchHighMode" class="curveMode" type="button">Pitch High</button>
+            <button id="positionMode" class="active curveMode" type="button" data-parameter-help aria-describedby="positionModeHelp">Read Position</button>
+            <button id="spreadMode" class="curveMode" type="button" data-parameter-help aria-describedby="spreadModeHelp">Spread</button>
+            <button id="sizeMode" class="curveMode" type="button" data-parameter-help aria-describedby="sizeModeHelp">Size</button>
+            <button id="densityMode" class="curveMode" type="button" data-parameter-help aria-describedby="densityModeHelp">Density</button>
+            <button id="pitchLowMode" class="curveMode" type="button" data-parameter-help aria-describedby="pitchLowModeHelp">Pitch Low</button>
+            <button id="pitchHighMode" class="curveMode" type="button" data-parameter-help aria-describedby="pitchHighModeHelp">Pitch High</button>
             <div class="toolToggle" role="group" aria-label="Curve editing tool">
               <button id="penTool" class="active" type="button" aria-label="Pen" aria-pressed="true" title="Pen: add or move points">
                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L9 17l-4 1 1-4Z"/></svg>
@@ -146,5 +147,12 @@
 
     <script src="src/file-help.js?v=20261014-family1" type="module"></script>
     <script src="src/app.js?v=20261014-window-01" type="module"></script>
-  </body>
+  <div id="positionModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Read Position · 0–100% of Source Window</strong><span>Choose where grains start within the selected source window. It does not set output playback time.</span><span class="helpState"></span></div>
+<div id="spreadModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spread · 0–100%</strong><span>Randomize grain read positions around Read Position within the selected source window.</span><span class="helpState"></span></div>
+<div id="sizeModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Grain Size · 5–1000 ms</strong><span>Set the requested grain length. The actual length can be shorter to stay inside Source Window at the current pitch.</span><span class="helpState"></span></div>
+<div id="densityModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Density · 1–80 grains/s</strong><span>Set the requested number of new grains per second. Preview uses up to 64 voices, reduced to 32 at high density/size; Render uses up to 64.</span><span class="helpState"></span></div>
+<div id="pitchLowModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Pitch Low · −24 to +24 semitones</strong><span>Set one end of the random grain pitch range. If Low crosses High, the bounds are reordered.</span><span class="helpState"></span></div>
+<div id="pitchHighModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Pitch High · −24 to +24 semitones</strong><span>Set the other end of the random grain pitch range. 12 semitones = one octave; pitch also changes grain read speed.</span><span class="helpState"></span></div>
+<script type="module" src="src/parameter-help.js?v=20261014-family1"></script>
+</body>
 </html>
