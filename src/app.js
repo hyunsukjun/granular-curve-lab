@@ -163,10 +163,10 @@ function resizeCanvas() {
 }
 
 function formatClock(seconds) {
-  const safeSeconds = Math.max(0, seconds || 0);
-  const minutes = Math.floor(safeSeconds / 60);
-  const remaining = safeSeconds - (minutes * 60);
-  return `${String(minutes).padStart(2, "0")}:${remaining.toFixed(2).padStart(5, "0")}`;
+  const hundredths = Math.round(Math.max(0, Number.isFinite(seconds) ? seconds : 0) * 100);
+  const minutes = Math.floor(hundredths / 6000);
+  const rest = (hundredths % 6000) / 100;
+  return `${String(minutes).padStart(2, "0")}:${rest.toFixed(2).padStart(5, "0")}`;
 }
 
 function linearToDb(value) {
@@ -241,7 +241,7 @@ function formatSourcePercent(value) {
 function formatPointValue(curveName, point) {
   if (curveName === "position" || curveName === "spread") return `${Math.round(point.y * 100)}%`;
   if (curveName === "size") return `${Math.round(grainMsFromNorm(point.y))} ms`;
-  if (curveName === "density") return `${densityFromNorm(point.y).toFixed(1)}/s`;
+  if (curveName === "density") return `${densityFromNorm(point.y).toFixed(1)} grains/s`;
   const st = semitoneFromNorm(point.y);
   return `${st > 0 ? "+" : ""}${st.toFixed(1)} st`;
 }
@@ -382,7 +382,7 @@ async function loadAudioFile(file) {
     playheadSeconds = 0;
     sendBufferToWorklet();
     sendSettings();
-    fileStatus.textContent = `${file.name} - mono source, ${buffer.duration.toFixed(2)} s`;
+    fileStatus.textContent = `${file.name} - ${buffer.duration.toFixed(2)} s · mono source`;
     clearDownload();
     setExportStatus("ready");
     draw();
@@ -738,8 +738,8 @@ function updateReadouts() {
   readouts.position.textContent = `${Math.round(current.position * 100)}% in window`;
   readouts.spread.textContent = `${Math.round(current.spread * 100)}%`;
   readouts.size.textContent = `${Math.round(current.sizeMs)} ms`;
-  readouts.density.textContent = `${current.density.toFixed(1)}/s`;
-  readouts.pitch.textContent = `${current.pitchLow.toFixed(1)}..${current.pitchHigh.toFixed(1)} st`;
+  readouts.density.textContent = `${current.density.toFixed(1)} grains/s`;
+  readouts.pitch.textContent = `${current.pitchLow.toFixed(1)}–${current.pitchHigh.toFixed(1)} st`;
   sourceWindowReadout.textContent = `${formatSourcePercent(sourceWindow.start)}% - ${formatSourcePercent(sourceWindow.end)}%`;
   timeStatus.textContent = `${formatClock(playheadSeconds)} / ${formatClock(s.durationSeconds)}`;
   if (!isScrubbing) playbackScrubber.value = String(Math.max(0, Math.min(1, playheadSeconds / Math.max(1, s.durationSeconds))));
@@ -866,7 +866,7 @@ eraserTool.addEventListener("click", () => setTool("eraser"));
 
 function updateDurationDisplay() {
   const seconds = settings().durationSeconds;
-  const label = seconds < 60 ? `${seconds} sec` : `${Math.floor(seconds / 60)} min${seconds % 60 ? ` ${seconds % 60} sec` : ""}`;
+  const label = seconds < 60 ? `${seconds} s` : `${Math.floor(seconds / 60)} min${seconds % 60 ? ` ${seconds % 60} s` : ""}`;
   document.getElementById("durationValue").textContent = label;
   durationInput.setAttribute("aria-valuetext", label);
   const channels = { mono: 1, stereo: 2, quad: 4, octo: 8 }[formatSelect.value];
