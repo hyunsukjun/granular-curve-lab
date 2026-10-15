@@ -199,3 +199,7 @@ Family verification: all six information panels passed desktop/narrow bounds and
 ## 2026-10-14 — Family parameter help
 
 Static parameter descriptions are available on the relevant buttons using the Audio help design; current values, axes and activation feedback remain visible. See `docs/PARAMETER_HELP.md` (or `PARAMETER_HELP.md` in this directory). No DSP or curve mapping changes.
+
+## Information-density pilot — local review, 2026-10-15
+
+Selected parameter name/value visible; statistics and full overview in disclosure. Existing preview state; last reported or initialized values while stopped. Source Window and output duration retained. All original readout IDs and update sources preserved. Details summary Space does not start transport. COMMON CANDIDATE for standalone; not committed/deployed.

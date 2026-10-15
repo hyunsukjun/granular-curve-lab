@@ -743,6 +743,7 @@ function updateReadouts() {
   readouts.size.textContent = `${Math.round(current.sizeMs)} ms`;
   readouts.density.textContent = `${current.density.toFixed(1)}/s`;
   readouts.pitch.textContent = `${current.pitchLow.toFixed(1)}..${current.pitchHigh.toFixed(1)} st`;
+  document.getElementById("selectedValue").textContent = activeCurve === "pitchLow" ? `${current.pitchLow.toFixed(1)} st` : activeCurve === "pitchHigh" ? `${current.pitchHigh.toFixed(1)} st` : readouts[activeCurve].textContent;
   sourceWindowReadout.textContent = `${formatSourcePercent(sourceWindow.start)}% - ${formatSourcePercent(sourceWindow.end)}%`;
   timeStatus.textContent = `${formatClock(playheadSeconds)} / ${formatClock(s.durationSeconds)}`;
   if (!isScrubbing) playbackScrubber.value = String(Math.max(0, Math.min(1, playheadSeconds / Math.max(1, s.durationSeconds))));
