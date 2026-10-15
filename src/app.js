@@ -479,8 +479,8 @@ function drawParameterScale() {
     const y = (1 - tick.y) * height;
     const textY = Math.max(11, Math.min(height - 5, y + 4));
     ctx.font = tick.emphasis
-      ? "750 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-      : "600 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+      ? "500 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+      : "400 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
     ctx.fillStyle = tick.emphasis ? "rgba(232, 240, 246, 0.96)" : "rgba(170, 188, 204, 0.82)";
     ctx.strokeStyle = tick.emphasis ? "rgba(95, 141, 177, 0.6)" : "rgba(72, 111, 143, 0.28)";
     ctx.lineWidth = tick.emphasis ? 1.6 : 1;
@@ -653,14 +653,14 @@ function drawSourceWindow() {
   sourceCtx.strokeRect(startX, 1, Math.max(1, endX - startX), h - 2);
   drawReadPositionMarker(plot.left, plot.width, h);
   sourceCtx.fillStyle = "rgba(232, 240, 246, 0.9)";
-  sourceCtx.font = "650 12px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  sourceCtx.font = "500 12px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   sourceCtx.textAlign = "left";
   sourceCtx.textBaseline = "top";
   sourceCtx.fillText("Source Window", plot.left + 24, 8);
   sourceCtx.font = "600 10px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   sourceCtx.fillStyle = "rgba(170, 188, 204, 0.82)";
   sourceCtx.textAlign = "left";
-  sourceCtx.fillText("SOURCE", 7, 10);
+  sourceCtx.fillText("Source", 7, 10);
 }
 
 function sourceWindowDisplayBounds(left, width) {
@@ -697,7 +697,7 @@ function drawReadPositionMarker(left, width, h) {
 
 function drawCurveAxisHints(w) {
   ctx.save();
-  ctx.font = "600 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  ctx.font = "400 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   ctx.fillStyle = "rgba(170, 188, 204, 0.82)";
   ctx.textAlign = "right";
   ctx.textBaseline = "top";
@@ -713,7 +713,7 @@ function drawTooltip(pointRef) {
   const px = left + (point.x * width);
   const py = (1 - point.y) * canvasCssHeight;
   ctx.save();
-  ctx.font = "650 13px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  ctx.font = "500 12px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   const boxWidth = Math.ceil(ctx.measureText(text).width + 18);
   const boxX = Math.max(left + 8, Math.min(left + width - boxWidth - 8, px - (boxWidth / 2)));
   const boxY = py < 40 ? py + 14 : py - 36;

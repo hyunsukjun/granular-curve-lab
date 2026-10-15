@@ -225,3 +225,13 @@ Static parameter descriptions are available on the relevant buttons using the Au
 ## 2026-10-15 — output controls simplification (local review)
 Remove Mono1ch from web export selector; Stereo2ch is default, Quad4ch/Octo8ch retained. Internal mono renderer/source processing unchanged. Remove repeated Source Window percentage row; retain visual selection and exact percentages in source canvas title. Duration remains0–600s with1s steps, now displays mm:ss with tabular digits. Remove endpoint labels and WAV-size estimate; zero still disables rendering/playback and limits remain in slider semantics/help. No DSP changes.
 Browser verified08:03,00:00/disabled,10:00, narrow390px no horizontal overflow, and real1s WAV saves in2/4/8ch at48kHz24-bit. Not committed/deployed.
+
+
+## Restrained typography — 2026-10-15 local review
+COMMON CANDIDATE, Audio-approved visual direction. Shared typography.css gives ordinary text controls/readout values400 weight, section labels500,13px/500 transport time,10px/600 CLIP. Readout labels use natural case and zero tracking. Button dimensions and Lab-specific active/enabled colors remain; decorative highlights removed, active lower bevel1px. Duration14/600 remains intentional. Canvas excessive600/650/750 weights reduced; point tooltip13→12px where applicable; waveform headings natural case. No normalized coordinates, DSP, parameter meanings or transport logic changed.
+Commit/deployment withheld for user preview. Native confirmation keyboard and comparative listening remain deferred.
+
+### 2026-10-15 — Family typography release verification
+- Approved typography refinement verified in Brave actual 125% (1189×609 CSS px, DPR 2.5) and 150% (990×508 CSS px, DPR 3). No document horizontal overflow or clipped button labels; transport remains reachable by vertical scrolling.
+- Existing narrow-screen and representative parameter/playback checks retained. Granular additionally imported recovery-8s-test.wav via the native file picker: playback/meter activity, pause, resume from position, and rewind verified.
+- Scope is presentation only. Native confirmation keyboard behavior and comparative listening remain deferred; this does not claim new DSP/export or cross-device certification.

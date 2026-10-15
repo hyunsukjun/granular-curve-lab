@@ -287,3 +287,10 @@ Remove Mono1ch from web export selector; Stereo2ch is default, Quad4ch/Octo8ch r
 Browser verified08:03,00:00/disabled,10:00, narrow390px no horizontal overflow, and real1s WAV saves in2/4/8ch at48kHz24-bit. Not committed/deployed.
 
 Duration clock approved at14px/600 (reduced from16px) to match current-value typography; retain tabular digits. Approved for release2026-10-15.
+
+
+## Restrained typography — 2026-10-15 local review
+COMMON CANDIDATE, Audio-approved visual direction. Shared typography.css gives ordinary text controls/readout values400 weight, section labels500,13px/500 transport time,10px/600 CLIP. Readout labels use natural case and zero tracking. Button dimensions and Lab-specific active/enabled colors remain; decorative highlights removed, active lower bevel1px. Duration14/600 remains intentional. Canvas excessive600/650/750 weights reduced; point tooltip13→12px where applicable; waveform headings natural case. No normalized coordinates, DSP, parameter meanings or transport logic changed.
+Commit/deployment withheld for user preview. Native confirmation keyboard and comparative listening remain deferred.
+
+Validation follow-up: default wide layout and narrow354px(Timbre)/390px(other Labs) no horizontal overflow or button clipping; representative active effect/mode colors and400 weight verified, chain enabled colors retained. Basic Play/Pause/rewind confirmed for Timbre/Space/Spectral/Oscillator; Granular no-file disabled state and mode selection checked, no real-file playback repeated. Console errors none; app syntax/diff checks passed. Native zoom not repeated for these five changes. Evidence: shared QA type-family-audit.json and type-family-*-390.png.
