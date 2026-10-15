@@ -247,3 +247,8 @@ Title/icon, primary controls, values, editor outer edges and transport contents 
 - This supersedes the previous #252C32 waveform / #30343C transport pilot for Granular. Approved for commit and deployment on 2026-10-15.
 
 Transport surrounding page space also uses #373B43. Source gutter label starts 7px inside the canvas (10px font); Source Window title starts 24px after the plot origin, clear of the initial minimum-width selection. Canvas bounds and source selection mapping are unchanged.
+
+### Shared transport alignment — 2026-10-15 (uncommitted review)
+Return / Play / Pause retain their order and behavior. Each occupies a 38 × 32px cell with 4px spacing and a centered 16px icon. Remove the first button's extra 7px offset/divider so visual spacing is uniform. Audio reference palette: surround #292F37, thin border #596472, hover #343A42, playing #5C6978; no per-button accent colors. Override generic button backgrounds only inside transport. Preserve keyboard focus and disabled states.
+
+Release approval (2026-10-15): user approved the reviewed transport/layout changes. All six transport-keyboard suites passed (27 tests total); Oscillator syntax and diff checks passed. Prior browser measurements confirmed equal transport cells, and Oscillator point add/erase, Clear Current, Play/Pause/rewind and narrow layout were checked.
