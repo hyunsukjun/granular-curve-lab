@@ -265,7 +265,7 @@ function markDownloadStale() {
   if (!buffer) return;
   if (downloadUrl) URL.revokeObjectURL(downloadUrl);
   downloadUrl = null;
-  readouts.download.textContent = "needs export";
+  setExportStatus("needs export");
 }
 
 function clearDownload() {
@@ -384,12 +384,12 @@ async function loadAudioFile(file) {
     sendSettings();
     fileStatus.textContent = `${file.name} - mono source, ${buffer.duration.toFixed(2)} s`;
     clearDownload();
-    readouts.download.textContent = "ready";
+    setExportStatus("ready");
     draw();
   } catch (error) {
     console.error(error);
     fileStatus.textContent = error.message?.startsWith("AIFF:") ? error.message : "Could not load audio. Try WAV, MP3, or M4A.";
-    readouts.download.textContent = "not ready";
+    setExportStatus("not ready");
     buffer = null;
   } finally {
     setBusy(false);
@@ -647,9 +647,6 @@ function drawSourceWindow() {
     sourceCtx.fillRect(plot.left + x, mid - (sample * amp), 1, Math.max(1, sample * amp * 2));
   }
   const { startX, endX } = sourceWindowDisplayBounds(plot.left, plot.width);
-  sourceCtx.fillStyle = "rgba(3, 10, 17, 0.55)";
-  sourceCtx.fillRect(plot.left, 0, Math.max(0, startX - plot.left), h);
-  sourceCtx.fillRect(endX, 0, Math.max(0, (plot.left + plot.width) - endX), h);
   sourceCtx.fillStyle = "rgba(109, 224, 192, 0.12)";
   sourceCtx.fillRect(startX, 0, Math.max(1, endX - startX), h);
   sourceCtx.strokeStyle = "#6de0c0";
@@ -660,11 +657,11 @@ function drawSourceWindow() {
   sourceCtx.font = "650 12px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   sourceCtx.textAlign = "left";
   sourceCtx.textBaseline = "top";
-  sourceCtx.fillText("Source Window", plot.left + 8, 8);
-  sourceCtx.font = "600 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  sourceCtx.fillText("Source Window", plot.left + 24, 8);
+  sourceCtx.font = "600 10px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
   sourceCtx.fillStyle = "rgba(170, 188, 204, 0.82)";
-  sourceCtx.textAlign = "right";
-  sourceCtx.fillText("SOURCE", plot.left - 9, 10);
+  sourceCtx.textAlign = "left";
+  sourceCtx.fillText("SOURCE", 7, 10);
 }
 
 function sourceWindowDisplayBounds(left, width) {
@@ -743,7 +740,6 @@ function updateReadouts() {
   readouts.size.textContent = `${Math.round(current.sizeMs)} ms`;
   readouts.density.textContent = `${current.density.toFixed(1)}/s`;
   readouts.pitch.textContent = `${current.pitchLow.toFixed(1)}..${current.pitchHigh.toFixed(1)} st`;
-  document.getElementById("selectedValue").textContent = activeCurve === "pitchLow" ? `${current.pitchLow.toFixed(1)} st` : activeCurve === "pitchHigh" ? `${current.pitchHigh.toFixed(1)} st` : readouts[activeCurve].textContent;
   sourceWindowReadout.textContent = `${formatSourcePercent(sourceWindow.start)}% - ${formatSourcePercent(sourceWindow.end)}%`;
   timeStatus.textContent = `${formatClock(playheadSeconds)} / ${formatClock(s.durationSeconds)}`;
   if (!isScrubbing) playbackScrubber.value = String(Math.max(0, Math.min(1, playheadSeconds / Math.max(1, s.durationSeconds))));
@@ -909,7 +905,7 @@ downloadButton.addEventListener("click", async () => {
   setBusy(true);
   downloadButton.disabled = false;
   downloadButton.textContent = "Cancel";
-  readouts.download.textContent = "creating 0%";
+  setExportStatus("creating 0%");
   try {
     const render = await getRenderer();
     const rendered = await render({
@@ -917,7 +913,7 @@ downloadButton.addEventListener("click", async () => {
       curves: renderCurves,
       settings: renderSettings,
       signal: renderAbortController.signal,
-      onProgress: (progress) => { readouts.download.textContent = `creating ${Math.round(progress * 100)}%`; }
+      onProgress: (progress) => { setExportStatus(`creating ${Math.round(progress * 100)}%`); }
     });
     downloadUrl = URL.createObjectURL(rendered.blob);
     const link = document.createElement("a");
@@ -926,9 +922,9 @@ downloadButton.addEventListener("click", async () => {
     document.body.appendChild(link);
     link.click();
     link.remove();
-    readouts.download.textContent = `${rendered.duration.toFixed(1)} s, ${rendered.channelCount} ch`;
+    setExportStatus(`${rendered.duration.toFixed(1)} s, ${rendered.channelCount} ch`);
   } catch (error) {
-    readouts.download.textContent = error.name === "AbortError" ? "cancelled" : "export failed";
+    setExportStatus(error.name === "AbortError" ? "cancelled" : "export failed");
     if (error.name !== "AbortError") console.error(error);
   } finally {
     renderAbortController = null;
@@ -1114,3 +1110,10 @@ function pauseAudio() {
 }
 
 mountTransport({onScrub:value=>{isScrubbing=value;},state:()=>({duration:settings().durationSeconds,seconds:playheadSeconds,playing:isPlaying,disabled:playButton.disabled}),seek:p=>{playbackScrubber.value=String(p);seekFromScrubber();}});
+
+// Idle readiness is conveyed by the Download control; retain actionable feedback.
+function setExportStatus(message) {
+  const output = document.getElementById("downloadReadout");
+  output.textContent = message;
+  output.parentElement.hidden = ["", "ready", "not ready", "needs export"].includes(message);
+}

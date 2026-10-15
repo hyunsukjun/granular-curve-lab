@@ -229,3 +229,21 @@ See `docs/SHARED_VISUAL_CONTRACT.md` for the accepted shared baseline and resolu
 ## Information-density pilot — local review, 2026-10-15
 
 Selected parameter name/value visible; statistics and full overview in disclosure. Existing preview state; last reported or initialized values while stopped. Source Window and output duration retained. All original readout IDs and update sources preserved. Details summary Space does not start transport. COMMON CANDIDATE for standalone; not committed/deployed.
+
+## Functional surfaces
+See docs/FUNCTIONAL_SURFACE_PILOT.md. Upper controls share the title background; waveform/analysis area has its own uniform surface. This refines continuous-shell styling without changing button identity or states.
+
+## Readout disclosure rollback — 2026-10-15
+User requested removal of the newly introduced Details disclosures across the family. Original always-visible readout panels restored; Oscillator retains its pre-existing Synthesis detail panel and original contents. Value computation and audio behavior unchanged. Do not add disclosure or restructure information during color/minor-UI work. Audio also removes the border above EDIT AUDIO.
+
+## Shared content rails — 2026-10-15 (local review)
+Title/icon, primary controls, values, editor outer edges and transport contents share 20px side insets; <=600px uses 10px. Dark canvas surfaces stop at this rail with neutral #373B43 outer gutters. Internal axis labels/plot margins remain part of the canvas, not the shell rail. Space retains its two-column spatial view; Oscillator retains Synthesis detail without double insets. Colors of controls/transport and all DSP behavior are preserved. Implementation: src/content-alignment.css. No release authorized for this alignment pass.
+
+### Granular surface correction — 2026-10-15 (local review)
+- Transport surround matches Timbre/header #373B43, without outer border or shadow.
+- Source and curve canvas, including label gutters, use Audio editor #191C20. Remove the outside-selection background wash so left/right gutters remain continuous; retain the source selection tint, outline and range behavior.
+- Remove the separator before Clear Current. Give channel selection an explicit 1px #626F7F border and 4px radius.
+- Remove the persistent 24-bit / 48 kHz header label; retain export specs in file help and Download tooltip. Export behavior unchanged.
+- This supersedes the previous #252C32 waveform / #30343C transport pilot for Granular. Approved for commit and deployment on 2026-10-15.
+
+Transport surrounding page space also uses #373B43. Source gutter label starts 7px inside the canvas (10px font); Source Window title starts 24px after the plot origin, clear of the initial minimum-width selection. Canvas bounds and source selection mapping are unchanged.
