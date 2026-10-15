@@ -1,3 +1,5 @@
+import {analyzeSourceColors} from "./source-colors.js";
+import {summarizeChannels,paintEnvelope,peakOf,paintToneLegend} from "./source-envelope.js";
 import {mountTransport} from "./common-transport.js?v=20261013-1";
 import { readAudioFile } from "./audio-import.js?v=20261011-aiff1";
 import {
@@ -81,6 +83,7 @@ let outputMeter;
 let workletBufferLoaded = false;
 let buffer;
 let waveform = [];
+let sourceColors=null,sourceRaster=null;
 let activeCurve = "position";
 let selectedTool = "pen";
 let selectedPoint = null;
@@ -352,16 +355,8 @@ async function decodeAudioFile(arrayBuffer) {
 }
 
 function buildWaveform(audioBuffer) {
-  const channel = audioBuffer.getChannelData(0);
-  const buckets = 4000;
-  const samplesPerBucket = Math.max(1, Math.floor(channel.length / buckets));
-  waveform = [];
-  for (let i = 0; i < buckets; i += 1) {
-    let peak = 0;
-    const start = i * samplesPerBucket;
-    for (let j = 0; j < samplesPerBucket; j += 1) peak = Math.max(peak, Math.abs(channel[start + j] || 0));
-    waveform.push(peak);
-  }
+  waveform=summarizeChannels([audioBuffer.getChannelData(0)])[0];sourceColors=null;sourceRaster=null;
+  analyzeSourceColors({length:audioBuffer.length,sampleRate:audioBuffer.sampleRate,numberOfChannels:1,getChannelData:()=>audioBuffer.getChannelData(0)},colors=>{if(buffer===audioBuffer){sourceColors=colors;drawSourceWindow();}});
 }
 
 async function loadAudioFile(file) {
@@ -632,22 +627,18 @@ function drawSourceWindow() {
   const w = sourceCanvasCssWidth;
   const h = sourceCanvasCssHeight;
   const plot = getSourcePlotBounds();
-  sourceCtx.setTransform(scale, 0, 0, scale, 0, 0);
-  sourceCtx.clearRect(0, 0, w, h);
-  sourceCtx.fillStyle = "#191c20";
-  sourceCtx.fillRect(0, 0, w, h);
-  drawCanvasGrid(sourceCtx, plot.left, plot.width, h);
-  sourceCtx.fillStyle = "rgba(128, 158, 186, 0.48)";
-  const mid = h * 0.52;
-  const amp = h * 0.34;
-  const step = Math.max(1, Math.floor(waveform.length / plot.width));
-  for (let x = 0; x < plot.width; x += 1) {
-    const sample = waveform[Math.min(waveform.length - 1, x * step)] || 0;
-    sourceCtx.fillRect(plot.left + x, mid - (sample * amp), 1, Math.max(1, sample * amp * 2));
+  const key=`${w}:${h}:${scale}:${plot.left}:${plot.width}`;
+  if(!sourceRaster||sourceRaster.key!==key||sourceRaster.waveform!==waveform||sourceRaster.colors!==sourceColors){
+    const image=document.createElement('canvas');image.width=Math.ceil(w*scale);image.height=Math.ceil(h*scale);const c=image.getContext('2d');c.setTransform(scale,0,0,scale,0,0);c.fillStyle='#191c20';c.fillRect(0,0,w,h);drawCanvasGrid(c,plot.left,plot.width,h);
+    paintEnvelope(c,waveform,sourceColors?.[0],plot.left,plot.width,h*.52,h*.34,scale,peakOf([waveform]));
+    sourceRaster={key,waveform,colors:sourceColors,image};
   }
+  sourceCtx.setTransform(1,0,0,1,0,0);sourceCtx.clearRect(0,0,sourceCtx.canvas.width,sourceCtx.canvas.height);sourceCtx.drawImage(sourceRaster.image,0,0);sourceCtx.setTransform(scale,0,0,scale,0,0);
   const { startX, endX } = sourceWindowDisplayBounds(plot.left, plot.width);
-  sourceCtx.fillStyle = "rgba(109, 224, 192, 0.12)";
-  sourceCtx.fillRect(startX, 0, Math.max(1, endX - startX), h);
+  sourceCtx.fillStyle = "rgba(10, 13, 17, 0.42)";
+  sourceCtx.fillRect(plot.left,0,Math.max(0,startX-plot.left),h);
+  sourceCtx.fillRect(endX,0,Math.max(0,plot.left+plot.width-endX),h);
+  sourceCtx.strokeStyle="#101419";sourceCtx.lineWidth=4;sourceCtx.strokeRect(startX,1,Math.max(1,endX-startX),h-2);
   sourceCtx.strokeStyle = "#6de0c0";
   sourceCtx.lineWidth = 2;
   sourceCtx.strokeRect(startX, 1, Math.max(1, endX - startX), h - 2);
@@ -661,6 +652,7 @@ function drawSourceWindow() {
   sourceCtx.fillStyle = "rgba(170, 188, 204, 0.82)";
   sourceCtx.textAlign = "left";
   sourceCtx.fillText("Source", 7, 10);
+  paintToneLegend(sourceCtx,w,14);
 }
 
 function sourceWindowDisplayBounds(left, width) {

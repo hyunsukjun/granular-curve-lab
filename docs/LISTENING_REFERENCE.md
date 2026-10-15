@@ -95,3 +95,8 @@ No item is approved until a named listener, environment, source, settings, resul
 - Acceptable audible difference between Preview 32/64 and Offline Render.
 - Perceptual effect of source-boundary clamping.
 
+
+## 2026-10-15 — Source-tone demo sounds noisy (user report, unresolved)
+User hears noise in the provided curve-source-tone-demo.wav preview, not yet reported with their own file. This 10 s stereo synthetic sweep is for visual color testing, not a musical listening reference. Channel 0 rises roughly 180→5760 Hz; PCM peak 0.5991, no full-scale clipping detected. Grain overlap/position spread over changing frequency is a possible explanation, not a confirmed diagnosis.
+Display summary leaves source samples unchanged. Deterministic worklet rendering before/after display summarization gives identical 96,000 frames (peak 0.43664 for default curves, source window 23–58%, 48 kHz). Core/worklet/offline-render files unchanged from released HEAD. This does not rule out device underruns or existing DSP artifacts.
+Follow-up belongs to Curve Lab DSP: compare dry demo vs rendered/preview grains and a known musical file at identical settings. Listening approval UNKNOWN. No DSP tuning applied.

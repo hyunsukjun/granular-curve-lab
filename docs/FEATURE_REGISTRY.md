@@ -21,7 +21,7 @@ Statuses describe the current repository, not proposed future work.
 **PURPOSE:** Supply source material without uploading it to a service.  
 **USER BEHAVIOR:** The user chooses a local audio file. The waveform appears and transport/export become available.  
 **INPUT:** Browser-decodable `audio/*` file.  
-**OUTPUT:** Mono source buffer using channel 0 and a 4000-bucket peak waveform.  
+**OUTPUT:** Mono source buffer using channel 0 and a display-only signed min/max waveform with up to 16,000 buckets.
 **DATA MODEL:** Source samples, source sample rate, duration.  
 **EDGE CASES:** Decode failure clears the source and reports recommended formats. Multichannel inputs do not mix down; only channel 0 is used.  
 **CURRENT WEB IMPLEMENTATION:** `loadAudioFile`, `decodeAudioFile`, and `buildWaveform` in `src/app.js`.  
@@ -263,3 +263,14 @@ Approved circular dotted-i disclosure immediately left of Open Audio. Default fo
 ## 2026-10-14 — Family parameter help
 
 Static parameter descriptions are available on the relevant buttons using the Audio help design; current values, axes and activation feedback remain visible. See `docs/PARAMETER_HELP.md` (or `PARAMETER_HELP.md` in this directory). No DSP or curve mapping changes.
+
+## 2026-10-15 — Source-tone waveform (local review, not released)
+
+- Follow the Audio/Timbre source-tone palette: blue → teal → gold → peach indicates low-to-high spectral centroid of the original source. It does not represent processed output, level, clipping, or sound quality.
+- Signed min/max summary up to 16,000 buckets preserves transients; display gain is normalized without changing samples. HiDPI polygon rendering replaces the coarse waveform. Static waveform raster is cached while cursor/selection overlays update independently.
+- Worker analysis samples at most 1,024 Hann/FFT windows per channel (1,024 samples/window, max two channels). File replacement cancels stale work; analysis failure falls back to blue. Long files are sampled and brief events may be missed; this is a visual guide, not a spectrogram.
+- Existing DSP, playback/export, normalized curves, timing and channel routing remain unchanged.
+- Local source-color tests and syntax/diff checks passed. Browser import and play/pause checked. Brave at 900×700 with actual 125% and 150% zoom checked; vertical scrolling is retained on short screens. No subjective listening, Windows, or native confirmation-keyboard claim.
+- Await user visual review before commit/deployment.
+
+Granular: first-channel mono source policy retained. Selected region retains original colors, outside is dimmed, and teal selection border has a dark under-stroke. Real drag selection and playback marker checked. Existing boundary regression passed 144 rate/pitch/window cases, zero duration rejection, 8ch WAV and source preservation.
