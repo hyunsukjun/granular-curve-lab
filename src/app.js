@@ -562,7 +562,7 @@ function drawPitchRangeFill() {
 function drawCanvasGrid(context, left, w, h) {
   context.save();
   context.lineWidth = 1;
-  context.strokeStyle = "rgba(63, 101, 132, 0.12)";
+  context.strokeStyle = "rgba(139, 149, 162, 0.08)";
   for (let i = 1; i < 40; i += 1) {
     if (i % 4 === 0) continue;
     const x = left + ((i / 40) * w);
@@ -579,7 +579,7 @@ function drawCanvasGrid(context, left, w, h) {
     context.lineTo(left + w, y);
     context.stroke();
   }
-  context.strokeStyle = "rgba(79, 121, 155, 0.28)";
+  context.strokeStyle = "rgba(139, 149, 162, 0.18)";
   for (let i = 0; i <= 10; i += 1) {
     const x = left + ((i / 10) * w);
     context.beginPath();
@@ -603,7 +603,7 @@ function draw() {
   const h = canvasCssHeight;
   ctx.setTransform(scale, 0, 0, scale, 0, 0);
   ctx.clearRect(0, 0, w, h);
-  ctx.fillStyle = "#0c1f31";
+  ctx.fillStyle = "#191c20";
   ctx.fillRect(0, 0, w, h);
   const plot = getPlotBounds();
   drawCanvasGrid(ctx, plot.left, plot.width, h);
@@ -635,7 +635,7 @@ function drawSourceWindow() {
   const plot = getSourcePlotBounds();
   sourceCtx.setTransform(scale, 0, 0, scale, 0, 0);
   sourceCtx.clearRect(0, 0, w, h);
-  sourceCtx.fillStyle = "#0c1f31";
+  sourceCtx.fillStyle = "#191c20";
   sourceCtx.fillRect(0, 0, w, h);
   drawCanvasGrid(sourceCtx, plot.left, plot.width, h);
   sourceCtx.fillStyle = "rgba(128, 158, 186, 0.48)";
