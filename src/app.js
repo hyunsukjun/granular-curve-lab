@@ -23,7 +23,6 @@ const resetButton = document.getElementById("resetButton");
 const durationInput = document.getElementById("durationInput");
 const durationPanel = document.getElementById("durationPanel");
 const formatSelect = document.getElementById("formatSelect");
-const sourceWindowReadout = document.getElementById("sourceWindowReadout");
 const sourceCanvas = document.getElementById("sourceCanvas");
 const sourceCtx = sourceCanvas.getContext("2d");
 const canvas = document.getElementById("curveCanvas");
@@ -740,7 +739,7 @@ function updateReadouts() {
   readouts.size.textContent = `${Math.round(current.sizeMs)} ms`;
   readouts.density.textContent = `${current.density.toFixed(1)} grains/s`;
   readouts.pitch.textContent = `${current.pitchLow.toFixed(1)}–${current.pitchHigh.toFixed(1)} st`;
-  sourceWindowReadout.textContent = `${formatSourcePercent(sourceWindow.start)}% - ${formatSourcePercent(sourceWindow.end)}%`;
+  sourceCanvas.title = `Source Window ${formatSourcePercent(sourceWindow.start)}% – ${formatSourcePercent(sourceWindow.end)}%`;
   timeStatus.textContent = `${formatClock(playheadSeconds)} / ${formatClock(s.durationSeconds)}`;
   if (!isScrubbing) playbackScrubber.value = String(Math.max(0, Math.min(1, playheadSeconds / Math.max(1, s.durationSeconds))));
 }
@@ -867,11 +866,9 @@ eraserTool.addEventListener("click", () => setTool("eraser"));
 function updateDurationDisplay() {
   const seconds = settings().durationSeconds;
   const label = seconds < 60 ? `${seconds} s` : `${Math.floor(seconds / 60)} min${seconds % 60 ? ` ${seconds % 60} s` : ""}`;
-  document.getElementById("durationValue").textContent = label;
+  document.getElementById("durationValue").textContent = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
   durationInput.setAttribute("aria-valuetext", label);
-  const channels = { mono: 1, stereo: 2, quad: 4, octo: 8 }[formatSelect.value];
-  const megabytes = (44 + seconds * 48000 * channels * 3) / 1000000;
-  document.getElementById("durationEstimate").textContent = seconds === 0 ? "Choose duration > 0" : `WAV ~${megabytes.toFixed(1)} MB`;
+
 }
 
 function applyDuration() {

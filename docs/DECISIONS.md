@@ -221,3 +221,7 @@ Verification: tests/source-window-boundary.mjs and tests/duration-range.mjs. See
 ## 2026-10-14 — Family parameter help
 
 Static parameter descriptions are available on the relevant buttons using the Audio help design; current values, axes and activation feedback remain visible. See `docs/PARAMETER_HELP.md` (or `PARAMETER_HELP.md` in this directory). No DSP or curve mapping changes.
+
+## 2026-10-15 — output controls simplification (local review)
+Remove Mono1ch from web export selector; Stereo2ch is default, Quad4ch/Octo8ch retained. Internal mono renderer/source processing unchanged. Remove repeated Source Window percentage row; retain visual selection and exact percentages in source canvas title. Duration remains0–600s with1s steps, now displays mm:ss with tabular digits. Remove endpoint labels and WAV-size estimate; zero still disables rendering/playback and limits remain in slider semantics/help. No DSP changes.
+Browser verified08:03,00:00/disabled,10:00, narrow390px no horizontal overflow, and real1s WAV saves in2/4/8ch at48kHz24-bit. Not committed/deployed.

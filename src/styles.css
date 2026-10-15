@@ -926,3 +926,14 @@ button:disabled {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Duration is a clock readout plus one continuous control. */
+.durationPanel { grid-template-columns:auto minmax(80px,1fr) auto; gap:12px; }
+.durationPanel > label, #durationInput, #durationValue { grid-column:auto; }
+.durationPanel #durationValue { min-width:5ch; font-size:14px; font-weight:600; font-variant-numeric:tabular-nums; letter-spacing:.02em; }
+@media(max-width:520px) {
+ .durationPanel { grid-template-columns:1fr auto; gap:8px; }
+ .durationPanel > label { grid-column:1; grid-row:1; }
+ .durationPanel #durationValue { grid-column:2; grid-row:1; }
+ .durationPanel #durationInput { grid-column:1/-1; grid-row:2; }
+}

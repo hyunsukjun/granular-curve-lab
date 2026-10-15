@@ -18,7 +18,7 @@ This document records stable identity and current code-derived behavior. Percept
 | `durationSeconds` | Output Duration | s | 0–600 | 20 | Single linear slider | No |
 | `rangeStart` | Source Window Start | normalized source | 0–1 | 0 | Linear | No |
 | `rangeEnd` | Source Window End | normalized source | 0–1 | source-dependent | Linear | No |
-| `format` | Output Format | channels | 1/2/4/8 | 1 | Discrete | No |
+| `format` | Output Format | channels | 2/4/8 | 2 | Discrete | No |
 | `renderSampleRate` | Render Sample Rate | Hz | 48000 | 48000 | Fixed | No |
 | `renderBitDepth` | Render Bit Depth | bit | 24 | 24 | Fixed PCM | No |
 | `envelope` | Grain Envelope | enum | `hann` | `hann` | Fixed | No |

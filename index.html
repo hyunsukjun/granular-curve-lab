@@ -6,7 +6,7 @@
     <title>Granular Curve Lab</title>
     <link rel="icon" type="image/svg+xml" href="assets/identity/granular-micro.svg?v=hub-v0.10">
     <link rel="stylesheet" href="assets/identity/tokens.css?v=hub-v0.10">
-    <link rel="stylesheet" href="src/styles.css?v=20261014-duration-01">
+    <link rel="stylesheet" href="src/styles.css?v=20261015-duration-clock2">
     <link rel="stylesheet" href="src/common-transport.css?v=20261013-1">
     <link rel="stylesheet" href="src/curve-actions.css?v=20261014-family1">
     <link rel="stylesheet" href="src/file-help.css?v=20261014-family1">
@@ -44,7 +44,7 @@
                 <dt>Input</dt><dd>WAV, MP3 recommended.</dd>
                 <dt>AIFF</dt><dd>Mono/stereo 16/24-bit PCM (8–192 kHz), converted locally on import. AIFF-C is not supported.</dd>
                 <dt>AIFF limits</dt><dd>128 MiB file / converted WAV; 192 MiB decoded audio. Other formats depend on browser memory.</dd>
-                <dt>Output</dt><dd>1–600 s synthesis · 1 / 2 / 4 / 8 channels · 48 kHz / 24-bit WAV.</dd>
+                <dt>Output</dt><dd>1–600 s synthesis · 2 / 4 / 8 channels · 48 kHz / 24-bit WAV.</dd>
               </dl>
               <p>Grains use the first input channel. Short excerpts recommended. Use one Lab at a time for heavy processing.</p>
             </div>
@@ -55,14 +55,13 @@
           </label>
           <label class="outputSelect">
             <select id="formatSelect" aria-label="Final output format">
-              <option value="mono">Mono 1ch</option>
               <option value="stereo">Stereo 2ch</option>
               <option value="quad">Quad 4ch</option>
               <option value="octo">Octo 8ch</option>
             </select>
           </label>
           <span class="exportStatus" role="status" aria-label="Export status" hidden><strong id="downloadReadout">not ready</strong></span>
-<button id="downloadButton" type="button" disabled title="1–600 s synthesis · 1 / 2 / 4 / 8 channels · 48 kHz / 24-bit WAV.">Download WAV</button>
+<button id="downloadButton" type="button" disabled title="1–600 s synthesis · 2 / 4 / 8 channels · 48 kHz / 24-bit WAV.">Download WAV</button>
         </div>
       </header>
 
@@ -84,25 +83,16 @@
               </button>
             </div>
           </div>
-          <div class="controlBand">
-            <div class="sourceWindowControl">
-              <span>Source Window</span>
-              <strong id="sourceWindowReadout">0% - 0.5%</strong>
-            </div>
-          </div>
           <div class="curveActions">
             <button id="clearCurveButton" type="button">Clear Current</button>
             <button id="resetButton" type="button">Reset All</button>
           </div>
         </div>
 
-        <section id="durationPanel" class="durationPanel" aria-label="Output Duration">
+        <section id="durationPanel" class="durationPanel" aria-label="Output Duration" title="Output duration: 0–10 minutes">
           <label for="durationInput">Output Duration</label>
-          <span id="durationMin">0 s</span>
-          <input id="durationInput" type="range" min="0" max="600" step="1" value="20" aria-label="Output Duration">
-          <span id="durationMax">10 min</span>
-          <output id="durationValue" for="durationInput">20 s</output>
-          <span id="durationEstimate"></span>
+          <input id="durationInput" type="range" min="0" max="600" step="1" value="20" aria-label="Output Duration" title="Output duration: 0–10 minutes">
+          <output id="durationValue" for="durationInput" title="Minutes:seconds">00:20</output>
         </section>
 
         <div class="panel currentValues">
@@ -156,7 +146,7 @@
     </main>
 
     <script src="src/file-help.js?v=20261014-family1" type="module"></script>
-    <script src="src/app.js?v=20261015-units1" type="module"></script>
+    <script src="src/app.js?v=20261015-duration-clock1" type="module"></script>
   <div id="positionModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Read Position · 0–100% of Source Window</strong><span>Choose where grains start within the selected source window. It does not set output playback time.</span><span class="helpState"></span></div>
 <div id="spreadModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spread · 0–100%</strong><span>Randomize grain read positions around Read Position within the selected source window.</span><span class="helpState"></span></div>
 <div id="sizeModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Grain Size · 5–1000 ms</strong><span>Set the requested grain length. The actual length can be shorter to stay inside Source Window at the current pitch.</span><span class="helpState"></span></div>

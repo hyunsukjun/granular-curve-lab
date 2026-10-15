@@ -84,3 +84,7 @@ navigates output time. Source guides, sound engines and export policies are unch
 
 ### Local update 2026-10-14
 Source Window isolation now includes pitched reads and cubic interpolation taps. Output Duration uses one 0–10 min slider; 0 disables playback/export. See [verification](docs/VERIFICATION_2026-10-14.md). Reset confirm/cancel and post-reset playback/WAV saving verified in Safari; release details are tracked in the verification log.
+
+## 2026-10-15 — output controls simplification (local review)
+Remove Mono1ch from web export selector; Stereo2ch is default, Quad4ch/Octo8ch retained. Internal mono renderer/source processing unchanged. Remove repeated Source Window percentage row; retain visual selection and exact percentages in source canvas title. Duration remains0–600s with1s steps, now displays mm:ss with tabular digits. Remove endpoint labels and WAV-size estimate; zero still disables rendering/playback and limits remain in slider semantics/help. No DSP changes.
+Browser verified08:03,00:00/disabled,10:00, narrow390px no horizontal overflow, and real1s WAV saves in2/4/8ch at48kHz24-bit. Not committed/deployed.
