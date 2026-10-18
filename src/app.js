@@ -1,4 +1,4 @@
-import {drawEditorGrid, frequencyTicks, frequencyLabel, spacedMarks, canvasLabelFont} from "./canvas-grid.js";
+import {canvasAxisWidth, drawEditorGrid, frequencyTicks, frequencyLabel, spacedMarks, canvasLabelFont} from "./canvas-grid.js";
 import {analyzeSourceColors} from "./source-colors.js";
 import {summarizeChannels,paintEnvelope,peakOf,paintToneLegend} from "./source-envelope.js";
 import {mountTransport} from "./common-transport.js?v=20261013-1";
@@ -108,7 +108,7 @@ let canvasCssWidth = 1;
 let canvasCssHeight = 1;
 let sourceCanvasCssWidth = 1;
 let sourceCanvasCssHeight = 1;
-const parameterScaleWidth = 54;
+const parameterScaleWidth = canvasAxisWidth;
 const plotRightPadding = 8;
 const grainMinimumSeconds = 0.005;
 const sourceWindowMinimumPixels = 10;
