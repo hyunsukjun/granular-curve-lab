@@ -1,3 +1,4 @@
+import {drawEditorGrid, frequencyTicks, frequencyLabel, spacedMarks, canvasLabelFont} from "./canvas-grid.js";
 import {analyzeSourceColors} from "./source-colors.js";
 import {summarizeChannels,paintEnvelope,peakOf,paintToneLegend} from "./source-envelope.js";
 import {mountTransport} from "./common-transport.js?v=20261013-1";
@@ -482,7 +483,7 @@ function drawParameterScale() {
     ctx.fillText(tick.label, left - 9, textY);
     ctx.beginPath();
     ctx.moveTo(left - 5, y);
-    ctx.lineTo(left + width, y);
+    ctx.lineTo(tick.emphasis ? left + width : left, y);
     ctx.stroke();
   }
   ctx.strokeStyle = "rgba(104, 145, 178, 0.62)";
@@ -554,41 +555,7 @@ function drawPitchRangeFill() {
 }
 
 function drawCanvasGrid(context, left, w, h) {
-  context.save();
-  context.lineWidth = 1;
-  context.strokeStyle = "rgba(139, 149, 162, 0.08)";
-  for (let i = 1; i < 40; i += 1) {
-    if (i % 4 === 0) continue;
-    const x = left + ((i / 40) * w);
-    context.beginPath();
-    context.moveTo(x, 0);
-    context.lineTo(x, h);
-    context.stroke();
-  }
-  for (let i = 1; i < 8; i += 1) {
-    if (i % 2 === 0) continue;
-    const y = (i / 8) * h;
-    context.beginPath();
-    context.moveTo(left, y);
-    context.lineTo(left + w, y);
-    context.stroke();
-  }
-  context.strokeStyle = "rgba(139, 149, 162, 0.18)";
-  for (let i = 0; i <= 10; i += 1) {
-    const x = left + ((i / 10) * w);
-    context.beginPath();
-    context.moveTo(x, 0);
-    context.lineTo(x, h);
-    context.stroke();
-  }
-  for (let i = 1; i < 4; i += 1) {
-    const y = (i / 4) * h;
-    context.beginPath();
-    context.moveTo(left, y);
-    context.lineTo(left + w, y);
-    context.stroke();
-  }
-  context.restore();
+  drawEditorGrid(context, left, 0, w, h);
 }
 
 function draw() {
