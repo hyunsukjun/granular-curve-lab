@@ -10,7 +10,9 @@ const c={readAudioFile,audioContext:{sampleRate:48000},buffer:{duration:1},downl
  node:{port:{postMessage:m=>messages.push(m)}},URL:{revokeObjectURL:u=>revoked.push(u)},nextPlaybackToken:()=>7,draw(){},
  setBusy:x=>busy.push(x),ensureAudioContext:async()=>{},decodeAudioFile:()=>new Promise((resolve,reject)=>{resolveDecode=resolve;rejectDecode=reject}),
  buildWaveform(){},resetSourceWindowToMinimum(){},sendBufferToWorklet(){},sendSettings(){},console:{error(){}}};
-vm.createContext(c);vm.runInContext(['clearDownload','stopAudio','loadAudioFile'].map(pick).join('\n'),c);
+// Export status moved into a UI helper; preserve the fixture readout contract.
+ c.setExportStatus = message => { c.readouts.download.textContent = message; };
+ vm.createContext(c);vm.runInContext(['clearDownload','stopAudio','loadAudioFile'].map(pick).join('\n'),c);
 const file={name:'replacement.wav',slice:()=>new Blob([new ArrayBuffer(8)]),arrayBuffer:async()=>new ArrayBuffer(8)};
 await c.loadAudioFile(null);assert.equal(c.isPlaying,true);assert.equal(c.downloadUrl,'blob:previous');
 const pending=c.loadAudioFile(file);await new Promise(r=>setImmediate(r));

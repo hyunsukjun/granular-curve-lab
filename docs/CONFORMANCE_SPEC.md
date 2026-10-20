@@ -146,3 +146,10 @@ Preview and Render now constrain pitched grain length to the selected half-open 
 Output Duration is one linear 0–600 second slider, 1-second step, default 20. Removed Short/Long selector; durationSeconds identity is retained. Zero is a non-renderable UI state: Play/Download disabled, direct render rejects zero. Positive UI durations are 1–600. Changing duration stops playback and returns its cursor to zero. Existing valid durations retain their meaning; no preset persistence is introduced.
 
 Verification: tests/source-window-boundary.mjs and tests/duration-range.mjs. See docs/VERIFICATION_2026-10-14.md for evidence and limits. No listening approval or deployment is implied.
+
+
+## 2026-10-20 — Preview continuity correction
+
+Event parity now includes retiring-voice half-cosine endpoints (at most 5 ms) and gain state evolution with coefficient 1-exp(-1/(0.005*sampleRate)). Stop/cleared playback/seek reset risk gain. tests/preview-continuity.mjs captures numeric regression against the immutable prior revision. Offline output contract unchanged.
+
+Evidence, reproduction limits and listening checklist: [Preview continuity report](PREVIEW_CONTINUITY_2026-10-20.md).

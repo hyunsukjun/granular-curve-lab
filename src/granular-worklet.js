@@ -81,9 +81,12 @@ class GranularProcessor extends AudioWorkletProcessor {
     this.playing = false;
     this.token = 0;
     this.grains = [];
+    this.riskGain = 1;
     this.nextGrain = 0;
     this.grainIndex = 0;
     this.random = makeSeededRandom(42);
+    this.riskGainStep = 1 - Math.exp(-1 / (0.005 * sampleRate));
+    this.releaseSamples = Math.max(2, Math.round(0.005 * sampleRate));
     this.positionFramesUntilUpdate = 0;
     this.curves = {};
     this.settings = {
@@ -109,6 +112,7 @@ class GranularProcessor extends AudioWorkletProcessor {
         this.token = data.token ?? this.token;
         this.playing = true;
         this.grains = [];
+        this.riskGain = 1;
         this.nextGrain = 0;
       } else if (data.type === "stop") {
         this.token = data.token ?? this.token;
@@ -119,6 +123,7 @@ class GranularProcessor extends AudioWorkletProcessor {
         this.token = data.token ?? this.token;
         this.outputTime = clamp(data.seconds || 0, 0, this.settings.durationSeconds);
         this.grains = [];
+        this.riskGain = 1;
         this.nextGrain = 0;
         this.positionFramesUntilUpdate = 0;
       }
@@ -128,6 +133,7 @@ class GranularProcessor extends AudioWorkletProcessor {
   resetPlayback(resetTime) {
     if (resetTime) this.outputTime = 0;
     this.grains = [];
+    this.riskGain = 1;
     this.nextGrain = 0;
     this.grainIndex = 0;
     this.positionFramesUntilUpdate = 0;
@@ -168,8 +174,15 @@ class GranularProcessor extends AudioWorkletProcessor {
       channel: balancedChannelFor(this.grainIndex, 2)
     });
     this.grainIndex += 1;
-    if (this.grains.length > this.settings.maxPreviewGrains) {
-      this.grains.splice(0, this.grains.length - this.settings.maxPreviewGrains);
+    // Retire excess voices through a short tail; never cut a nonzero Hann grain.
+    let excess = this.grains.reduce((n, grain) => n + (grain.releaseAge == null ? 1 : 0), 0)
+      - this.settings.maxPreviewGrains;
+    for (const grain of this.grains) {
+      if (excess <= 0) break;
+      if (grain.releaseAge != null) continue;
+      grain.releaseAge = 0;
+      grain.releaseLength = Math.min(this.releaseSamples, grain.length - grain.age);
+      excess -= 1;
     }
   }
 
@@ -194,19 +207,25 @@ class GranularProcessor extends AudioWorkletProcessor {
         for (let g = this.grains.length - 1; g >= 0; g -= 1) {
           const grain = this.grains[g];
           const phase = grain.age / grain.length;
-          if (phase >= 1) {
+          if (phase >= 1 || (grain.releaseAge != null && grain.releaseAge >= grain.releaseLength)) {
             this.grains.splice(g, 1);
             continue;
           }
-          const sample = readCubic(this.source, grain.pos, grain.first, grain.last) * envelopeValue(this.settings.envelope, phase);
+          const release = grain.releaseAge == null ? 1
+            : grain.releaseLength <= 1 ? 0
+            : 0.5 + 0.5 * Math.cos(Math.PI * grain.releaseAge / (grain.releaseLength - 1));
+          const sample = readCubic(this.source, grain.pos, grain.first, grain.last) * envelopeValue(this.settings.envelope, phase) * release;
           if (grain.channel === 0) l += sample;
           else r += sample;
           grain.pos += grain.rate;
           grain.age += 1;
+          if (grain.releaseAge != null) grain.releaseAge += 1;
         }
 
         const active = Math.max(1, this.grains.length);
-        const riskGain = 1 / Math.sqrt(Math.max(1, active * 0.55));
+        const targetRiskGain = 1 / Math.sqrt(Math.max(1, active * 0.55));
+        this.riskGain += (targetRiskGain - this.riskGain) * this.riskGainStep;
+        const riskGain = this.riskGain;
         l = Math.tanh(l * riskGain * this.settings.outputGain) * 0.89125;
         r = Math.tanh(r * riskGain * this.settings.outputGain) * 0.89125;
         this.outputTime += 1 / sampleRate;

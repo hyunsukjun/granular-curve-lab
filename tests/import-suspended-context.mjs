@@ -13,7 +13,9 @@ const c={readAudioFile,window:{AudioContext},audioContext:null,buffer:null,rende
  setTransportBusy(x){busy.push(x)},setBusy(x){busy.push(x)},nextPlaybackToken(){return 1},
  decodeAudioFile:async()=>{decoded++;if(rejectDecode)throw new Error('Invalid audio');return candidate},
  stopAudio(){},buildWaveform(){},sendBufferToWorklet(){},resetSourceWindowToMinimum(){},sendSettings(){},clearDownload(){},largeFileSeconds:300,resetCurrentReadouts(){},draw(){},console:{error(){}}};
-vm.createContext(c);vm.runInContext(pick('ensureAudioContext')+'\n'+pick('loadAudioFile'),c);
+// Export status moved into a UI helper; preserve the fixture readout contract.
+ c.setExportStatus = message => { c.readouts.download.textContent = message; };
+ vm.createContext(c);vm.runInContext(pick('ensureAudioContext')+'\n'+pick('loadAudioFile'),c);
 const file={name:'test.wav',slice:()=>new Blob([new ArrayBuffer(8)]),arrayBuffer:async()=>new ArrayBuffer(8)};
 let timer;
 try {await Promise.race([c.loadAudioFile(file),new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Import blocked by pending audio resume')),200)})]);} finally {clearTimeout(timer)}

@@ -127,3 +127,10 @@ Preview and Render now constrain pitched grain length to the selected half-open 
 Output Duration is one linear 0–600 second slider, 1-second step, default 20. Removed Short/Long selector; durationSeconds identity is retained. Zero is a non-renderable UI state: Play/Download disabled, direct render rejects zero. Positive UI durations are 1–600. Changing duration stops playback and returns its cursor to zero. Existing valid durations retain their meaning; no preset persistence is introduced.
 
 Verification: tests/source-window-boundary.mjs and tests/duration-range.mjs. See docs/VERIFICATION_2026-10-14.md for evidence and limits. No listening approval or deployment is implied.
+
+
+## 2026-10-20 — Preview continuity correction
+
+User low-frequency/high-Density click report led to separate numerical diagnosis of gain steps and premature Hann-grain truncation. Initial hypothesis was window shape/size; evidence justified correcting lifetime/gain continuity before changing the window. Product application and deployment authorized for listening review. Existing lifecycle test mocks were repaired for the export-status helper.
+
+Evidence, reproduction limits and listening checklist: [Preview continuity report](PREVIEW_CONTINUITY_2026-10-20.md).

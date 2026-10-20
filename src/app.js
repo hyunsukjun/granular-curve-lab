@@ -311,7 +311,7 @@ async function ensureAudio() {
 
 async function setupAudio() {
   if (!audioContext.audioWorklet) throw new Error("AudioWorklet is not available. Use a current browser over localhost or HTTPS.");
-  await audioContext.audioWorklet.addModule("src/granular-worklet.js?v=20261014-window-01");
+  await audioContext.audioWorklet.addModule("src/granular-worklet.js?v=20261020-preview-continuity1");
   node = new AudioWorkletNode(audioContext, "granular-curve-processor", {
     numberOfInputs: 0,
     numberOfOutputs: 1,

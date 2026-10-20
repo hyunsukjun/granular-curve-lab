@@ -248,3 +248,10 @@ Commit/deployment withheld for user preview. Native confirmation keyboard and co
 Granular: first-channel mono source policy retained. Selected region retains original colors, outside is dimmed, and teal selection border has a dark under-stroke. Real drag selection and playback marker checked. Existing boundary regression passed 144 rate/pitch/window cases, zero duration rejection, 8ch WAV and source preservation.
 
 Release approval: user approved source-tone preview on 2026-10-15. Commit and Pages deployment authorized; visual-only scope retained.
+
+
+## 2026-10-20 — Preview continuity correction
+
+User authorized the diagnosed Preview correction, commit and deployment for listening review. Preserve Hann and existing cap policy; smooth gain and retire excess voices instead of abruptly deleting them. Listening acceptance remains pending.
+
+Evidence, reproduction limits and listening checklist: [Preview continuity report](PREVIEW_CONTINUITY_2026-10-20.md).

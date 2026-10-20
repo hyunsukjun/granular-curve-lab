@@ -69,3 +69,10 @@ Evidence links or render checksums:
 
 Rejected trials stay in this file. They are evidence against repeating the same unsuccessful approach.
 
+
+
+## 2026-10-20 — Preview continuity correction
+
+Previous: immediate active-count gain, immediate excess-voice removal. New: 5 ms one-pole gain and up-to-5 ms half-cosine release. Reason: measured low-frequency discontinuities after user Preview report. Silent numerical/browser validation passed; audible effect and musical optimum remain pending. Brief voice tails add work; no device CPU certification.
+
+Evidence, reproduction limits and listening checklist: [Preview continuity report](PREVIEW_CONTINUITY_2026-10-20.md).

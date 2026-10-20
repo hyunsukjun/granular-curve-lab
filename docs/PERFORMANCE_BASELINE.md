@@ -90,3 +90,10 @@ Local browser, 48k, 60-second Octo, 80 grains/s, 1000ms grains: 4800 scheduled g
 Worker candidate follow-up: same 60-second dense Octo browser condition completed in3.65s with181 timer ticks and21.7ms maximum gap, compared with503.8ms before. This improves main-thread availability, not memory complexity or low-end-device certification.
 
 Worker memory follow-up (Node adapter, explicit GC):60s20 alternating completion/cancel cycles return main arrays to11.12MiB; RSS stabilizes near479MiB from cycle9 through20. 180s8ch completes in11.40s, worker arrays692.21MiB. WAV readback in the test contributes to process RSS near1027MiB; this is not a browser peak measurement. Worker separation does not reduce full-buffer memory complexity. Browser/low-end/5–10minute validation remains open.
+
+
+## 2026-10-20 — Preview continuity correction
+
+Measured synthetic steady high-density case: up to 33 live voices including release tails under cap32. 64→32 transition/DC stress bounded at65. Real browser muted worklet smoke48k passed. These bounds are not CPU load, latency or dropout measurements; long-run/device profiling remains open.
+
+Evidence, reproduction limits and listening checklist: [Preview continuity report](PREVIEW_CONTINUITY_2026-10-20.md).
