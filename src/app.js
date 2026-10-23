@@ -555,7 +555,11 @@ function drawPitchRangeFill() {
 }
 
 function drawCanvasGrid(context, left, w, h) {
+  // Quiet background grid; retain scales, points and curve contrast.
+  context.save();
+  context.globalAlpha *= 0.65;
   drawEditorGrid(context, left, 0, w, h);
+  context.restore();
 }
 
 function draw() {
