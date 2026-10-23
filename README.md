@@ -16,7 +16,7 @@ The web app is the current executable reference implementation. Product behavior
 - Playback uses the shared Curve Lab bottom bar with output-time scrubbing and post-DSP stereo level metering.
 - Offline render is not limited by the 32/64-grain Preview cap; it calculates every scheduled grain. The current `Render 64` status text denotes the original quality target, not a literal offline voice limit.
 - Gain handling is peak-risk compensation with a -1 dBFS limiter ceiling, not full loudness normalization.
-- WAV export is fixed at 24-bit / 48 kHz and supports mono, stereo, quad, and 8-channel files.
+- WAV export is fixed at 24-bit / 48 kHz. The web selector offers stereo, quad and 8-channel output; mono remains an internal/historical capability.
 - Multichannel output uses balanced grain distribution only. It deliberately avoids Space Curve Lab-style spatial composition controls.
 
 ## Reused Curve Lab patterns
@@ -30,7 +30,11 @@ The web app is the current executable reference implementation. Product behavior
 
 ## Current prototype limits
 
-This remains a focused v0.1 prototype. Real-file browser lifecycle, curve editing, responsive layout, and 1/2/4/8-channel render calculations have been verified. Formal listening approval across representative source material, a broader browser/codec matrix, persistent presets, and Standalone conformance fixtures are still to be documented.
+This remains a focused v0.1 prototype. Prior checks covered real-file browser lifecycle, curve editing, responsive layout, and internal 1/2/4/8-channel render calculations. The current web selector offers 2/4/8 channels; those checks do not validate every selectable duration/channel combination. Formal listening approval across representative source material, a broader browser/codec matrix, persistent presets, and Standalone conformance fixtures are still to be documented.
+
+On the recorded macOS 27.0.1 / Brave 156.1.98.60 environment, checks covered a 2 s stereo WAV save and reopen, cancellation during a 60 s job followed by a 2 s retry, and native file selection. Cancellation of the 60 s job is not evidence of a completed 60 s render. The 600 s / 8-channel stability decision remains deferred. Long multichannel exports can use substantial memory; try a short excerpt first. Other channel counts and environments retain only their separately recorded test coverage. These version numbers identify the checked environment, not minimum system requirements.
+
+Preview and offline render use different processing limits and may differ in sound and level. Scope-limited acceptance criteria have been adopted; final acceptance and release freeze remain pending.
 
 ## Product knowledge documentation
 
@@ -93,3 +97,5 @@ Browser verified08:03,00:00/disabled,10:00, narrow390px no horizontal overflow, 
 ## 2026-10-20 Preview update
 
 Preview now smooths overlap-risk gain and fades capped voices before removal to reduce measured discontinuities. Offline Render is unchanged. Numerical checks passed; user listening acceptance is pending. See [diagnosis and validation](docs/PREVIEW_CONTINUITY_2026-10-20.md).
+
+Subsequent user acceptance covers the reported Preview continuity issue; it is not approval of every source, export setting or playback environment. This updates the listening status recorded above without changing the historical test scope.

@@ -48,6 +48,8 @@
                 <dt>Output</dt><dd>1–600 s synthesis · 2 / 4 / 8 channels · 48 kHz / 24-bit WAV.</dd>
               </dl>
               <p>Grains use the first input channel. Short excerpts recommended. Use one Lab at a time for heavy processing.</p>
+              <p>Available duration and channel settings do not imply that every combination has been validated. Stability at 600 s / 8 channels has not been verified. Long multichannel exports can use substantial memory; try a short excerpt first. Preview and offline render use different processing limits and may differ in sound and level.</p>
+              <p>Current verification covers selected cases on macOS 27.0.1 with Brave 156.1.98.60; it does not certify all browsers, devices or settings.</p>
             </div>
           </details>
           <label class="fileButton">
@@ -151,7 +153,7 @@
   <div id="positionModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Read Position · 0–100% of Source Window</strong><span>Choose where grains start within the selected source window. It does not set output playback time.</span><span class="helpState"></span></div>
 <div id="spreadModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spread · 0–100%</strong><span>Randomize grain read positions around Read Position within the selected source window.</span><span class="helpState"></span></div>
 <div id="sizeModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Grain Size · 5–1000 ms</strong><span>Set the requested grain length. The actual length can be shorter to stay inside Source Window at the current pitch.</span><span class="helpState"></span></div>
-<div id="densityModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Density · 1–80 grains/s</strong><span>Set the requested number of new grains per second. Preview uses up to 64 voices, reduced to 32 at high density/size; Render uses up to 64.</span><span class="helpState"></span></div>
+<div id="densityModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Density · 1–80 grains/s</strong><span>Set the requested number of new grains per second. Preview limits active grains to 64, reduced to 32 at high density/size, with brief fade-out tails. Offline render processes all scheduled grains.</span><span class="helpState"></span></div>
 <div id="pitchLowModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Pitch Low · −24 to +24 semitones</strong><span>Set one end of the random grain pitch range. If Low crosses High, the bounds are reordered.</span><span class="helpState"></span></div>
 <div id="pitchHighModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Pitch High · −24 to +24 semitones</strong><span>Set the other end of the random grain pitch range. 12 semitones = one octave; pitch also changes grain read speed.</span><span class="helpState"></span></div>
 <script type="module" src="src/parameter-help.js?v=20261014-family1"></script>
