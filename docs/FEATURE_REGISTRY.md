@@ -274,3 +274,8 @@ Static parameter descriptions are available on the relevant buttons using the Au
 - Await user visual review before commit/deployment.
 
 Granular: first-channel mono source policy retained. Selected region retains original colors, outside is dimmed, and teal selection border has a dark under-stroke. Real drag selection and playback marker checked. Existing boundary regression passed 144 rate/pitch/window cases, zero duration rejection, 8ch WAV and source preservation.
+
+
+## 10 ms playback boundary candidate — 2026-10-25
+
+The current local candidate supersedes earlier automatic transport-boundary durations with the [10 ms playback/WAV contract](PLAYBACK_BOUNDARY.md). Source/effect envelopes are separate. See that contract for pause-state retention, existing tail-length limits and verification status. Uncommitted; listening acceptance pending.

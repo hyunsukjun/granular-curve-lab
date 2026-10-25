@@ -255,3 +255,8 @@ Release approval: user approved source-tone preview on 2026-10-15. Commit and Pa
 User authorized the diagnosed Preview correction, commit and deployment for listening review. Preserve Hann and existing cap policy; smooth gain and retire excess voices instead of abruptly deleting them. Listening acceptance remains pending.
 
 Evidence, reproduction limits and listening checklist: [Preview continuity report](PREVIEW_CONTINUITY_2026-10-20.md).
+
+
+## 10 ms playback boundary candidate — 2026-10-25
+
+The current local candidate supersedes earlier automatic transport-boundary durations with the [10 ms playback/WAV contract](PLAYBACK_BOUNDARY.md). Source/effect envelopes are separate. See that contract for pause-state retention, existing tail-length limits and verification status. Uncommitted; listening acceptance pending.

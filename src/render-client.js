@@ -14,7 +14,7 @@ export function renderGranular({ audioBuffer, curves, settings, signal, onProgre
     const abort = () => finish(new DOMException('Render cancelled', 'AbortError'));
     if (signal?.aborted) { abort(); return; }
     try {
-      worker = new Worker(new URL('./render-worker.js?v=20261014-window-01', import.meta.url), { type: 'module' });
+      worker = new Worker(new URL('./render-worker.js?v=20261025-fade10', import.meta.url), { type: 'module' });
       signal?.addEventListener('abort', abort, { once: true });
       worker.onmessage = ({ data }) => {
         if (settled) return;

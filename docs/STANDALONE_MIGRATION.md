@@ -268,3 +268,8 @@ Verification: tests/source-window-boundary.mjs and tests/duration-range.mjs. See
 Preserve independent tests for voice-cap termination and normalization continuity. Preview uses a 5 ms gain time constant and up-to-5 ms half-cosine voice release. These are verified web tuning candidates, not native implementation or native performance approval.
 
 Evidence, reproduction limits and listening checklist: [Preview continuity report](PREVIEW_CONTINUITY_2026-10-20.md).
+
+
+## 10 ms playback boundary candidate — 2026-10-25
+
+The current local candidate supersedes earlier automatic transport-boundary durations with the [10 ms playback/WAV contract](PLAYBACK_BOUNDARY.md). Source/effect envelopes are separate. See that contract for pause-state retention, existing tail-length limits and verification status. Uncommitted; listening acceptance pending.

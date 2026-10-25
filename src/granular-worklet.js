@@ -1,3 +1,4 @@
+import { PlaybackBoundary } from "./playback-boundary.js";
 function clamp(value, min = 0, max = 1) {
   return Math.min(max, Math.max(min, value));
 }
@@ -75,6 +76,8 @@ function balancedChannelFor(grainIndex, channelCount) {
 class GranularProcessor extends AudioWorkletProcessor {
   constructor() {
     super();
+    this.boundary = new PlaybackBoundary(sampleRate);
+    this.pendingPause = null;
     this.source = null;
     this.sourceRate = sampleRate;
     this.outputTime = 0;
@@ -100,6 +103,17 @@ class GranularProcessor extends AudioWorkletProcessor {
 
     this.port.onmessage = (event) => {
       const data = event.data;
+      if (data.type === "play" || data.type === "seek" || data.type === "buffer") {
+        this.pendingPause = null;
+        this.boundary.start();
+      }
+      if (data.type === "stop" && !data.reset && !data.boundaryComplete && this.playing) {
+        this.token = data.token ?? this.token;
+        this.pendingPause = data;
+        this.boundary.release();
+        return;
+      }
+      if (data.type === "stop") this.pendingPause = null;
       if (data.type === "buffer") {
         this.source = data.mono;
         this.sourceRate = data.sampleRate;
@@ -191,6 +205,7 @@ class GranularProcessor extends AudioWorkletProcessor {
     const outL = out[0];
     const outR = out[1] || out[0];
     for (let i = 0; i < outL.length; i += 1) {
+      const boundaryGain = this.playing && this.source ? this.boundary.next(Math.ceil((this.settings.durationSeconds - this.outputTime) * sampleRate)) : 0;
       let l = 0;
       let r = 0;
       if (this.source && this.playing && this.settings.durationSeconds > 0) {
@@ -253,8 +268,13 @@ class GranularProcessor extends AudioWorkletProcessor {
         }
         this.positionFramesUntilUpdate -= 1;
       }
-      outL[i] = l;
-      outR[i] = r;
+      outL[i] = l * boundaryGain;
+      outR[i] = r * boundaryGain;
+      if (this.pendingPause && this.boundary.done) {
+        const pause = this.pendingPause;
+        this.pendingPause = null;
+        this.port.onmessage({ data: { ...pause, boundaryComplete: true } });
+      }
     }
     return true;
   }

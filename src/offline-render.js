@@ -1,3 +1,4 @@
+import { fadeOutput } from "./playback-boundary.js";
 import {
   balancedChannelFor,
   clamp,
@@ -72,6 +73,7 @@ export async function renderGranular({ audioBuffer, curves, settings, signal, on
   }
 
   applyPeakRiskCompensation(output, settings.outputGain ?? 0.92);
+  fadeOutput(output, sampleRate);
   onProgress?.(1);
   return {
     blob: encodeWav(output, sampleRate, { bitDepth: RENDER_BIT_DEPTH, dither: true, ditherSeed: 48024 }),
