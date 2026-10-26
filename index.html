@@ -6,7 +6,7 @@
     <title>Granular Curve Lab</title>
     <link rel="icon" type="image/svg+xml" href="assets/identity/granular-micro.svg?v=hub-v0.10">
     <link rel="stylesheet" href="assets/identity/tokens.css?v=hub-v0.10">
-    <link rel="stylesheet" href="src/styles.css?v=20261015-duration-clock2">
+    <link rel="stylesheet" href="src/styles.css?v=20261027-context1">
     <link rel="stylesheet" href="src/common-transport.css?v=20261013-1">
     <link rel="stylesheet" href="src/curve-actions.css?v=20261014-family1">
     <link rel="stylesheet" href="src/file-help.css?v=20261014-family1">
@@ -101,18 +101,19 @@
         </section>
 
         <div class="panel currentValues">
-          <div class="readout primaryReadout"><span>Curve</span><strong id="modeReadout">Read Position</strong></div>
-          <div class="readout"><span>Points</span><strong id="pointsReadout">2</strong></div>
+          <div class="readout primaryReadout"><span>Editing</span><strong id="modeReadout">Read Position</strong></div>
+          <div class="readout"><span>Curve points</span><strong id="pointsReadout">2</strong></div>
           <div class="readout engineReadout referenceReadout"><span>Engine</span><strong id="engineReadout">Preview 64</strong></div>
-          <div class="readout"><span>Read Position</span><strong id="positionReadout">50% in window</strong></div>
-          <div class="readout"><span>Spread</span><strong id="spreadReadout">8%</strong></div>
-          <div class="readout"><span>Size</span><strong id="sizeReadout">80 ms</strong></div>
-          <div class="readout"><span>Density</span><strong id="densityReadout">18 grains/s</strong></div>
-          <div class="readout"><span>Pitch</span><strong id="pitchReadout">0–0 st</strong></div>
+          <div class="readout"><span title="Preview value: initial default until playback, then the latest Preview engine value. Not the selected point or stopped playhead target.">Position · preview</span><strong id="positionReadout">50% in window</strong></div>
+          <div class="readout"><span title="Preview value: initial default until playback, then the latest Preview engine value. Not the selected point or stopped playhead target.">Spread · preview</span><strong id="spreadReadout">8%</strong></div>
+          <div class="readout"><span title="Preview value: initial default until playback, then the latest Preview engine value. Not the selected point or stopped playhead target.">Size · preview</span><strong id="sizeReadout">80 ms</strong></div>
+          <div class="readout"><span title="Preview value: initial default until playback, then the latest Preview engine value. Not the selected point or stopped playhead target.">Density · preview</span><strong id="densityReadout">18 grains/s</strong></div>
+          <div class="readout"><span title="Preview value: initial default until playback, then the latest Preview engine value. Not the selected point or stopped playhead target.">Pitch · preview</span><strong id="pitchReadout">0–0 st</strong></div>
         </div>
 
         <div class="curveStack">
           <div class="canvasFrame sourceFrame">
+            <span id="sourceWindowReadout" class="sourceWindowReadout" hidden title="Selected grain source window in source seconds. This does not set output playback time or grain read position."></span>
             <canvas id="sourceCanvas" width="1800" height="150"></canvas>
           </div>
           <div class="canvasFrame curveFrame">
@@ -151,7 +152,7 @@
     </main>
 
     <script src="src/file-help.js?v=20261014-family1" type="module"></script>
-    <script src="src/app.js?v=20261026-graphite1" type="module"></script>
+    <script src="src/app.js?v=20261027-context1" type="module"></script>
   <div id="positionModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Read Position · 0–100% of Source Window</strong><span>Choose where grains start within the selected source window. It does not set output playback time.</span><span class="helpState"></span></div>
 <div id="spreadModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spread · 0–100%</strong><span>Randomize grain read positions around Read Position within the selected source window.</span><span class="helpState"></span></div>
 <div id="sizeModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Grain Size · 5–1000 ms</strong><span>Set the requested grain length. The actual length can be shorter to stay inside Source Window at the current pitch.</span><span class="helpState"></span></div>

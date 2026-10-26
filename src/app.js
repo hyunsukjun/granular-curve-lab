@@ -27,6 +27,7 @@ const durationInput = document.getElementById("durationInput");
 const durationPanel = document.getElementById("durationPanel");
 const formatSelect = document.getElementById("formatSelect");
 const sourceCanvas = document.getElementById("sourceCanvas");
+const sourceWindowReadout = document.getElementById("sourceWindowReadout");
 const sourceCtx = sourceCanvas.getContext("2d");
 const canvas = document.getElementById("curveCanvas");
 const ctx = canvas.getContext("2d");
@@ -691,6 +692,14 @@ function drawTooltip(pointRef) {
   ctx.restore();
 }
 
+// Read-only source metadata; normalization, selection and seeking stay unchanged.
+function sourceWindowRangeText() {
+  if (!buffer) return "";
+  const start = sourceWindow.start * buffer.duration;
+  const end = sourceWindow.end * buffer.duration;
+  return `Source window · ${start.toFixed(3)}–${end.toFixed(3)} s · Length ${(end - start).toFixed(3)} s`;
+}
+
 function updateReadouts() {
   const s = settings();
   const engineLimit = s.maxPreviewGrains;
@@ -703,6 +712,8 @@ function updateReadouts() {
   readouts.density.textContent = `${current.density.toFixed(1)} grains/s`;
   readouts.pitch.textContent = `${current.pitchLow.toFixed(1)}–${current.pitchHigh.toFixed(1)} st`;
   sourceCanvas.title = `Source Window ${formatSourcePercent(sourceWindow.start)}% – ${formatSourcePercent(sourceWindow.end)}%`;
+  sourceWindowReadout.hidden = !buffer;
+  sourceWindowReadout.textContent = sourceWindowRangeText();
   timeStatus.textContent = `${formatClock(playheadSeconds)} / ${formatClock(s.durationSeconds)}`;
   if (!isScrubbing) playbackScrubber.value = String(Math.max(0, Math.min(1, playheadSeconds / Math.max(1, s.durationSeconds))));
 }

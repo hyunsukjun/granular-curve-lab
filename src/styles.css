@@ -937,3 +937,11 @@ button:disabled {
  .durationPanel #durationValue { grid-column:2; grid-row:1; }
  .durationPanel #durationInput { grid-column:1/-1; grid-row:2; }
 }
+
+/* Source selection metadata reuses existing caption/surface roles. */
+.sourceWindowReadout:not([hidden]) {
+  display:block; padding:4px 8px; min-width:0; overflow-wrap:anywhere;
+  font-size:var(--cl-type-caption,11px); line-height:14px;
+  font-variant-numeric:tabular-nums; color:var(--cl-ink-caption,#aab4c0);
+  background:var(--cl-surface-canvas,#191c20);
+}
