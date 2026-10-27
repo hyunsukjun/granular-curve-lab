@@ -67,7 +67,7 @@ Selecting Eraser changes both tool-button state and Canvas cursor.
 
 While Pen remains selected:
 
-- macOS: Command-click acts as Eraser.
+- macOS: Option-click acts as Eraser.
 - PC: Ctrl-click acts as Eraser.
 - Releasing the modifier returns the cursor/behavior to the selected Pen tool.
 
@@ -224,3 +224,7 @@ The current local candidate supersedes earlier automatic transport-boundary dura
 ## Readout context family release — 2026-10-27
 
 Value captions identify initial/latest Preview snapshot. Source Window start/end/length is read-only source-time metadata; normalized bounds, read-position meaning and output clock unchanged. No new gesture, seeking, point selection, transport command or audio mutation is introduced by displaying these values. See `READOUT_CONTEXT_CONTRACT.md` for basis, source-range rules, verification boundary and portability.
+
+## Shift group / Option erase — 2026-10-27
+
+Current gesture contract supersedes earlier Mac Command erase statements only. Shift captures the clicked point and ordered suffix in the active curve, fixes all X and applies one normalized Y delta with common bounds. Option-click temporarily erases on Mac, Ctrl-click on PC. Esc/cancellation restores the pending group. Existing normal editing and source/transport semantics remain. See [gesture contract](CURVE_GESTURE_CONTRACT.md).

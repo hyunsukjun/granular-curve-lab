@@ -99,3 +99,7 @@ Browser verified08:03,00:00/disabled,10:00, narrow390px no horizontal overflow, 
 Preview now smooths overlap-risk gain and fades capped voices before removal to reduce measured discontinuities. Offline Render is unchanged. Numerical checks passed; user listening acceptance is pending. See [diagnosis and validation](docs/PREVIEW_CONTINUITY_2026-10-20.md).
 
 Subsequent user acceptance covers the reported Preview continuity issue; it is not approval of every source, export setting or playback environment. This updates the listening status recorded above without changing the historical test scope.
+
+## Shift group / Option erase — 2026-10-27
+
+Shift-drag a point and following points vertically with X fixed; Mac Option-click erases an interior point (PC Ctrl-click unchanged). Original editing, mappings and DSP remain. User-reviewed UI checks are recorded in the gesture contract; commit/deployment was explicitly authorized on 2026-10-27. See [gesture contract](docs/CURVE_GESTURE_CONTRACT.md).

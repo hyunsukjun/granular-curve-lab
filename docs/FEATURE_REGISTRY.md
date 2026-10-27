@@ -283,3 +283,7 @@ The current local candidate supersedes earlier automatic transport-boundary dura
 ## Readout context family release — 2026-10-27
 
 Existing current-value captions now identify their basis. Value captions identify initial/latest Preview snapshot. Source Window start/end/length is read-only source-time metadata; normalized bounds, read-position meaning and output clock unchanged. See `READOUT_CONTEXT_CONTRACT.md` for basis, source-range rules, verification boundary and portability.
+
+## Shift group / Option erase — 2026-10-27
+
+IMPLEMENTED / UI checks verified as stated in the contract. Add Shift suffix Y-only group movement and replace Mac temporary Command erase with Option erase. Existing musical values and normal editing are retained. The user individually reviewed the five-Lab interaction and reported no major issue, then authorized commit/deployment. Publication evidence remains separate. See [gesture contract](CURVE_GESTURE_CONTRACT.md).

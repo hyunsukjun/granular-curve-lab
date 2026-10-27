@@ -269,3 +269,7 @@ User-authorized six-Lab application and commit of the researched dark interface 
 ## Readout context family release — 2026-10-27
 
 User approved the Audio pilot and sequential six-Lab rollout/commit/verification/deployment. Apply shared semantics selectively: Value captions identify initial/latest Preview snapshot. Source Window start/end/length is read-only source-time metadata; normalized bounds, read-position meaning and output clock unchanged. Preserve per-Lab behavior instead of forcing Audio calculations or adding nonexistent selection features. See `READOUT_CONTEXT_CONTRACT.md` for basis, source-range rules, verification boundary and portability.
+
+## Shift group / Option erase — 2026-10-27
+
+2026-10-27 — User approved extending the released Audio gesture contract to the other five Labs, preserving each Lab mapping and ordinary editor constraints, with web review before commit. The user subsequently reported no major issues in individual tests and explicitly authorized the five-Lab UI commit/deployment. Reuse only the proven normalized group transaction; do not merge differing coordinate decoders or engine paths. No DSP change. See [gesture contract](CURVE_GESTURE_CONTRACT.md).
