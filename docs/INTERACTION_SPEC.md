@@ -228,3 +228,8 @@ Value captions identify initial/latest Preview snapshot. Source Window start/end
 ## Shift group / Option erase — 2026-10-27
 
 Current gesture contract supersedes earlier Mac Command erase statements only. Shift captures the clicked point and ordered suffix in the active curve, fixes all X and applies one normalized Y delta with common bounds. Option-click temporarily erases on Mac, Ctrl-click on PC. Esc/cancellation restores the pending group. Existing normal editing and source/transport semantics remain. See [gesture contract](CURVE_GESTURE_CONTRACT.md).
+
+
+## Channel selector placement — 2026-10-28
+
+The existing output-format selector sits directly before Pen/Eraser, after Reverb in Space or Pitch High in Granular. Selector and tools wrap together. Native select keyboard/focus semantics, IDs, Stereo default and stereo/quad/octo values, disabled/processing rules and Preview/Render meanings remain unchanged. Approved for release after local visual review. Verified channel selection, toolbar wrapping and keyboard focus; DSP and export processing are unchanged.

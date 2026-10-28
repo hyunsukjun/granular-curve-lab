@@ -339,3 +339,8 @@ Reuse existing Graphite colors/type and controls. Value captions identify initia
 ## Shift group / Option erase — 2026-10-27
 
 APPROVED INTERACTION / UI-only addition. Preserve existing point and hit geometry. A thin ring and count communicate the temporary Shift group; vertical cursor communicates the constrained action. Keep axes/focus/data colors and surrounding layout. Option temporary erase supersedes Mac Command erase. Touch is not assigned a desktop modifier gesture. See [gesture contract](docs/CURVE_GESTURE_CONTRACT.md).
+
+
+## Channel selector next to editing tools — 2026-10-28
+
+APPROVED WEB UI / STANDALONE ASSET. Keep the existing output-format selector before Pen/Eraser in the parameter toolbar. Reuse 34px control height, 13px regular type and Graphite neutral/hover/focus roles. Web control width132px, leading inset12px and trailing reserve28px leave space for the native arrow; preserve native select appearance. Wrap selector and tool pair as one group; preserve parameter order. These are web metrics, not native point specifications.

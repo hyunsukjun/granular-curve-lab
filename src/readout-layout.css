@@ -17,17 +17,38 @@
   font-weight:500;
   font-variant-numeric:tabular-nums;
 }
-/* Only the header output-channel selector shares file/export button geometry. */
-.topbar select:is(#renderFormat,#formatSelect) {
-  box-sizing:border-box;
-  height:38px;
-  min-height:38px;
-  padding-block:0;
-  font-size:13px;
-  font-weight:500;
-  line-height:18px;
-  border-radius:4px;
+/* Keep output format next to Pen/Eraser, including wrapped toolbar rows. */
+.channelTools {
+  display:inline-flex;
+  align-items:center;
+  flex:0 0 auto;
+  flex-wrap:nowrap;
+  gap:var(--cl-space-2,8px);
 }
+.channelTools > .toolToggle { margin-left:0; }
+.channelTools > select:is(#renderFormat,#formatSelect) {
+  box-sizing:border-box;
+  flex:0 0 auto;
+  width:132px;
+  min-width:132px;
+  height:var(--cl-control-height,34px);
+  min-height:var(--cl-control-height,34px);
+  padding:0 28px 0 var(--cl-control-inset,12px);
+  border:1px solid var(--cl-edge-rest,var(--cl-border-strong));
+  border-radius:var(--cl-control-radius,4px);
+  background-color:var(--cl-surface-control,var(--cl-surface-raised));
+  color:var(--cl-ink-primary,var(--cl-text));
+  font-size:var(--cl-type-control,13px);
+  font-weight:400;
+  line-height:18px;
+  color-scheme:dark;
+  cursor:pointer;
+}
+.channelTools > select:is(#renderFormat,#formatSelect):hover:not(:disabled) {
+  background-color:var(--cl-surface-hover);
+  border-color:var(--cl-edge-hover,var(--cl-border-strong));
+}
+.channelTools > select:disabled { cursor:default; }
 
 /* Compact stacked readouts without reducing type size or hiding values. */
 @media (max-width:899px) {

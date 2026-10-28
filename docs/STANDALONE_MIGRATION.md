@@ -286,3 +286,8 @@ STANDALONE ASSET. Preserve editing-target, point-value, playhead/Preview-value, 
 ## Shift group / Option erase — 2026-10-27
 
 STANDALONE ASSET / approved web gesture. Retain active-curve ordered suffix, fixed-time X, common normalized delta/clamp and cancellable gesture transaction, separate from selection, audition position and output freshness. Use native modifiers and access semantics; do not transfer web pixels as native metrics. See [gesture contract](CURVE_GESTURE_CONTRACT.md).
+
+
+## Output format / tool grouping — 2026-10-28
+
+STANDALONE ASSET: place output format immediately before Pen/Eraser, following the last parameter control. Group these controls when wrapping; separate text inset from the native disclosure-arrow reserve. Preserve channel/Preview/Render meaning and native keyboard/focus semantics. Web dimensions require independent native sizing validation; no Standalone implementation or product/listening acceptance implied.
