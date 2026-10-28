@@ -291,3 +291,8 @@ STANDALONE ASSET / approved web gesture. Retain active-curve ordered suffix, fix
 ## Output format / tool grouping — 2026-10-28
 
 STANDALONE ASSET: place output format immediately before Pen/Eraser, following the last parameter control. Group these controls when wrapping; separate text inset from the native disclosure-arrow reserve. Preserve channel/Preview/Render meaning and native keyboard/focus semantics. Web dimensions require independent native sizing validation; no Standalone implementation or product/listening acceptance implied.
+
+
+## Readout hierarchy and key context — 2026-10-28
+
+STANDALONE ASSET / approved web UI. Preserve edit target, selected-point values, playhead/Preview values, input/output/IR time and engine/safety distinctions. Use role order/proximity and an optional context-specific shortcut reference. Preview readouts show initial defaults or the latest engine snapshot. Source Window and output time are separate. Native menus/tooltips/key conventions may replace web details/popover mechanics; web pixels/breakpoints are not native specifications. No native implementation or listening approval implied.

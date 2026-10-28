@@ -287,3 +287,8 @@ Existing current-value captions now identify their basis. Value captions identif
 ## Shift group / Option erase — 2026-10-27
 
 IMPLEMENTED / UI checks verified as stated in the contract. Add Shift suffix Y-only group movement and replace Mac temporary Command erase with Option erase. Existing musical values and normal editing are retained. The user individually reviewed the five-Lab interaction and reported no major issue, then authorized commit/deployment. Publication evidence remains separate. See [gesture contract](CURVE_GESTURE_CONTRACT.md).
+
+
+## Readout hierarchy and shortcut reference — 2026-10-28
+
+IMPLEMENTED / USER-APPROVED WEB UI. Existing fields/IDs/labels/units/value origins retained; edit target and point count lead musical values, followed by input/engine/safety references. All values stay visible. An optional Shortcuts guide exposes only current per-Lab bindings; no source-volume/Undo feature is copied from Audio. Preview readouts show initial defaults or the latest engine snapshot. Source Window and output time are separate.

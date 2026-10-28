@@ -233,3 +233,8 @@ Current gesture contract supersedes earlier Mac Command erase statements only. S
 ## Channel selector placement — 2026-10-28
 
 The existing output-format selector sits directly before Pen/Eraser, after Reverb in Space or Pitch High in Granular. Selector and tools wrap together. Native select keyboard/focus semantics, IDs, Stereo default and stereo/quad/octo values, disabled/processing rules and Preview/Render meanings remain unchanged. Approved for release after local visual review. Verified channel selection, toolbar wrapping and keyboard focus; DSP and export processing are unchanged.
+
+
+## Contextual shortcut guide — 2026-10-28
+
+APPROVED WEB UI. The native Shortcuts disclosure reuses file-information behavior and Graphite roles. Click/Enter/Space opens it without changing transport. Escape closes it before background gesture cancellation and returns summary focus; outside press, Tab leaving, outer scroll/resize dismiss; internal scrolling stays usable. Shortcuts follows the editing tools; Space/Granular retain the channel selector immediately before Pen/Eraser. No assignment, point/mapping, select/Space routing, chain keyboard logic or Preview/Render behavior changed.

@@ -344,3 +344,8 @@ APPROVED INTERACTION / UI-only addition. Preserve existing point and hit geometr
 ## Channel selector next to editing tools — 2026-10-28
 
 APPROVED WEB UI / STANDALONE ASSET. Keep the existing output-format selector before Pen/Eraser in the parameter toolbar. Reuse 34px control height, 13px regular type and Graphite neutral/hover/focus roles. Web control width132px, leading inset12px and trailing reserve28px leave space for the native arrow; preserve native select appearance. Wrap selector and tool pair as one group; preserve parameter order. These are web metrics, not native point specifications.
+
+
+## Readout groups and shortcut guide — 2026-10-28
+
+APPROVED WEB UI / STANDALONE ASSET. Apply Audio-approved role order/proximity with this Lab's own field count, units and colors. Keep edit context first, related musical values together and reference state last. Two semantic dividers on wide views; whitespace on narrow views. Reuse existing typography, Graphite, focus and file-help panel; all fields stay visible. Shortcuts follows the editing tools; Space/Granular retain the channel selector immediately before Pen/Eraser. Native dimensions/layout need independent validation.

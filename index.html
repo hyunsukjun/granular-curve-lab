@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="src/transport-polish.css?v=20261015-2">
   <link rel="stylesheet" href="src/transport-surface.css?v=20261015-2">
   <link rel="stylesheet" href="src/brand-layout.css?v=20261015-1">
-    <link rel="stylesheet" href="src/readout-layout.css?v=20261028-channel-tools1">
+    <link rel="stylesheet" href="src/readout-layout.css?v=20261028-family-guide1">
     <link rel="stylesheet" href="src/header-rhythm.css?v=20261015-1">
     <link rel="stylesheet" href="src/expanded-editor.css?v=20261015-1">
     <link rel="stylesheet" href="src/typography.css?v=20261015-family1">
@@ -87,6 +87,10 @@
                 </button>
               </div>
             </div>
+            <details id="shortcutHelp" class="fileHelp shortcutHelp">
+              <summary title="Existing shortcuts by editing area">Shortcuts</summary>
+              <div class="fileHelpPanel" aria-label="Keyboard shortcuts"><strong>Keyboard shortcuts</strong><h3>Curve editing</h3><dl><dt>Shift-drag</dt><dd>Move this and following points vertically. X stays fixed.</dd><dt>Option-click</dt><dd>Mac: delete a point. PC: Ctrl-click. Endpoints stay protected.</dd><dt>Esc</dt><dd>Cancel the pending Shift group drag.</dd></dl><h3>Playback and controls</h3><dl><dt>Space</dt><dd>Play/pause outside inputs, selectors and help. Load an audio source first.</dd><dt>Tab / Shift-Tab</dt><dd>Focus controls. Arrow keys adjust a focused duration or playback slider using its existing range.</dd></dl><p>Preview readouts show initial defaults or the latest engine snapshot. Source Window and output time are separate. Esc closes this guide.</p></div>
+            </details>
           </div>
           <div class="curveActions">
             <button id="clearCurveButton" type="button">Clear Current</button>
@@ -100,15 +104,15 @@
           <output id="durationValue" for="durationInput" title="Minutes:seconds">00:20</output>
         </section>
 
-        <div class="panel currentValues">
+        <div class="panel currentValues contextReadouts">
           <div class="readout primaryReadout"><span>Editing</span><strong id="modeReadout">Read Position</strong></div>
-          <div class="readout"><span>Curve points</span><strong id="pointsReadout">2</strong></div>
-          <div class="readout engineReadout referenceReadout"><span>Engine</span><strong id="engineReadout">Preview 64</strong></div>
+          <div class="readout editContextEnd"><span>Curve points</span><strong id="pointsReadout">2</strong></div>
           <div class="readout"><span title="Preview value: initial default until playback, then the latest Preview engine value. Not the selected point or stopped playhead target.">Position · preview</span><strong id="positionReadout">50% in window</strong></div>
           <div class="readout"><span title="Preview value: initial default until playback, then the latest Preview engine value. Not the selected point or stopped playhead target.">Spread · preview</span><strong id="spreadReadout">8%</strong></div>
           <div class="readout"><span title="Preview value: initial default until playback, then the latest Preview engine value. Not the selected point or stopped playhead target.">Size · preview</span><strong id="sizeReadout">80 ms</strong></div>
           <div class="readout"><span title="Preview value: initial default until playback, then the latest Preview engine value. Not the selected point or stopped playhead target.">Density · preview</span><strong id="densityReadout">18 grains/s</strong></div>
-          <div class="readout"><span title="Preview value: initial default until playback, then the latest Preview engine value. Not the selected point or stopped playhead target.">Pitch · preview</span><strong id="pitchReadout">0–0 st</strong></div>
+          <div class="readout playbackGroupEnd"><span title="Preview value: initial default until playback, then the latest Preview engine value. Not the selected point or stopped playhead target.">Pitch · preview</span><strong id="pitchReadout">0–0 st</strong></div>
+          <div class="readout engineReadout referenceReadout"><span>Engine</span><strong id="engineReadout">Preview 64</strong></div>
         </div>
 
         <div class="curveStack">
@@ -151,7 +155,7 @@
       </footer>
     </main>
 
-    <script src="src/file-help.js?v=20261014-family1" type="module"></script>
+    <script src="src/file-help.js?v=20261028-family-guide1" type="module"></script>
     <script src="src/app.js?v=20261027-shift1" type="module"></script>
   <div id="positionModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Read Position · 0–100% of Source Window</strong><span>Choose where grains start within the selected source window. It does not set output playback time.</span><span class="helpState"></span></div>
 <div id="spreadModeHelp" class="parameterHelp" role="tooltip" hidden><strong>Spread · 0–100%</strong><span>Randomize grain read positions around Read Position within the selected source window.</span><span class="helpState"></span></div>
