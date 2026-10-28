@@ -296,3 +296,7 @@ STANDALONE ASSET: place output format immediately before Pen/Eraser, following t
 ## Readout hierarchy and key context — 2026-10-28
 
 STANDALONE ASSET / approved web UI. Preserve edit target, selected-point values, playhead/Preview values, input/output/IR time and engine/safety distinctions. Use role order/proximity and an optional context-specific shortcut reference. Preview readouts show initial defaults or the latest engine snapshot. Source Window and output time are separate. Native menus/tooltips/key conventions may replace web details/popover mechanics; web pixels/breakpoints are not native specifications. No native implementation or listening approval implied.
+
+## Toolbar hierarchy and technical metadata — 2026-10-28
+
+STANDALONE ASSET / approved web UI. Keep the existing dynamic engineReadout values, Preview/Render caps and their basis. Rename the caption from Engine to Grain limit; no grain limit or randomization setting changes. Group editing help with editing tools and reset utilities with upper file/task actions. Separate fixed implementation identity from actionable state. Native layout, focus conventions and dimensions require independent validation; no native implementation or listening acceptance implied.

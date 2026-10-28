@@ -349,3 +349,7 @@ APPROVED WEB UI / STANDALONE ASSET. Keep the existing output-format selector bef
 ## Readout groups and shortcut guide — 2026-10-28
 
 APPROVED WEB UI / STANDALONE ASSET. Apply Audio-approved role order/proximity with this Lab's own field count, units and colors. Keep edit context first, related musical values together and reference state last. Two semantic dividers on wide views; whitespace on narrow views. Reuse existing typography, Graphite, focus and file-help panel; all fields stay visible. Shortcuts follows the editing tools; Space/Granular retain the channel selector immediately before Pen/Eraser. Native dimensions/layout need independent validation.
+
+## Toolbar roles and processor information — 2026-10-28
+
+APPROVED WEB UI / STANDALONE ASSET. Keep the existing dynamic engineReadout values, Preview/Render caps and their basis. Rename the caption from Engine to Grain limit; no grain limit or randomization setting changes. Reuse existing controls, disclosure, typography and focus roles. Fixed implementation names may move to on-demand information; actionable routing, limits and safety remain visible. This supersedes only the prior Engine placement and stated toolbar positions, not musical readout formatting.

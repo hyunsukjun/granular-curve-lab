@@ -292,3 +292,7 @@ IMPLEMENTED / UI checks verified as stated in the contract. Add Shift suffix Y-o
 ## Readout hierarchy and shortcut reference — 2026-10-28
 
 IMPLEMENTED / USER-APPROVED WEB UI. Existing fields/IDs/labels/units/value origins retained; edit target and point count lead musical values, followed by input/engine/safety references. All values stay visible. An optional Shortcuts guide exposes only current per-Lab bindings; no source-volume/Undo feature is copied from Audio. Preview readouts show initial defaults or the latest engine snapshot. Source Window and output time are separate.
+
+## Toolbar and information visibility — 2026-10-28
+
+IMPLEMENTED / USER-APPROVED WEB UI. Keep the existing dynamic engineReadout values, Preview/Render caps and their basis. Rename the caption from Engine to Grain limit; no grain limit or randomization setting changes. No new controls, shortcuts, processing or value model. The user approved commit/deployment after visual review on 2026-10-28; publication success is verified separately.

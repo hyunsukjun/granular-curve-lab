@@ -37,3 +37,7 @@ Standalone should preserve these semantic distinctions and read-only observation
 ## Granular readout order — approved web UI — 2026-10-28
 
 Retained direct readout identifiers in order: modeReadout → pointsReadout → positionReadout → spreadReadout → sizeReadout → densityReadout → pitchReadout → engineReadout. Preview readouts show initial defaults or the latest engine snapshot. Source Window and output time are separate. Keep 11px captions/14px values. Wrap long retained values without ellipsis; adapt column counts to available width, never hide a field or relabel its origin. Implementation is scoped to this Lab; native/family acceptance remains separate.
+
+## Current-value visibility follow-up — 2026-10-28
+
+Keep the existing dynamic engineReadout values, Preview/Render caps and their basis. Rename the caption from Engine to Grain limit; no grain limit or randomization setting changes. Retained musical/readout IDs, text, units, precision, selected-point/playhead/Preview distinction and calculations remain unchanged. Dynamic status remains visible; no fixed processor name was moved in this Lab.
