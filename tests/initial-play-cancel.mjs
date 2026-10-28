@@ -1,3 +1,4 @@
+import {createSourceLoadGate} from "../src/default-source.js";
 import {readAudioFile} from "../src/audio-import.js";
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -13,6 +14,7 @@ for(const action of actions){
  setTransportBusy:x=>c.playButton.disabled=x,decodeAudioFile:async()=>({duration:2,numberOfChannels:1}),buildWaveform(){},sendBufferToWorklet(){},clearDownload(){},largeFileSeconds:300,resetCurrentReadouts(){},draw(){},console};
  // Export status moved into a UI helper; preserve the fixture readout contract.
  c.setExportStatus = message => { c.readouts.download.textContent = message; };
+ c.sourceLoadGate = createSourceLoadGate();
  vm.createContext(c);vm.runInContext(['nextPlaybackToken','playAudio',...actions].map(pick).join('\n'),c);
  const pending=c.playAudio();
  if(action==='loadAudioFile')await c.loadAudioFile({name:'replacement.wav',slice:()=>new Blob([new ArrayBuffer(8)]),arrayBuffer:async()=>new ArrayBuffer(8)});else c[action]();

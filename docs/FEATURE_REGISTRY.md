@@ -296,3 +296,10 @@ IMPLEMENTED / USER-APPROVED WEB UI. Existing fields/IDs/labels/units/value origi
 ## Toolbar and information visibility — 2026-10-28
 
 IMPLEMENTED / USER-APPROVED WEB UI. Keep the existing dynamic engineReadout values, Preview/Render caps and their basis. Rename the caption from Engine to Grain limit; no grain limit or randomization setting changes. No new controls, shortcuts, processing or value model. The user approved commit/deployment after visual review on 2026-10-28; publication success is verified separately.
+
+
+## 2026-10-29 — Shared musical default source
+
+Use the approved shared Bach mallet MP3 in the role documented in [default source](DEFAULT_SOURCE.md). This adds an initial sample where the old page started empty. Existing first-channel mono source processing, minimum Source Window reset and20-second output-duration default are unchanged. The whole15-second source is not automatically selected. DSP and musical mappings are unchanged.
+
+Built-in example only: place the unchanged5ms Source Window at0.050–0.055s to avoid the authored lead-in. Ordinary file imports keep their existing zero-start minimum window. No grain DSP, gain or output-duration change.

@@ -1,5 +1,7 @@
 # Granular Curve Lab
 
+Current default/example: [Bach Prelude No.1 · mallet ·72BPM ·15s MP3](docs/DEFAULT_SOURCE.md). Prepared automatically without autoplay; Open Audio replaces it.
+
 Granular Curve Lab is a small browser-based Curve Lab prototype for drawing granular synthesis relationships over time. It follows the existing Audio/Timbre/Space Curve Lab frame: static HTML/CSS/JS, local browser decoding, one large curve canvas, realtime AudioWorklet preview, and a separate offline WAV renderer.
 
 The web app is the current executable reference implementation. Product behavior, parameter mappings, DSP rules, interaction contracts, fine-tuning knowledge, and future Standalone considerations are maintained as long-term product assets in the documentation set below.

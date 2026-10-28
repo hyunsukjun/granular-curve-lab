@@ -1,3 +1,4 @@
+import {createSourceLoadGate} from "../src/default-source.js";
 import {readAudioFile} from "../src/audio-import.js";
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -12,6 +13,7 @@ const c={readAudioFile,audioContext:{sampleRate:48000},buffer:{duration:1},downl
  buildWaveform(){},resetSourceWindowToMinimum(){},sendBufferToWorklet(){},sendSettings(){},console:{error(){}}};
 // Export status moved into a UI helper; preserve the fixture readout contract.
  c.setExportStatus = message => { c.readouts.download.textContent = message; };
+ c.sourceLoadGate = createSourceLoadGate();
  vm.createContext(c);vm.runInContext(['clearDownload','stopAudio','loadAudioFile'].map(pick).join('\n'),c);
 const file={name:'replacement.wav',slice:()=>new Blob([new ArrayBuffer(8)]),arrayBuffer:async()=>new ArrayBuffer(8)};
 await c.loadAudioFile(null);assert.equal(c.isPlaying,true);assert.equal(c.downloadUrl,'blob:previous');

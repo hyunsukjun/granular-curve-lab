@@ -1,3 +1,4 @@
+import {createSourceLoadGate, fetchDefaultSource} from "./default-source.js?v=20261029-bach1";
 import {beginVerticalGroup, moveVerticalGroup, restoreVerticalGroup, verticalGroupSuffix, drawVerticalGroupRing} from "./curve-group-edit.js?v=20261027-shift1";
 import {canvasAxisWidth, drawEditorGrid, frequencyTicks, frequencyLabel, spacedMarks, canvasLabelFont} from "./canvas-grid.js?v=20261026-graphite1";
 import {analyzeSourceColors} from "./source-colors.js";
@@ -14,6 +15,8 @@ import {
   valueAt
 } from "./granular-core.js";
 import { OutputMeterAnalyzer } from "./output-meter.js?v=20260930-01";
+
+const sourceLoadGate = createSourceLoadGate();
 
 const fileInput = document.getElementById("fileInput");
 const fileStatus = document.getElementById("fileStatus");
@@ -365,8 +368,10 @@ function buildWaveform(audioBuffer) {
   analyzeSourceColors({length:audioBuffer.length,sampleRate:audioBuffer.sampleRate,numberOfChannels:1,getChannelData:()=>audioBuffer.getChannelData(0)},colors=>{if(buffer===audioBuffer){sourceColors=colors;drawSourceWindow();}});
 }
 
-async function loadAudioFile(file) {
+async function loadAudioFile(file, { request = null } = {}) {
   if (!file) return;
+  const sourceRequest = request || sourceLoadGate.begin();
+  if (!sourceRequest.current()) return;
   // A replacement invalidates the previous playback and exported result, even on decode failure.
   stopAudio();
   clearDownload();
@@ -375,9 +380,19 @@ async function loadAudioFile(file) {
   try {
     // Decoding must not wait for Safari playback permission after the file chooser.
     await ensureAudioContext({ resume: false });
-    buffer = await decodeAudioFile(await readAudioFile(file, audioContext.sampleRate));
+    const candidate = await decodeAudioFile(await readAudioFile(file, audioContext.sampleRate));
+    if (!sourceRequest.current()) return;
+    buffer = candidate;
     buildWaveform(buffer);
     resetSourceWindowToMinimum();
+    // This authored example has35ms lead-in. Keep the established5ms width,
+    // but place the built-in example on its first note, not encoder pre-ringing.
+    // Explicit user files keep the existing start-at-zero import behavior.
+    if (request) {
+      const width = sourceWindow.end;
+      sourceWindow.start = Math.max(0, Math.min(0.05 / buffer.duration, 1 - width));
+      sourceWindow.end = sourceWindow.start + width;
+    }
     workletBufferLoaded = false;
     playheadSeconds = 0;
     sendBufferToWorklet();
@@ -387,12 +402,13 @@ async function loadAudioFile(file) {
     setExportStatus("ready");
     draw();
   } catch (error) {
+    if (!sourceRequest.current()) return;
     console.error(error);
     fileStatus.textContent = error.message?.startsWith("AIFF:") ? error.message : "Could not load audio. Try WAV, MP3, or M4A.";
     setExportStatus("not ready");
     buffer = null;
   } finally {
-    setBusy(false);
+    if (sourceRequest.current()) setBusy(false);
   }
 }
 
@@ -1203,3 +1219,20 @@ function setExportStatus(message) {
   output.textContent = message;
   output.parentElement.hidden = ["", "ready", "not ready", "needs export"].includes(message);
 }
+
+async function loadDefaultSource() {
+  const request = sourceLoadGate.begin();
+  fileStatus.textContent = "Loading default sample…";
+  setBusy(false);
+  try {
+    const file = await fetchDefaultSource(request.signal);
+    if (request.current()) await loadAudioFile(file, { request });
+  } catch (error) {
+    if (!request.current()) return;
+    fileStatus.textContent = "Default sample unavailable. Open an audio file to begin.";
+    setExportStatus("not ready");
+    setBusy(false);
+  }
+}
+
+loadDefaultSource();

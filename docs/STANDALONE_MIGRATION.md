@@ -300,3 +300,8 @@ STANDALONE ASSET / approved web UI. Preserve edit target, selected-point values,
 ## Toolbar hierarchy and technical metadata — 2026-10-28
 
 STANDALONE ASSET / approved web UI. Keep the existing dynamic engineReadout values, Preview/Render caps and their basis. Rename the caption from Engine to Grain limit; no grain limit or randomization setting changes. Group editing help with editing tools and reset utilities with upper file/task actions. Separate fixed implementation identity from actionable state. Native layout, focus conventions and dimensions require independent validation; no native implementation or listening acceptance implied.
+
+
+## 2026-10-29 — Shared musical default source
+
+STANDALONE ASSET: approved source identity, user-file precedence and source-vs-IR meaning are portable. HTTP loading/MP3 delivery are web choices, not native requirements. See [default source](DEFAULT_SOURCE.md).
