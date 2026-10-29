@@ -303,3 +303,7 @@ IMPLEMENTED / USER-APPROVED WEB UI. Keep the existing dynamic engineReadout valu
 Use the approved shared Bach mallet MP3 in the role documented in [default source](DEFAULT_SOURCE.md). This adds an initial sample where the old page started empty. Existing first-channel mono source processing, minimum Source Window reset and20-second output-duration default are unchanged. The whole15-second source is not automatically selected. DSP and musical mappings are unchanged.
 
 Built-in example only: place the unchanged5ms Source Window at0.050–0.055s to avoid the authored lead-in. Ordinary file imports keep their existing zero-start minimum window. No grain DSP, gain or output-duration change.
+
+## Safe decoded input admission (2026-10-29)
+
+IMPLEMENTED, USER-AUTHORIZED RELEASE. Reject empty/invalid decoded audio and nonfinite PCM before source adoption. A failed import retains the previous valid source and its editing/IR/analysis state; a later valid file recovers. Finite PCM and existing DSP/limits remain unchanged. See [input contract](INPUT_VALIDATION.md).

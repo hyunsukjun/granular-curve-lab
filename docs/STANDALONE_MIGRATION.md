@@ -216,7 +216,7 @@ File import creates the decoding context without awaiting `AudioContext.resume()
 
 ## 2026-10-08 — Source replacement lifecycle
 
-Selecting a replacement file stops previous playback, resets the playhead and revokes the previous rendered WAV URL before decoding. A failed decode continues to clear the source and disable transport/export; a subsequent valid file restores readiness without reload. Cancelling the file chooser (no file) preserves the existing source and playback. No DSP, curves, output duration or WAV format changes. Regression: tests/file-replacement-lifecycle.mjs. Standalone implementations should keep old playback and export resources from surviving a failed replacement.
+HISTORICAL POLICY, SUPERSEDED by the2026-10-29 input-admission contract below. Selecting a replacement file stops previous playback, resets the playhead and revokes the previous rendered WAV URL before decoding. A failed decode continues to clear the source and disable transport/export; a subsequent valid file restores readiness without reload. Cancelling the file chooser (no file) preserves the existing source and playback. No DSP, curves, output duration or WAV format changes. Regression: tests/file-replacement-lifecycle.mjs. Standalone implementations should keep old playback and export resources from surviving a failed replacement.
 
 
 ## 2026-10-08 — Cancel pending first playback
@@ -305,3 +305,7 @@ STANDALONE ASSET / approved web UI. Keep the existing dynamic engineReadout valu
 ## 2026-10-29 — Shared musical default source
 
 STANDALONE ASSET: approved source identity, user-file precedence and source-vs-IR meaning are portable. HTTP loading/MP3 delivery are web choices, not native requirements. See [default source](DEFAULT_SOURCE.md).
+
+## Input admission transaction — STANDALONE ASSET (2026-10-29)
+
+Preserve candidate validation before ownership swap, full-channel/tail finite checks, bounded read-only access, stale-job cancellation, previous valid source/dependent state on failure, and explicit retry. Decode independently of device activation. Native adapter/batch sizes need separate measurements; do not copy browser getter quirks into the DSP model. Web implementation and silent evidence are not native integration or listening acceptance. See [input contract](INPUT_VALIDATION.md).

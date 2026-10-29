@@ -150,7 +150,7 @@ File import creates the decoding context without awaiting `AudioContext.resume()
 
 ## 2026-10-08 — Source replacement lifecycle
 
-Selecting a replacement file stops previous playback, resets the playhead and revokes the previous rendered WAV URL before decoding. A failed decode continues to clear the source and disable transport/export; a subsequent valid file restores readiness without reload. Cancelling the file chooser (no file) preserves the existing source and playback. No DSP, curves, output duration or WAV format changes. Regression: tests/file-replacement-lifecycle.mjs. Standalone implementations should keep old playback and export resources from surviving a failed replacement.
+HISTORICAL POLICY, SUPERSEDED by the2026-10-29 input-admission contract below. Selecting a replacement file stops previous playback, resets the playhead and revokes the previous rendered WAV URL before decoding. A failed decode continues to clear the source and disable transport/export; a subsequent valid file restores readiness without reload. Cancelling the file chooser (no file) preserves the existing source and playback. No DSP, curves, output duration or WAV format changes. Regression: tests/file-replacement-lifecycle.mjs. Standalone implementations should keep old playback and export resources from surviving a failed replacement.
 
 
 ## 2026-10-08 — Cancel pending first playback
@@ -238,3 +238,7 @@ The existing output-format selector sits directly before Pen/Eraser, after Rever
 ## Contextual shortcut guide — 2026-10-28
 
 APPROVED WEB UI. The native Shortcuts disclosure reuses file-information behavior and Graphite roles. Click/Enter/Space opens it without changing transport. Escape closes it before background gesture cancellation and returns summary focus; outside press, Tab leaving, outer scroll/resize dismiss; internal scrolling stays usable. Shortcuts follows the editing tools; Space/Granular retain the channel selector immediately before Pen/Eraser. No assignment, point/mapping, select/Space routing, chain keyboard logic or Preview/Render behavior changed.
+
+## Failed input retains the valid source (2026-10-29)
+
+Supersedes earlier failed-decode behavior that cleared a source. File attempts still stop playback; rejected candidates do not reset source edits/window/curves or replace waveform/IR/analysis. Show the error and prior-source availability; do not autoplay. Completed old WAV availability follows unchanged source/settings; invalidate it on successful replacement. See [input contract](INPUT_VALIDATION.md).

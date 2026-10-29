@@ -4,7 +4,7 @@ import {canvasAxisWidth, drawEditorGrid, frequencyTicks, frequencyLabel, spacedM
 import {analyzeSourceColors} from "./source-colors.js";
 import {summarizeChannels,paintEnvelope,peakOf,paintToneLegend} from "./source-envelope.js";
 import {mountTransport} from "./common-transport.js?v=20261013-1";
-import { readAudioFile } from "./audio-import.js?v=20261011-aiff1";
+import { readAudioFile, validateAudioBuffer } from "./audio-import.js?v=20261029-input-validation1";
 import {
   curveDefaults,
   densityFromNorm,
@@ -88,6 +88,7 @@ let node;
 let outputMeter;
 let workletBufferLoaded = false;
 let buffer;
+let sourceFileLabel = "";
 let waveform = [];
 let sourceColors=null,sourceRaster=null;
 let activeCurve = "position";
@@ -372,15 +373,16 @@ async function loadAudioFile(file, { request = null } = {}) {
   if (!file) return;
   const sourceRequest = request || sourceLoadGate.begin();
   if (!sourceRequest.current()) return;
-  // A replacement invalidates the previous playback and exported result, even on decode failure.
+  // Stop the attempt safely; commit source/window/export changes only after validation.
+  const previousDownloadStatus = readouts.download.textContent;
   stopAudio();
-  clearDownload();
   setBusy(true);
   fileStatus.textContent = `Loading ${file.name}...`;
   try {
     // Decoding must not wait for Safari playback permission after the file chooser.
     await ensureAudioContext({ resume: false });
     const candidate = await decodeAudioFile(await readAudioFile(file, audioContext.sampleRate));
+    await validateAudioBuffer(candidate, { signal: sourceRequest.signal, isCurrent: sourceRequest.current });
     if (!sourceRequest.current()) return;
     buffer = candidate;
     buildWaveform(buffer);
@@ -398,15 +400,16 @@ async function loadAudioFile(file, { request = null } = {}) {
     sendBufferToWorklet();
     sendSettings();
     fileStatus.textContent = `${file.name} - ${buffer.duration.toFixed(2)} s · mono source`;
+    sourceFileLabel = fileStatus.textContent;
     clearDownload();
     setExportStatus("ready");
     draw();
   } catch (error) {
     if (!sourceRequest.current()) return;
     console.error(error);
-    fileStatus.textContent = error.message?.startsWith("AIFF:") ? error.message : "Could not load audio. Try WAV, MP3, or M4A.";
-    setExportStatus("not ready");
-    buffer = null;
+    const message = /^(AIFF:|Audio input:)/.test(error.message || "") ? error.message : "Could not load audio. Try WAV, MP3, or M4A.";
+    fileStatus.textContent = `${message}${buffer ? ` Previous audio remains available: ${sourceFileLabel}` : ""}`;
+    setExportStatus(buffer ? previousDownloadStatus : "not ready");
   } finally {
     if (sourceRequest.current()) setBusy(false);
   }
