@@ -68,7 +68,7 @@ const curveColors = {
   position: "#6de0c0",
   spread: "#f2b705",
   size: "#6fa8dc",
-  density: "#4fb06f",
+  density: "#f4a261",
   pitchLow: "#eb6f75",
   pitchHigh: "#b887f4"
 };

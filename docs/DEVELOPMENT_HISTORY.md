@@ -134,3 +134,7 @@ Verification: tests/source-window-boundary.mjs and tests/duration-range.mjs. See
 User low-frequency/high-Density click report led to separate numerical diagnosis of gain steps and premature Hann-grain truncation. Initial hypothesis was window shape/size; evidence justified correcting lifetime/gain continuity before changing the window. Product application and deployment authorized for listening review. Existing lifecycle test mocks were repaired for the export-status helper.
 
 Evidence, reproduction limits and listening checklist: [Preview continuity report](PREVIEW_CONTINUITY_2026-10-20.md).
+
+## Color distinction and raster-QA correction — 2026-10-30
+
+Implemented only the approved Density hue distinction. The initial screenshot assertion expected the solid mint token at an antialiased inactive-line pixel; the before image had the same pixel. Corrected the QA to compare the unchanged before/after pixels and allow a2-level Canvas readback tolerance, while selected CSS colors remain exact. Retain failed QA evidence; do not change data rendering or audio to force a test. [Contract](PARAMETER_COLOR_2026-10-30.md).

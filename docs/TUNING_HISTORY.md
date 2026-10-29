@@ -76,3 +76,7 @@ Rejected trials stay in this file. They are evidence against repeating the same 
 Previous: immediate active-count gain, immediate excess-voice removal. New: 5 ms one-pole gain and up-to-5 ms half-cosine release. Reason: measured low-frequency discontinuities after user Preview report. Silent numerical/browser validation passed; audible effect and musical optimum remain pending. Brief voice tails add work; no device CPU certification.
 
 Evidence, reproduction limits and listening checklist: [Preview continuity report](PREVIEW_CONTINUITY_2026-10-20.md).
+
+## Visual-only Density role — 2026-10-30
+
+Density#4FB06F→#F4A261; selected fill#183D27→#4A2F1E; text#D8F5E1→#FFE5CE. Read Position#6DE0C0 unchanged. Reason: user-reported green/mint confusion. Scoped UI/numeric checks passed; no listening judgment or DSP tuning. Local candidate only; [details](PARAMETER_COLOR_2026-10-30.md).

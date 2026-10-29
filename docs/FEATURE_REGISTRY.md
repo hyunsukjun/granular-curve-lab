@@ -307,3 +307,7 @@ Built-in example only: place the unchanged5ms Source Window at0.050–0.055s to 
 ## Safe decoded input admission (2026-10-29)
 
 IMPLEMENTED, USER-AUTHORIZED RELEASE. Reject empty/invalid decoded audio and nonfinite PCM before source adoption. A failed import retains the previous valid source and its editing/IR/analysis state; a later valid file recovers. Finite PCM and existing DSP/limits remain unchanged. See [input contract](INPUT_VALIDATION.md).
+
+## Read Position / Density distinction — 2026-10-30
+
+LOCAL UI CANDIDATE: mint Read Position and orange Density, consistently applied to existing controls and data graphics. No new feature or musical behavior. See [color contract and limits](PARAMETER_COLOR_2026-10-30.md).

@@ -105,3 +105,12 @@ Subsequent user acceptance covers the reported Preview continuity issue; it is n
 ## Shift group / Option erase — 2026-10-27
 
 Shift-drag a point and following points vertically with X fixed; Mac Option-click erases an interior point (PC Ctrl-click unchanged). Original editing, mappings and DSP remain. User-reviewed UI checks are recorded in the gesture contract; commit/deployment was explicitly authorized on 2026-10-27. See [gesture contract](docs/CURVE_GESTURE_CONTRACT.md).
+
+### Local UI review — 2026-10-30
+
+[Read Position / Density color distinction](docs/PARAMETER_COLOR_2026-10-30.md): mint source position and orange grain rate; layout, values and audio unchanged. User reviewed the candidate and authorized commit/deployment on2026-10-30. Public verification is recorded separately.
+
+
+### Release authorization — 2026-10-30
+
+User approved the reviewed Density/Read Position distinction for commit and deployment. Preserve the earlier test boundary and unrelated user edits; public success requires separate exact-release verification. No DSP, Native or listening acceptance change.

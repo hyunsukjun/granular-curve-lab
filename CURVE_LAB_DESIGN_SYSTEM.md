@@ -26,7 +26,7 @@ Brand color and parameter colors have different jobs.
 - Read Position `#6DE0C0`: source-reading trajectory and Source Window.
 - Spread `#F2B705`: random source-position distribution width.
 - Grain Size `#6FA8DC`: grain duration.
-- Density `#4FB06F`: grain event rate.
+- Density `#F4A261`: grain event rate (2026-10-30 local candidate; previous #4FB06F retained in change history below).
 - Pitch Low `#EB6F75`: lower transposition bound.
 - Pitch High `#B887F4`: upper transposition bound.
 
@@ -353,3 +353,12 @@ APPROVED WEB UI / STANDALONE ASSET. Apply Audio-approved role order/proximity wi
 ## Toolbar roles and processor information — 2026-10-28
 
 APPROVED WEB UI / STANDALONE ASSET. Keep the existing dynamic engineReadout values, Preview/Render caps and their basis. Rename the caption from Engine to Grain limit; no grain limit or randomization setting changes. Reuse existing controls, disclosure, typography and focus roles. Fixed implementation names may move to on-demand information; actionable routing, limits and safety remain visible. This supersedes only the prior Engine placement and stated toolbar positions, not musical readout formatting.
+
+## Density versus source position — 2026-10-30 local candidate
+
+Read Position stays mint#6DE0C0; Density changes green#4FB06F→warm orange#F4A261, with selected fill#183D27→#4A2F1E and text#D8F5E1→#FFE5CE. The earlier green was too similar to Read Position. Reuse the role consistently for the Density selected control, line, points and point tooltip. Names, units and independent focus remain essential. No type/layout/processing changes. See [scope and verification](docs/PARAMETER_COLOR_2026-10-30.md). Not committed/deployed; Native adoption requires independent appearance/accessibility checks.
+
+
+### Release authorization — 2026-10-30
+
+User approved the reviewed Density/Read Position distinction for commit and deployment. Preserve the earlier test boundary and unrelated user edits; public success requires separate exact-release verification. No DSP, Native or listening acceptance change.

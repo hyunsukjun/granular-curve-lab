@@ -309,3 +309,7 @@ STANDALONE ASSET: approved source identity, user-file precedence and source-vs-I
 ## Input admission transaction — STANDALONE ASSET (2026-10-29)
 
 Preserve candidate validation before ownership swap, full-channel/tail finite checks, bounded read-only access, stale-job cancellation, previous valid source/dependent state on failure, and explicit retry. Decode independently of device activation. Native adapter/batch sizes need separate measurements; do not copy browser getter quirks into the DSP model. Web implementation and silent evidence are not native integration or listening acceptance. See [input contract](INPUT_VALIDATION.md).
+
+## Parameter-color identity — 2026-10-30 asset, not Native implementation
+
+Keep source position/window mint and grain-rate Density warm orange, reinforced by names/units and independent selected/focus state. Preserve one semantic role across native controls and graph/point graphics. Revalidate native appearance, color-vision alternatives and system focus; CSS hex values are a reference, not proof of native acceptance. No mapping, DSP, channel or timing change. See [web candidate contract](PARAMETER_COLOR_2026-10-30.md).

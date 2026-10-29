@@ -33,7 +33,7 @@
   --cl-toolbar-height: 54px;
   --mint: #6de0c0;
   --spread: #f2b705;
-  --density: #4fb06f;
+  --density: #f4a261;
   --blue: #6fa8dc;
   --red: #eb6f75;
   --purple: #b887f4;
@@ -405,8 +405,8 @@ button:disabled {
 
 #densityMode.active {
   border-color: var(--density);
-  background: #183d27;
-  color: #d8f5e1;
+  background: #4a2f1e;
+  color: #ffe5ce;
 }
 
 #pitchLowMode.active {

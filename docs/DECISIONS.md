@@ -295,3 +295,12 @@ User approved the72BPM weak-room MP3 as the shared default/example asset and aut
 ## Read-only admission before source replacement (2026-10-29)
 
 USER-APPROVED SCOPE, IMPLEMENTED; release authorized2026-10-29. Extend the already shared audio-import module instead of creating another decoder or DSP sanitizer. Scan all decoded channels before adoption; reject nonfinite data rather than silently replacing samples. Preserve a previous valid input on failure. Bounded copy reads avoid mutating view readback in the observed Brave environment. Normal hot/clipped/DC/silent audio keeps its existing processing meaning. Verification/release/listening are separate. See [input contract](INPUT_VALIDATION.md).
+
+## Parameter identity through distinct hues — 2026-10-30
+
+User requested stronger Read Position/Density distinction. Preserve mint Read Position and use warm orange Density across the existing Canvas and selected button; preserve the other colors, layout, labels, units, keyboard focus and all behavior. See [local color contract](PARAMETER_COLOR_2026-10-30.md). The candidate is numerically/visually checked; no commit, release, listening or Native acceptance is implied.
+
+
+### Release authorization — 2026-10-30
+
+User approved the reviewed Density/Read Position distinction for commit and deployment. Preserve the earlier test boundary and unrelated user edits; public success requires separate exact-release verification. No DSP, Native or listening acceptance change.
